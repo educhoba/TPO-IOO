@@ -53,6 +53,8 @@ public class Buque extends ObjetosJuego {
 		}
 		// TODO implement here
 
+		//hago un nuevo metodo()
+		
 		// TODO evento de movimiento 
 		if (this.coordenada.getX() == this.xDesaparecer) {
 			// desaparecer(); lo hace el controlador
