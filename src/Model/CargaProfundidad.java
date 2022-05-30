@@ -11,16 +11,15 @@ public class CargaProfundidad extends ObjetosJuego {
 	private float alturaExplosion;
 	private Buque buque;
 
-	public CargaProfundidad(int velocidad, int altura, int largo, AreaJuego aj, Coordenada c) {
+	public CargaProfundidad(int velocidad, int altura, int largo, Coordenada c) {
 		// OJ
 		this.velocidad = velocidad;
 		this.altura = altura;
 		this.largo = largo;
-		this.areaJuego = aj;
 		this.coordenada = c;
 		// Carga
 		setAlturaExplosion();
-		// ni idea como le seteo el buque
+		buque = null;//TODO ver como asignarle el buque
 	}
 
 	public void soltar() {
@@ -33,8 +32,7 @@ public class CargaProfundidad extends ObjetosJuego {
 			this.coordenada.moverY(distancia);
 			// TODO chequeo si tiene que explotar
 			float yActual = this.coordenada.getX();
-			if ((yActual == this.alturaExplosion) // si justo esta en el punto
-					|| (yActual - distancia < this.alturaExplosion && yActual > this.alturaExplosion)) // si pasó el // punto
+			if (yActual <= this.alturaExplosion)
 				explotar();
 		}
 	}
@@ -64,7 +62,7 @@ public class CargaProfundidad extends ObjetosJuego {
 
 	public void moverConBuque(float deltaX) {
 		if (!estaSoltada())
-			this.coordenada.moverY(deltaX);
+			this.coordenada.moverX(deltaX);
 	}
 
 }

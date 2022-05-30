@@ -9,12 +9,11 @@ public class Buque extends ObjetosJuego {
 	private float xDesaparecer;
 	private CargaProfundidad cargaProfunidad;
 
-	public Buque(int velocidad, int altura, int largo, AreaJuego aj, Coordenada c, CargaProfundidad cp) {
+	public Buque(int velocidad, int altura, int largo, Coordenada c, CargaProfundidad cp) {
 		// OJ
 		this.velocidad = velocidad; // TODO multiplicar x -1 depende donde aparece?
 		this.altura = altura;
 		this.largo = largo;
-		this.areaJuego = aj;
 		this.coordenada = c;
 		// Buque
 		añadirCarga(cp);
@@ -52,11 +51,9 @@ public class Buque extends ObjetosJuego {
 				soltarCarga();
 		}
 		// TODO implement here
-
-		//hago un nuevo metodo()
 		
 		// TODO evento de movimiento 
-		if (this.coordenada.getX() == this.xDesaparecer) {
+		if (this.coordenada.getX() >= this.xDesaparecer) {
 			// desaparecer(); lo hace el controlador
 		}
 	}

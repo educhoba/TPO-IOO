@@ -14,12 +14,11 @@ public class Submarino extends ObjetosJuego {
 	private int nivel;
 	private int vidasExtrasContador;
 
-	public Submarino(int velocidad, int altura, int largo, AreaJuego aj, Coordenada c, int vidas, int integridadCasco) {
+	public Submarino(int velocidad, int altura, int largo, Coordenada c, int vidas, int integridadCasco) {
 		// OJ
 		this.velocidad = velocidad;
 		this.altura = altura;
 		this.largo = largo;
-		this.areaJuego = aj;
 		this.coordenada = c;
 		// Sub
 		ObjetosJuego.velocidadMultiplicador = 1;
@@ -41,7 +40,7 @@ public class Submarino extends ObjetosJuego {
 	}
 
 	public boolean estaVivo() {
-		return vidas > 0;
+		return vidas >= 0;
 	}
 
 	// Setters
@@ -74,17 +73,18 @@ public class Submarino extends ObjetosJuego {
 
 	private void restarVida() {
 		this.vidas--;
-		if (vidas > 0)
+		if (vidas >= 0)
 			this.integridadCasco = 100;
 	}
 
 	public void moverArriba() {
-		// TODO implement here
-		return;
+		var distancia = this.velocidad;
+		this.coordenada.moverY(distancia);
 	}
 
 	public void moverAbajo() {
-		// TODO implement here
+		var distancia = -this.velocidad;
+		this.coordenada.moverY(distancia);
 		return;
 	}
 

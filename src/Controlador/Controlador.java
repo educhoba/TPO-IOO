@@ -14,6 +14,9 @@ public class Controlador {
      * Default constructor
      */
     public Controlador() {
+    	
+    	//move buque
+    	//move carga
     }
 
     /**
@@ -99,7 +102,8 @@ public class Controlador {
      * @return
      */
     public void getInput() {
-        // TODO implement here
+    	//si apreto ESC abrir menu
+    	//si apreto W submarino.moverarriba()
         return;
     }
 

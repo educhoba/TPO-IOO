@@ -12,7 +12,6 @@ public abstract class ObjetosJuego {
     protected int altura;
     protected int largo;
     protected Coordenada coordenada;
-    protected AreaJuego areaJuego;
 
     public Coordenada getCoordenada() {
         return this.coordenada;
