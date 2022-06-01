@@ -45,7 +45,44 @@ public class Submarino extends ObjetosJuego {
 
 	// Setters
 
-	public void dañar(int valor) {
+	private void calcularExplosion(Coordenada coordenadaCarga) {
+
+		float xExplosion = coordenadaCarga.getX();
+		float yExplosion = coordenadaCarga.getY();
+		float xSubmarino = this.coordenada.getX();
+		float ySubmarino = this.coordenada.getY();
+
+		float mediaAltura = this.altura / 2.0f;
+		float medioLargo = this.altura / 2.0f;
+
+		float A  = xSubmarino + medioLargo; //xVerticeDerecho
+		float B  = xSubmarino - medioLargo; //xVerticeIzquierdo
+
+		float C = xSubmarino + mediaAltura;//yVerticeArriba
+		float D = xSubmarino - mediaAltura; //yVerticeAbajo
+
+		//	     (A,C)                             (B,C)
+        //	     //////////////////////////////////
+        //	     //                              //
+        //	     //                              //
+        //	     //                              //
+        //	     //////////////////////////////////
+		//	     (A,D)                             (B,D)
+
+		float explosionDistancia = 0;
+	}
+
+	private int calcularDaño(float explosionDistancia) {
+		// TODO implement here
+		return 0;
+	}
+
+	private int calcularPuntos(float explosionDistancia) {
+		// TODO implement here
+		return 0;
+	}
+
+	private void dañar(int valor) {
 		this.integridadCasco -= valor;
 		// TODO evento de daño
 		if (integridadCasco <= 0) {
@@ -53,9 +90,8 @@ public class Submarino extends ObjetosJuego {
 		}
 	}
 
-	public void añadirPuntos(int valor) {
+	private void añadirPuntos(int valor) {
 		this.puntos += valor;
-
 		// TODO evento de puntos
 		if (this.puntos / 500 > vidasExtrasContador) {
 			añadirVidas();

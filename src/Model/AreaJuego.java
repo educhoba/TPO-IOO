@@ -12,6 +12,7 @@ public class AreaJuego {
     private int xMin;
     private int yMax;
     private int yMin;
+    private String estadoJuego; //estatico?
 
     public AreaJuego(int xMax , int xMin, int yMax, int yMin) {
         this.xMax = xMax;
@@ -34,6 +35,9 @@ public class AreaJuego {
 
     public int getYMin() {
         return this.yMin;
+    }
+    public String getEstado() {
+        return this.estadoJuego;
     }
 
 }

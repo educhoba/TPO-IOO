@@ -45,15 +45,6 @@ public class CargaProfundidad extends ObjetosJuego {
 		return this.buque == null;
 	}
 
-	public int calcularDaño(float explosionDistancia) {
-		// TODO implement here
-		return 0;
-	}
-
-	public int calcularPuntos(float explosionDistancia) {
-		// TODO implement here
-		return 0;
-	}
 
 	private void setAlturaExplosion() {
 		// TODO numero random dentro del gamearea
