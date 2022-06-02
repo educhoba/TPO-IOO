@@ -50,11 +50,8 @@ public class Buque extends ObjetosJuego {
 					|| (xActual - distancia > this.xSoltar && xActual < this.xSoltar))// si pasó el punto yendo de derecha a izquierda (velocidad es - => distancia es -)
 				soltarCarga();
 		}
-		// TODO implement here
-		
-		// TODO evento de movimiento 
 		if (this.coordenada.getX() >= this.xDesaparecer) {
-			// desaparecer(); lo hace el controlador
+			//TODO evento desaparecer = desaparecer(); lo hace el controlador
 		}
 	}
 
@@ -65,6 +62,7 @@ public class Buque extends ObjetosJuego {
 
 	public void añadirCarga(CargaProfundidad carga) {
 		this.cargaProfunidad = carga;
+		this.cargaProfunidad.añadir(this);
 		return;
 	}
 

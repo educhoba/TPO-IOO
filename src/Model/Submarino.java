@@ -45,7 +45,7 @@ public class Submarino extends ObjetosJuego {
 
 	// Setters
 
-	private void calcularExplosion(Coordenada coordenadaCarga) {
+	public void calcularExplosion(Coordenada coordenadaCarga) {
 
 		float xExplosion = coordenadaCarga.getX();
 		float yExplosion = coordenadaCarga.getY();
@@ -55,31 +55,57 @@ public class Submarino extends ObjetosJuego {
 		float mediaAltura = this.altura / 2.0f;
 		float medioLargo = this.altura / 2.0f;
 
-		float A  = xSubmarino + medioLargo; //xVerticeDerecho
-		float B  = xSubmarino - medioLargo; //xVerticeIzquierdo
+		float A = xSubmarino + medioLargo; // xVerticeDerecho
+		float B = xSubmarino - medioLargo; // xVerticeIzquierdo
+		float C = xSubmarino + mediaAltura;// yVerticeArriba
+		float D = xSubmarino - mediaAltura; // yVerticeAbajo
 
-		float C = xSubmarino + mediaAltura;//yVerticeArriba
-		float D = xSubmarino - mediaAltura; //yVerticeAbajo
+		// (A,C)          largo              (B,C)
+		// //////////////////////////////////
+		// //                              //
+		// //                              // alto
+		// //                              //
+		// //////////////////////////////////
+		// (A,D)                             (B,D)
 
-		//	     (A,C)                             (B,C)
-        //	     //////////////////////////////////
-        //	     //                              //
-        //	     //                              //
-        //	     //                              //
-        //	     //////////////////////////////////
-		//	     (A,D)                             (B,D)
-
+		// TODO: calcular distancia minima
 		float explosionDistancia = 0;
+
+		calcularPuntos(explosionDistancia);
+		calcularDaño(explosionDistancia);
 	}
 
-	private int calcularDaño(float explosionDistancia) {
-		// TODO implement here
-		return 0;
+	private void calcularDaño(float explosionDistancia) {
+		//TODO ponerle los valores y las condiciones de la consigna
+		boolean condicion1 = true;
+		boolean condicion2 = true;
+		int valor1 = 0;
+		int valor2 = 0;
+		int valor3 = 0;
+		
+		if (condicion1)
+			dañar(valor1);
+		else if (condicion2)
+			dañar(valor2);
+		else
+			dañar(valor3);
 	}
 
-	private int calcularPuntos(float explosionDistancia) {
-		// TODO implement here
-		return 0;
+	private void calcularPuntos(float explosionDistancia) {
+		//TODO ponerle los valores y las condiciones de la consigna
+		boolean condicion1 = true;
+		boolean condicion2 = true;
+		int valor1 = 0;
+		int valor2 = 0;
+		int valor3 = 0;
+		
+		if (condicion1)
+			añadirPuntos(valor1);
+		else if (condicion2)
+			añadirPuntos(valor2);
+		else
+			añadirPuntos(valor3);
+
 	}
 
 	private void dañar(int valor) {
@@ -102,9 +128,11 @@ public class Submarino extends ObjetosJuego {
 		this.vidas++;
 		this.vidasExtrasContador++;
 	}
-
-	public void incrementarDificultad(float porcentaje) {
+	
+	public void pasarDeNivelEIncrementarDificultad(float porcentaje) {
 		ObjetosJuego.velocidadMultiplicador = ObjetosJuego.velocidadMultiplicador * (1 + (porcentaje / 100));
+		// TODO evento de nivel
+		this.nivel++;
 	}
 
 	private void restarVida() {
@@ -121,17 +149,16 @@ public class Submarino extends ObjetosJuego {
 	public void moverAbajo() {
 		var distancia = -this.velocidad;
 		this.coordenada.moverY(distancia);
-		return;
 	}
 
 	public void moverDerecha() {
-		// TODO implement here
-		return;
+		var distancia = this.velocidad;
+		this.coordenada.moverX(distancia);
 	}
 
 	public void moverIzquierda() {
-		// TODO implement here
-		return;
+		var distancia = -this.velocidad;
+		this.coordenada.moverX(distancia);
 	}
 
 }

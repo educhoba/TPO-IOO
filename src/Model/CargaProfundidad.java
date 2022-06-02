@@ -19,18 +19,21 @@ public class CargaProfundidad extends ObjetosJuego {
 		this.coordenada = c;
 		// Carga
 		setAlturaExplosion();
-		buque = null;//TODO ver como asignarle el buque
+		buque = null;
 	}
 
 	public void soltar() {
 		this.buque = null;
+	}
+	public void añadir(Buque b) {
+		this.buque = b;
 	}
 
 	public void moveY(float deltaTime) {
 		if (estaSoltada()) {
 			float distancia = deltaTime * this.velocidad * ObjetosJuego.velocidadMultiplicador;
 			this.coordenada.moverY(distancia);
-			// TODO chequeo si tiene que explotar
+			//chequeo si tiene que explotar
 			float yActual = this.coordenada.getX();
 			if (yActual <= this.alturaExplosion)
 				explotar();
