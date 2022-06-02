@@ -2,19 +2,14 @@ package Model;
 
 public class Submarino extends ObjetosJuego {
 
-	/**
-	 * Default constructor
-	 */
-	public Submarino() {
-	}
-
 	private int integridadCasco;
 	private int vidas;
 	private int puntos;
 	private int nivel;
 	private int vidasExtrasContador;
+	private final int INTEGRIDAD_CASCO_MAX = 100;
 
-	public Submarino(int velocidad, int altura, int largo, Coordenada c, int vidas, int integridadCasco) {
+	public Submarino(int velocidad, int altura, int largo, Coordenada c, int vidas) {
 		// OJ
 		this.velocidad = velocidad;
 		this.altura = altura;
@@ -26,7 +21,7 @@ public class Submarino extends ObjetosJuego {
 		this.vidasExtrasContador = 0;
 		this.puntos = 0;
 		this.vidas = vidas;
-		this.integridadCasco = integridadCasco;
+		this.integridadCasco = INTEGRIDAD_CASCO_MAX;
 
 	}
 	// Getters
@@ -169,7 +164,7 @@ public class Submarino extends ObjetosJuego {
 	private void restarVida() {
 		this.vidas--;
 		if (vidas >= 0)
-			this.integridadCasco = 100;
+			this.integridadCasco = INTEGRIDAD_CASCO_MAX;
 	}
 
 	public void moverArriba() {

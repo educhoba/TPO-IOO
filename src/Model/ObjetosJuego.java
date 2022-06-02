@@ -1,11 +1,5 @@
 package Model;
 public abstract class ObjetosJuego {
-
-    /**
-     * Default constructor
-     */
-    public ObjetosJuego() {
-    }
     
     protected float velocidad;
     protected static float velocidadMultiplicador;

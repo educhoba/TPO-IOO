@@ -2,9 +2,6 @@ package Model;
 
 public class Buque extends ObjetosJuego {
 
-	public Buque() {
-	}
-
 	private float xSoltar;
 	private float xDesaparecer;
 	private CargaProfundidad cargaProfunidad;

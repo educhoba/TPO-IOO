@@ -2,12 +2,6 @@ package Model;
 
 public class CargaProfundidad extends ObjetosJuego {
 
-	/**
-	 * Default constructor
-	 */
-	public CargaProfundidad() {
-	}
-
 	private float alturaExplosion;
 	private Buque buque;
 

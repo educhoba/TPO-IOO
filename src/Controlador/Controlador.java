@@ -1,165 +1,159 @@
 package Controlador;
+
 import java.util.*;
 
 import Model.AreaJuego;
 import Model.CargaProfundidad;
 import Model.Coordenada;
+import Model.Buque;
+import Model.Submarino;
 
-/**
- * 
- */
 public class Controlador {
 
-    /**
-     * Default constructor
-     */
-    public Controlador() {
-    	
-    	//move buque
-    	//move carga
-    }
+	List<AreaJuego> areas;
+	List<CargaProfundidad> cargas;
+	List<Buque> buques;
+	Submarino jugador;
 
-    /**
-     * @return
-     */
-    private int getNivel() {
-        // TODO implement here
-        return 0;
-    }
+	public Controlador() {
+		areas = new ArrayList<AreaJuego>();
+		cargas = new ArrayList<CargaProfundidad>();
+		buques = new ArrayList<Buque>();
+		jugador = null;
+	}
 
-    /**
-     * @return
-     */
-    private void nuevoNivel() {
-        // TODO implement here
-        return;
-    }
+	// TODO hacer el orquestador (flow del juego)
+	// TODO hacer el event listener de las clases
 
-    /**
-     * @param dc 
-     * @param ga 
-     * @param c 
-     * @return
-     */
-    private void aparecerBuque(CargaProfundidad dc, AreaJuego ga, Coordenada c) {
-        // TODO implement here
-        return;
-    }
+	private int getNivel() {
+		return jugador.getNivel();
+	}
 
-    /**
-     * @param ga 
-     * @param c 
-     * @return
-     */
-    private void crearCargaProfundidad(AreaJuego ga, Coordenada c) {
-        // TODO implement here
-        return;
-    }
+	private void nuevoNivel() {
+		jugador.pasarDeNivelEIncrementarDificultad(10);
+	}
 
-    /**
-     * @param aj 
-     * @param c 
-     * @return
-     */
-    private void aparecerSubmarino(AreaJuego aj, Coordenada c) {
-        // TODO implement here
-        return;
-    }
+	private void aparecerBuque(CargaProfundidad dc, Coordenada c) {
+		this.buques.add(new Buque(6, 1, 1, c, dc));
+	}
 
-    /**
-     * @return
-     */
-    private void cargarMenu() {
-        // TODO implement here
-        return;
-    }
+	private CargaProfundidad crearCargaProfundidad(Coordenada c) {
+		return new CargaProfundidad(5, 1, 1, c);
+	}
 
-    /**
-     * @return
-     */
-    private void juegoFinalizado() {
-        // TODO implement here
-        return;
-    }
+	private void aparecerSubmarino(Coordenada c) {
+		this.jugador = new Submarino(1, 50, 10, c, 3);
+	}
 
-    /**
-     * @return
-     */
-    private void empezarJuego() {
-        // TODO implement here
-        return;
-    }
+	private void abrirOSalirDelMenuSiElJuegoEstaCorriendo() {
+		for (AreaJuego item : areas) {
+			if (item.estaMenuAbierto())
+				item.iniciarOReanudarJuego();
+			else if (item.estaCorriendo())
+				item.abrirMenu();
+		}
+	}
 
-    /**
-     * @return
-     */
-    private void terminarJuego() {
-        // TODO implement here
-        return;
-    }
+	private void juegoFinalizado() {
+		// TODO WIP
+		for (AreaJuego item : areas) {
+			if (item.estaCorriendo())
+				item.irAlInicio();
+		}
+	}
 
-    /**
-     * @return
-     */
-    private void pausarOReanudarJuego() {
-        // TODO implement here
-        return;
-    }
-    /**
-     * @return
-     */
-    public void getInput() {
-    	//si apreto ESC abrir menu
-    	//si apreto W submarino.moverarriba()
-        return;
-    }
+	private void empezarJuego() {
+		for (AreaJuego item : areas) {
+			if (item.estaEnInicio())
+				item.iniciarOReanudarJuego();
+		}
+	}
 
-    /**
-     * @return
-     */
-    private void desaparecerBuque() {
-        // TODO implement here
-        return;
-    }
+	private void terminarJuegoSiEstaElMenuAbierto() {
+		for (AreaJuego item : areas) {
+			if (item.estaMenuAbierto())
+				item.irAlInicio();
+		}
+		return;
+	}
 
-    /**
-     * @return
-     */
-    private void desaparecerCarga() {
-        // TODO implement here
-        return;
-    }
+	private void pausarOReanudarJuegoSiElJuegoEstaCorriendo() {
+		for (AreaJuego item : areas) {
+			if (item.estaPausado())
+				item.iniciarOReanudarJuego();
+			else if (item.estaCorriendo())
+				item.pausarJuego();
+		}
+	}
 
-    /**
-     * @return
-     */
-    private void desaparecerSubmarino() {
-        // TODO implement here
-        return;
-    }
+	private void desaparecerBuque(Buque b) {
+		for (Buque item : buques) {
+			if (item.equals(b)) {
+				buques.remove(item);
+				break;
+			}
+		}
+	}
 
-    /**
-     * @return
-     */
-    private void aparecerCarga() {
-        // TODO implement here
-        return;
-    }
+	private void desaparecerCarga(CargaProfundidad c) {
+		for (CargaProfundidad item : cargas) {
+			if (item.equals(c)) {
+				cargas.remove(item);
+				break;
+			}
+		}
+	}
 
-    /**
-     * @param entrada  
-     * @return
-     */
-    private void moverSubmarino(int entrada ) {
-        // TODO implement here
-        return;
-    }
+	private void desaparecerSubmarino() {
+		// creo que el submarino desaparece solamente si termina completamente el juego
+		jugador = null;
+	}
 
-    /**
-     * @param entrada
-     */
-    public void obtenerEntradaTeclado(int entrada ) {
-        // TODO implement here
-    }
+	private void aparecerCarga(CargaProfundidad c) {
+		cargas.add(c);
+	}
+
+	private void moverSubmarino(int entrada) {
+		if (entrada == 87)// W
+			jugador.moverArriba();
+		if (entrada == 65)
+			jugador.moverAbajo();
+		if (entrada == 83)// S
+			jugador.moverIzquierda();
+		if (entrada == 68)// D
+			jugador.moverDerecha();
+	}
+
+	public void obtenerEntradaTeclado(int entrada) {
+		switch (entrada) {
+		case 27: // Escape
+			abrirOSalirDelMenuSiElJuegoEstaCorriendo();
+			break;
+		case 65:// A
+			moverSubmarino(entrada);
+			break;
+		case 68:// D
+			moverSubmarino(entrada);
+			break;
+		case 78:// N
+			//lo puse x las dudas
+			break;
+		case 80:// P
+			pausarOReanudarJuegoSiElJuegoEstaCorriendo();
+			break;
+		case 83:// S
+			moverSubmarino(entrada);
+			break;
+		case 87:// W
+			moverSubmarino(entrada);
+			break;
+		case 89:// Y
+			terminarJuegoSiEstaElMenuAbierto();
+			break;
+		default:
+			break;
+		}
+
+	}
 
 }
