@@ -19,18 +19,21 @@ public class CargaProfundidad extends ObjetosJuego {
 		this.coordenada = c;
 		// Carga
 		setAlturaExplosion();
-		buque = null;//TODO ver como asignarle el buque
+		buque = null;
 	}
 
 	public void soltar() {
 		this.buque = null;
+	}
+	public void añadir(Buque b) {
+		this.buque = b;
 	}
 
 	public void moveY(float deltaTime) {
 		if (estaSoltada()) {
 			float distancia = deltaTime * this.velocidad * ObjetosJuego.velocidadMultiplicador;
 			this.coordenada.moverY(distancia);
-			// TODO chequeo si tiene que explotar
+			//chequeo si tiene que explotar
 			float yActual = this.coordenada.getX();
 			if (yActual <= this.alturaExplosion)
 				explotar();
@@ -45,15 +48,6 @@ public class CargaProfundidad extends ObjetosJuego {
 		return this.buque == null;
 	}
 
-	public int calcularDaño(float explosionDistancia) {
-		// TODO implement here
-		return 0;
-	}
-
-	public int calcularPuntos(float explosionDistancia) {
-		// TODO implement here
-		return 0;
-	}
 
 	private void setAlturaExplosion() {
 		// TODO numero random dentro del gamearea

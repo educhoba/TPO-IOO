@@ -85,7 +85,7 @@ public class Controlador {
     /**
      * @return
      */
-    public void empezarJuego() {
+    private void empezarJuego() {
         // TODO implement here
         return;
     }
@@ -93,11 +93,18 @@ public class Controlador {
     /**
      * @return
      */
-    public void terminarJuego() {
+    private void terminarJuego() {
         // TODO implement here
         return;
     }
 
+    /**
+     * @return
+     */
+    private void pausarOReanudarJuego() {
+        // TODO implement here
+        return;
+    }
     /**
      * @return
      */

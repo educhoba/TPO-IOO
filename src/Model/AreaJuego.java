@@ -12,6 +12,9 @@ public class AreaJuego {
     private int xMin;
     private int yMax;
     private int yMin;
+    private int estadoJuego; //estatico?
+    private final int ESTADO_PAUSADO = 0;
+    private final int ESTADO_CORRIENDO = 1;
 
     public AreaJuego(int xMax , int xMin, int yMax, int yMin) {
         this.xMax = xMax;
@@ -36,4 +39,16 @@ public class AreaJuego {
         return this.yMin;
     }
 
+    public boolean estaCorriendo() {
+        return this.estadoJuego == ESTADO_CORRIENDO;
+    }
+    public boolean estaPausado() {
+        return this.estadoJuego == ESTADO_PAUSADO;
+    }
+    public void pausarJuego(){
+    	this.estadoJuego = ESTADO_PAUSADO;
+    }
+    public void iniciarOReanudarJuego(){
+    	this.estadoJuego = ESTADO_CORRIENDO;
+    }
 }
