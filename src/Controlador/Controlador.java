@@ -25,8 +25,34 @@ public class Controlador {
 	// TODO hacer el orquestador (flow del juego)
 	// TODO hacer el event listener de las clases
 
-	private int getNivel() {
+	public int getNivel() {
 		return jugador.getNivel();
+	}
+
+	public int getVidasJugador() {
+		//TODO
+		return 0;
+	}
+
+	public int getIntegridadCascoJugador() {
+		//TODO
+		return 0;
+	}
+	public int getPuntosJugador() {
+		//TODO
+		return 0;
+	}
+	private void eventoNivel() {
+		//TODO
+	}
+	private void eventoDaño() {
+		//TODO
+	}
+	private void eventoPuntos() {
+		//TODO
+	}
+	private void eventoDesaparecerBuque() {
+		//TODO
 	}
 
 	private void nuevoNivel() {
@@ -34,6 +60,7 @@ public class Controlador {
 	}
 
 	private void aparecerBuque(CargaProfundidad dc, Coordenada c) {
+		//TODO crear la coordenada random
 		this.buques.add(new Buque(6, 1, 1, c, dc));
 	}
 
@@ -62,7 +89,8 @@ public class Controlador {
 		}
 	}
 
-	private void empezarJuego() {
+	private void comenzarJuegoSiEstaEnInicio() {
+		// TODO: Hay que crear las areas de juego, generar los objetos, bla bla
 		for (AreaJuego item : areas) {
 			if (item.estaEnInicio())
 				item.iniciarOReanudarJuego();
@@ -136,7 +164,7 @@ public class Controlador {
 			moverSubmarino(entrada);
 			break;
 		case 78:// N
-			//lo puse x las dudas
+			// lo puse x las dudas
 			break;
 		case 80:// P
 			pausarOReanudarJuegoSiElJuegoEstaCorriendo();
@@ -149,6 +177,7 @@ public class Controlador {
 			break;
 		case 89:// Y
 			terminarJuegoSiEstaElMenuAbierto();
+			comenzarJuegoSiEstaEnInicio();
 			break;
 		default:
 			break;
@@ -156,4 +185,18 @@ public class Controlador {
 
 	}
 
+	public List<Coordenada> getCoordenadasBuques() {
+		// TODO
+		return null;
+	}
+
+	public List<Coordenada> getCoordenadasJugador() {
+		// TODO
+		return null;
+	}
+
+	public List<Coordenada> getCoordenadasCargas() {
+		// TODO
+		return null;
+	}
 }

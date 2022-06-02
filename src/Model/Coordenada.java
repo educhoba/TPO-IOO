@@ -26,19 +26,20 @@ public class Coordenada {
     }
 
     public void moverY(float distance) {
-
-        	float yFinal = this.yCoordenada+distance;
-        	
-        	if(yFinal > (float)areaJuego.getYMax())
-        		this.yCoordenada = (float)areaJuego.getYMax();
-        	else if(yFinal < (float)areaJuego.getYMin())
-        		this.yCoordenada = (float)areaJuego.getYMin();
-        	else
-        		this.yCoordenada = yFinal;
+    		if(areaJuego.estaCorriendo()) {
+            	float yFinal = this.yCoordenada+distance;
+            	
+            	if(yFinal > (float)areaJuego.getYMax())
+            		this.yCoordenada = (float)areaJuego.getYMax();
+            	else if(yFinal < (float)areaJuego.getYMin())
+            		this.yCoordenada = (float)areaJuego.getYMin();
+            	else
+            		this.yCoordenada = yFinal;
+    		}
     }
 
     public void moverX(float distance) {
-
+    	if(areaJuego.estaCorriendo()) {
         	float xFinal = this.xCoordenada+distance;
         	
         	if(xFinal > (float)areaJuego.getXMax())
@@ -47,7 +48,7 @@ public class Coordenada {
         		this.yCoordenada = (float)areaJuego.getXMin();
         	else
         		this.yCoordenada = xFinal;
-
+    	}
     }
 
 }
