@@ -30,7 +30,7 @@ public class Main {
 		}
 	}
 
-	public static void printJuego(Controlador controlador){
+	static void printJuego(Controlador controlador){
 		printNivel(controlador.getNivel());
 		printInfoJugador(controlador.getVidasJugador(),
 				controlador.getIntegridadCascoJugador(),
@@ -46,42 +46,41 @@ public class Main {
 		}
 		printCoordenadasSubmarino(controlador.getCoordenadasJugador());
 	}
-	private static void printNivel(int nivel) {
+	static void printNivel(int nivel) {
 		System.out.println("Nivel: " +nivel );
 		
 	}
-
-	public static void printCoordenadasSubmarino(Coordenada coordSubmarino) {
+	static void printCoordenadasSubmarino(Coordenada coordSubmarino) {
 		System.out.printf("Posición Submarino: (%.2f,%.2f)%n",coordSubmarino.getX(),coordSubmarino.getY());
 	}
-	public static void printCoordenadasBuque(Coordenada coordBuque)
+	static void printCoordenadasBuque(Coordenada coordBuque)
 	{
 		System.out.printf("Posición Buque: (%.2f,%.2f)%n",coordBuque.getX(),coordBuque.getY());
 	}
-	public static void printCoordenadasCarga(Coordenada coordCarga)
+	static void printCoordenadasCarga(Coordenada coordCarga)
 	{
 		System.out.printf("Posición Carga: (%.2f,%.2f)%n",coordCarga.getX(),coordCarga.getY());
 	}
-	public static void printInfoJugador(int vidas,int integridad, int puntos) {
+	static void printInfoJugador(int vidas,int integridad, int puntos) {
 		System.out.print("Vidas: " +vidas +" - ");
 		System.out.print("Integridad: " +integridad +" - ");
 		System.out.print("Puntos: " +puntos);
 		System.out.println();
 	}
-	public static void printInicio() {
+	static void printInicio() {
 		System.out.println("=============MENU===============");
 		System.out.println("Apretar 'Y' para comenzar el juego");
 	}
-	public static void printMenu() {
+	static void printMenu() {
 		System.out.println("=============MENU===============");
 		System.out.println("Apretar 'Y' para finalizar el juego");
 		System.out.println("Apretar 'ESC' para reanudar el juego");
 	}
-	public static void printPausado() {
+	static void printPausado() {
 		System.out.println("=============PAUSADO===============");
 		System.out.println("Apretar 'P' para reanudar el juego");
 	}
-    public static void clearScreen() {  
+    static void clearScreen() {  
     	try {
 			Thread.sleep(300);
 		} catch (InterruptedException e) {
