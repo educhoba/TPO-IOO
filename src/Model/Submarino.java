@@ -107,11 +107,11 @@ public class Submarino extends ObjetosJuego {
 	}
 
 	private void calcularDaño(float explosionDistancia) {
-		if (explosionDistancia < 10)
+		if (explosionDistancia < 100)
 			dañar(100);
-		else if (explosionDistancia < 50)
+		else if (explosionDistancia < 500)
 			dañar(50);
-		else if (explosionDistancia < 100)
+		else if (explosionDistancia < 1000)
 			dañar(30);
 	}
 
@@ -156,13 +156,12 @@ public class Submarino extends ObjetosJuego {
 	private void restarVida() {
 		this.vidas--;
 		Debugger.printPerderVida(this.vidas);
-		if (vidas > 0)
+		if (vidas >= 0)
 		{
 			Debugger.printRecargarIntegridad();
 			this.integridadCasco = INTEGRIDAD_CASCO_MAX;
 		}
-		else 
-			Debugger.printGameOver();
+		
 	}
 
 	public void moverArriba() {

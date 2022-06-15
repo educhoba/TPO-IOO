@@ -31,6 +31,7 @@ public class Main {
 	}
 
 	public static void printJuego(Controlador controlador){
+		printNivel(controlador.getNivel());
 		printInfoJugador(controlador.getVidasJugador(),
 				controlador.getIntegridadCascoJugador(),
 				controlador.getPuntosJugador()
@@ -45,19 +46,21 @@ public class Main {
 		}
 		printCoordenadasSubmarino(controlador.getCoordenadasJugador());
 	}
+	private static void printNivel(int nivel) {
+		System.out.println("Nivel: " +nivel );
+		
+	}
+
 	public static void printCoordenadasSubmarino(Coordenada coordSubmarino) {
-		System.out.println("Posición Submarino: (" +coordSubmarino.getX() 
-		+", " +coordSubmarino.getY() +")");
+		System.out.printf("Posición Submarino: (%.2f,%.2f)%n",coordSubmarino.getX(),coordSubmarino.getY());
 	}
 	public static void printCoordenadasBuque(Coordenada coordBuque)
 	{
-		System.out.println("Posicion Buque: (" +coordBuque.getX() 
-		+", " +coordBuque.getY() +")");
+		System.out.printf("Posición Buque: (%.2f,%.2f)%n",coordBuque.getX(),coordBuque.getY());
 	}
 	public static void printCoordenadasCarga(Coordenada coordCarga)
 	{
-		System.out.println("Posicion Carga: (" +coordCarga.getX() 
-		+", " +coordCarga.getY() +")");
+		System.out.printf("Posición Carga: (%.2f,%.2f)%n",coordCarga.getX(),coordCarga.getY());
 	}
 	public static void printInfoJugador(int vidas,int integridad, int puntos) {
 		System.out.print("Vidas: " +vidas +" - ");

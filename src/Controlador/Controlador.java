@@ -2,20 +2,15 @@ package controlador;
 
 import java.util.*;
 
-import eventos.EventoTeclado;
 import model.AreaJuego;
 import model.Buque;
 import model.CargaProfundidad;
 import model.Coordenada;
 import model.Submarino;
+import test.Debugger;
 
 public class Controlador {
 
-	private static final int FPS = 24;
-	private static final double TIME = 1000000000 / FPS; // 1 segundo expresado en nanosegundos sobre la cantidad de FPS
-															// que se desean.
-	//private long ultimaActualizacion = System.nanoTime();
-	
 	AreaJuego areaJuego;
 	List<CargaProfundidad> cargas;
 	List<Buque> buques;
@@ -29,42 +24,55 @@ public class Controlador {
 		crearAreaJuego();
 	}
 
-	// TODO hacer el orquestador (flow del juego)
-	// TODO hacer el event listener de las clases
-
-	
 	public void actualizarJuego() {
-		if(jugador == null) {
+		// cuando sea grafico hay que poner el delta tiempo
+		if (jugador == null) {
 			inicializarSubmarino();
 			aparecerBuque();
 		}
-		//long now = 0;
-		//long lastTime = System.nanoTime();
-		//long ahora = System.nanoTime();
-		//lastTime = now;
-		
-		//double deltaTiempo = (ahora - lastTime) / TIME;
-		//double deltaTiempo = TIME;
-
+		List<Buque> dumpBuque = new ArrayList<Buque>();
+		List<CargaProfundidad> dumpCarga = new ArrayList<CargaProfundidad>();
 		for (Buque obj : buques) {
 			obj.moverX(1);
+			if (obj.finalizoRecorrido())
+				dumpBuque.add(obj);
 		}
 
 		for (CargaProfundidad obj : cargas) {
 			obj.moverY(1);
+			if (obj.exploto()) {
+				eventoExplosion(obj);
+				dumpCarga.add(obj);
+			}
 		}
-		//ultimaActualizacion = ahora;
+		for (Buque obj : dumpBuque) {
+			desaparecerBuque(obj);
+		}
+
+		for (CargaProfundidad obj : dumpCarga) {
+			desaparecerCarga(obj);
+		}
+
+		if (!jugador.estaVivo()) {
+			finalizarJuego();
+		}
+
+	}
+
+	private void finalizarJuego() {
+		Debugger.printGameOver();
+		areaJuego.finalizarEjecucion();
 	}
 
 	private void crearAreaJuego() {
-		areaJuego = new AreaJuego(400, 0, 800, 0);
+		areaJuego = new AreaJuego(150, 0, -800, 0);
 		// int xMax, int xMin, int yMax, int yMin
 	}
 
 	private void inicializarSubmarino() {
 		Coordenada coordSubmarino = new Coordenada(areaJuego.getXMax() / 2, areaJuego.getYMax() / 2, areaJuego,
-				areaJuego.getXMin(), 300, areaJuego.getXMax(), 800);
-		jugador = new Submarino(10, 3, 5, coordSubmarino);
+				areaJuego.getXMin(), -300, areaJuego.getXMax(), -800);
+		aparecerSubmarino(coordSubmarino);
 	}
 
 	public int getNivel() {
@@ -80,35 +88,23 @@ public class Controlador {
 	}
 
 	public int getPuntosJugador() {
-		// TODO
-		return 0;
+		return jugador.getPuntos();
 	}
 
-	private void eventoNivel() {
-		// TODO
+	private void eventoExplosion(CargaProfundidad carga) {
+		jugador.calcularExplosion(carga.getCoordenada());
+
 	}
 
-	private void eventoDaño() {
-		// TODO
-	}
-
-	private void eventoPuntos() {
-		// TODO
-	}
-
-	private void eventoDesaparecerBuque() {
-		// TODO
-	}
-
-	private void eventoExplosionBomba() {
-		// TODO
-	}
-
-	private void nuevoNivel() {
+	private void pasarDeNivel() {
 		jugador.pasarDeNivelEIncrementarDificultad(10);
+		Buque.resetCantidadBuques();
 	}
 
 	private void aparecerBuque() {
+
+		if (Buque.getCantidadBuques() == 10)
+			pasarDeNivel();
 
 		int lado = new Random().nextInt(1 + 1); // nro 0 o 1.
 		float velocidad;
@@ -131,11 +127,11 @@ public class Controlador {
 	private CargaProfundidad crearCargaProfundidad(int xBuque) {
 
 		Coordenada c = new Coordenada(xBuque, areaJuego.getYMin(), areaJuego);
-		return new CargaProfundidad(6f, 1, 1, c, 300, 700);
+		return new CargaProfundidad(6f, 1, 1, c, -300, -700);
 	}
 
 	private void aparecerSubmarino(Coordenada c) {
-		this.jugador = new Submarino(1, 3, 5, c);
+		this.jugador = new Submarino(10, 3, 5, c);
 	}
 
 	private void abrirOSalirDelMenuSiElJuegoEstaCorriendo() {
@@ -145,12 +141,6 @@ public class Controlador {
 		else if (areaJuego.estaCorriendo())
 			areaJuego.abrirMenu();
 
-	}
-
-	private void juegoFinalizado() {
-		// TODO WIP
-		if (areaJuego.estaCorriendo())
-			areaJuego.irAlInicio();
 	}
 
 	private void comenzarJuegoSiEstaEnInicio() {
@@ -181,6 +171,7 @@ public class Controlador {
 				break;
 			}
 		}
+		aparecerBuque();
 	}
 
 	private void desaparecerCarga(CargaProfundidad c) {
@@ -190,11 +181,6 @@ public class Controlador {
 				break;
 			}
 		}
-	}
-
-	private void desaparecerSubmarino() {
-		// creo que el submarino desaparece solamente si termina completamente el juego
-		jugador = null;
 	}
 
 	private void aparecerCarga(CargaProfundidad c) {

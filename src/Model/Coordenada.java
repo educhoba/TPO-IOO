@@ -64,9 +64,9 @@ public class Coordenada {
     		if(areaJuego.estaCorriendo()) {
             	float yFinal = this.yCoordenada+distance;
             	
-            	if(yFinal > this.yMax)
+            	if(yFinal < this.yMax)
             		this.yCoordenada = this.yMax;
-            	else if(yFinal < this.yMin)
+            	else if(yFinal > this.yMin)
             		this.yCoordenada = this.yMin;
             	else
             		this.yCoordenada = yFinal;

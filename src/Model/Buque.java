@@ -2,12 +2,14 @@ package model;
 
 import java.util.Random;
 
+import controlador.Controlador;
+
 public class Buque extends ObjetosJuego {
 
 	private float xSoltar;
 	private float xDesaparecer;
 	private CargaProfundidad cargaProfunidad;
-	private static int cantBuques = 0;
+	private static int cantBuques = 1;
 
 	public Buque(float velocidad, int altura, int largo, Coordenada c, CargaProfundidad cp) {
 		super(velocidad, altura, largo, c);
@@ -26,8 +28,8 @@ public class Buque extends ObjetosJuego {
 	// Setters
 	private void setSoltar() {
 
-		int xMin =  (int)this.coordenada.getxMin(); //esto ta mal
-		int xMax =  (int)this.coordenada.getxMax(); //esto ta mal
+		int xMin = (int) this.coordenada.getxMin(); // esto ta mal
+		int xMax = (int) this.coordenada.getxMax(); // esto ta mal
 		this.xSoltar = new Random().nextInt(xMax + 1 - xMin) + xMin; // nro entre xMin y xMax.
 
 	}
@@ -45,15 +47,18 @@ public class Buque extends ObjetosJuego {
 		this.coordenada.moverX(distancia);
 		if (this.tieneCarga()) {
 			this.cargaProfunidad.moverConBuque(distancia);
-			//chequeo si tiene que soltar la carga
+			// chequeo si tiene que soltar la carga
 			float xActual = this.coordenada.getX();
 			if ((xActual == this.xSoltar) // si justo esta en el punto
-					|| (xActual - distancia < this.xSoltar && xActual > this.xSoltar) // si pasó el punto yendo de izquierda a derecha (velocidad es + => distancia es +)
-					|| (xActual - distancia > this.xSoltar && xActual < this.xSoltar))// si pasó el punto yendo de derecha a izquierda (velocidad es - => distancia es -)
+					|| (xActual - distancia < this.xSoltar && xActual > this.xSoltar) // si pasó el punto yendo de
+																						// izquierda a derecha
+																						// (velocidad es + => distancia
+																						// es +)
+					|| (xActual - distancia > this.xSoltar && xActual < this.xSoltar))// si pasó el punto yendo de
+																						// derecha a izquierda
+																						// (velocidad es - => distancia
+																						// es -)
 				soltarCarga();
-		}
-		if (this.coordenada.getX() >= this.xDesaparecer) {
-			//TODO evento desaparecer = desaparecer(); lo hace el controlador
 		}
 	}
 
@@ -66,30 +71,28 @@ public class Buque extends ObjetosJuego {
 		return;
 	}
 
-	//Facu
-	
-	public float getxSoltar() 
-	{
+	// Facu
+
+	public float getxSoltar() {
 		return this.xSoltar;
 	}
-	
-	public boolean isxSoltar()
-	{
+
+	public boolean isxSoltar() {
 		if (velocidad > 0)
 			return coordenada.getX() >= xSoltar && tieneCarga();
 		else
 			return coordenada.getX() <= xSoltar && tieneCarga();
 	}
 
-	public int getCantBuques()
-	{
-		int cant = Buque.cantBuques;
-		if (cant > 10)
-			Buque.cantBuques = 0;
-		return cant;
+	public static int getCantidadBuques() {
+		return Buque.cantBuques;
 	}
-	public boolean isArrived()
+	public static void resetCantidadBuques()
 	{
+		Buque.cantBuques = 1;
+	}
+
+	public boolean finalizoRecorrido() {
 		if (velocidad > 0)
 			return coordenada.getX() == coordenada.getxMax();
 		else

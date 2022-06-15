@@ -6,12 +6,14 @@ public class CargaProfundidad extends ObjetosJuego {
 
 	private float yExplosion;
 	private boolean soltada;
+	private boolean explotada;
 
-	public CargaProfundidad(float velocidad, int altura, int largo, Coordenada c, int yMinExplosion, int yMaxExplosion) {
-		super(velocidad, altura, largo, c);
+	public CargaProfundidad(float velocidad, int altura, int largo, Coordenada c, int yMaxExplosion, int yMinExplosion) {
+		super(-velocidad, altura, largo, c);
 		// Carga
-		setAlturaExplosion(yMinExplosion,yMaxExplosion);
+		setAlturaExplosion(yMaxExplosion, yMinExplosion);
 		this.soltada = false;
+		this.explotada = false;
 	}
 
 	public void moverY(float deltaTime) {
@@ -19,21 +21,22 @@ public class CargaProfundidad extends ObjetosJuego {
 			float distancia = deltaTime * this.velocidad * ObjetosJuego.velocidadMultiplicador;
 			this.coordenada.moverY(distancia);
 			//chequeo si tiene que explotar
-			float yActual = this.coordenada.getX();
+			float yActual = this.coordenada.getY();
 			if (yActual <= this.yExplosion)
 				explotar();
 		}
 	}
 
 	private void explotar() {
-		// TODO implement here evento de explosion
+		explotada = true;
 	}
 	
-	private void setAlturaExplosion( float yMinExplosion, float yMaxExplosion) {
-		int yMin =  (int)yMinExplosion;
-		int yMax =  (int)yMaxExplosion;
-			
-		this.yExplosion =  new Random().nextInt(yMax + 1 - yMin) + yMin; // nro entre yMin e yMax.
+	private void setAlturaExplosion( float yMaxExplosion, float yMinExplosion) {
+		int yMax =  -(int)yMinExplosion;
+		int yMin =  -(int)yMaxExplosion;
+		
+		int yExpl = new Random().nextInt(yMax + 1 - yMin) + yMin; // nro entre yMin e yMax.
+		this.yExplosion = -yExpl;
 	}
 
 	public void moverConBuque(float deltaX) {
@@ -46,6 +49,9 @@ public class CargaProfundidad extends ObjetosJuego {
 	}
 	public void soltar() {
 		soltada =true;
+	}
+	public boolean exploto() {
+		return explotada;
 	}
 	
 }
