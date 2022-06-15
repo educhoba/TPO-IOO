@@ -6,6 +6,7 @@ import model.AreaJuego;
 import model.Buque;
 import model.CargaProfundidad;
 import model.Coordenada;
+import model.CoordenadaView;
 import model.Submarino;
 import test.Debugger;
 
@@ -30,6 +31,7 @@ public class Controlador {
 			inicializarSubmarino();
 			aparecerBuque();
 		}
+
 		List<Buque> dumpBuque = new ArrayList<Buque>();
 		List<CargaProfundidad> dumpCarga = new ArrayList<CargaProfundidad>();
 		for (Buque obj : buques) {
@@ -83,8 +85,8 @@ public class Controlador {
 		return jugador.getVidas();
 	}
 
-	public int getIntegridadCascoJugador() {
-		return jugador.getIntegridadCascoJugador();
+	public int getIntegridadCasco() {
+		return jugador.getIntegridadCasco();
 	}
 
 	public int getPuntosJugador() {
@@ -229,22 +231,22 @@ public class Controlador {
 
 	}
 
-	public List<Coordenada> getCoordenadasBuques() {
-		List<Coordenada> coords = new ArrayList<Coordenada>();
+	public List<CoordenadaView> getCoordenadasBuques() {
+		List<CoordenadaView> coords = new ArrayList<CoordenadaView>();
 		for (Buque item : buques) {
-			coords.add(item.getCoordenada());
+			coords.add(new CoordenadaView(item.getCoordenada()));
 		}
 		return coords;
 	}
 
-	public Coordenada getCoordenadasJugador() {
-		return jugador.getCoordenada();
+	public CoordenadaView getCoordenadasJugador() {
+		return new CoordenadaView(jugador.getCoordenada());
 	}
 
-	public List<Coordenada> getCoordenadasCargas() {
-		List<Coordenada> coords = new ArrayList<Coordenada>();
+	public List<CoordenadaView> getCoordenadasCargas() {
+		List<CoordenadaView> coords = new ArrayList<CoordenadaView>();
 		for (CargaProfundidad item : cargas) {
-			coords.add(item.getCoordenada());
+			coords.add(new CoordenadaView(item.getCoordenada()));
 		}
 		return coords;
 	}

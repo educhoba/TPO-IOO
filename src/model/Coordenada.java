@@ -47,9 +47,9 @@ public class Coordenada {
         return this.yCoordenada;
     }
 
-    public void moverX(float distance) {
+    public void moverX(float distancia) {
     	if(areaJuego.estaCorriendo()) {
-        	float xFinal = this.xCoordenada+distance;
+        	float xFinal = this.xCoordenada+distancia;
         	
         	if(xFinal > this.xMax)
         		this.xCoordenada = this.xMax;
@@ -60,9 +60,9 @@ public class Coordenada {
     	}
     }
     
-    public void moverY(float distance) {
+    public void moverY(float distancia) {
     		if(areaJuego.estaCorriendo()) {
-            	float yFinal = this.yCoordenada+distance;
+            	float yFinal = this.yCoordenada+distancia;
             	
             	if(yFinal < this.yMax)
             		this.yCoordenada = this.yMax;

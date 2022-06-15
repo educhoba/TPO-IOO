@@ -35,7 +35,7 @@ public class Submarino extends ObjetosJuego {
 	public int getVidas() {
 		return this.vidas;
 	}
-	public int getIntegridadCascoJugador() {
+	public int getIntegridadCasco() {
 		return this.integridadCasco;
 	}
 	

@@ -1,7 +1,5 @@
 package model;
 
-import controlador.Controlador;
-
 public abstract class ObjetosJuego {
     
     protected float velocidad;
@@ -9,7 +7,6 @@ public abstract class ObjetosJuego {
     protected int altura;
     protected int largo;
     protected Coordenada coordenada;
-    protected Controlador controlador;
 
 	public ObjetosJuego(float velocidad, int altura, int largo, Coordenada coordenada) 
 	{

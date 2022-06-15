@@ -2,7 +2,7 @@ package test;
 
 import controlador.Controlador;
 import eventos.EventoTeclado;
-import model.Coordenada;
+import model.CoordenadaView;
 
 
 public class Main {
@@ -33,15 +33,15 @@ public class Main {
 	static void printJuego(Controlador controlador){
 		printNivel(controlador.getNivel());
 		printInfoJugador(controlador.getVidasJugador(),
-				controlador.getIntegridadCascoJugador(),
+				controlador.getIntegridadCasco(),
 				controlador.getPuntosJugador()
 				);
 		var buques = controlador.getCoordenadasBuques();
-		for(Coordenada item : buques) {
+		for(CoordenadaView item : buques) {
 			printCoordenadasBuque(item);
 		}
 		var cargas = controlador.getCoordenadasCargas();
-		for(Coordenada item : cargas) {
+		for(CoordenadaView item : cargas) {
 			printCoordenadasCarga(item);
 		}
 		printCoordenadasSubmarino(controlador.getCoordenadasJugador());
@@ -50,14 +50,14 @@ public class Main {
 		System.out.println("Nivel: " +nivel );
 		
 	}
-	static void printCoordenadasSubmarino(Coordenada coordSubmarino) {
+	static void printCoordenadasSubmarino(CoordenadaView coordSubmarino) {
 		System.out.printf("Posición Submarino: (%.2f,%.2f)%n",coordSubmarino.getX(),coordSubmarino.getY());
 	}
-	static void printCoordenadasBuque(Coordenada coordBuque)
+	static void printCoordenadasBuque(CoordenadaView coordBuque)
 	{
 		System.out.printf("Posición Buque: (%.2f,%.2f)%n",coordBuque.getX(),coordBuque.getY());
 	}
-	static void printCoordenadasCarga(Coordenada coordCarga)
+	static void printCoordenadasCarga(CoordenadaView coordCarga)
 	{
 		System.out.printf("Posición Carga: (%.2f,%.2f)%n",coordCarga.getX(),coordCarga.getY());
 	}

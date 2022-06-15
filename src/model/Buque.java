@@ -2,12 +2,9 @@ package model;
 
 import java.util.Random;
 
-import controlador.Controlador;
-
 public class Buque extends ObjetosJuego {
 
 	private float xSoltar;
-	private float xDesaparecer;
 	private CargaProfundidad cargaProfunidad;
 	private static int cantBuques = 1;
 
@@ -16,7 +13,6 @@ public class Buque extends ObjetosJuego {
 		// Buque
 		añadirCarga(cp);
 		setSoltar();
-		setDesaparecer();
 		Buque.cantBuques++;
 	}
 
@@ -32,13 +28,6 @@ public class Buque extends ObjetosJuego {
 		int xMax = (int) this.coordenada.getxMax(); // esto ta mal
 		this.xSoltar = new Random().nextInt(xMax + 1 - xMin) + xMin; // nro entre xMin y xMax.
 
-	}
-
-	private void setDesaparecer() {
-		if (velocidad > 0)
-			this.xDesaparecer = coordenada.getxMax();
-		else
-			this.xDesaparecer = coordenada.getxMin();
 	}
 
 	public void moverX(float deltaTiempo) {
@@ -68,7 +57,6 @@ public class Buque extends ObjetosJuego {
 
 	public void añadirCarga(CargaProfundidad carga) {
 		this.cargaProfunidad = carga;
-		return;
 	}
 
 	// Facu
