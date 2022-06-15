@@ -1,4 +1,6 @@
-package Model;
+package model;
+
+import test.Debugger;
 
 public class Submarino extends ObjetosJuego {
 
@@ -7,22 +9,18 @@ public class Submarino extends ObjetosJuego {
 	private int puntos;
 	private int nivel;
 	private int vidasExtrasContador;
-	private final int INTEGRIDAD_CASCO_MAX = 100;
+	private static final int INTEGRIDAD_CASCO_MAX = 100;
 
-	public Submarino(int velocidad, int altura, int largo, Coordenada c, int vidas) {
-		// OJ
-		this.velocidad = velocidad;
-		this.altura = altura;
-		this.largo = largo;
-		this.coordenada = c;
+	public Submarino(float velocidad, int altura, int largo, Coordenada c) {
+		super(velocidad, altura, largo, c);
 		// Sub
-		ObjetosJuego.velocidadMultiplicador = 1;
+		this.integridadCasco = INTEGRIDAD_CASCO_MAX;
+		this.puntos = 0;
+		this.vidas = 3;
 		this.nivel = 1;
 		this.vidasExtrasContador = 0;
-		this.puntos = 0;
-		this.vidas = vidas;
-		this.integridadCasco = INTEGRIDAD_CASCO_MAX;
-
+		
+		ObjetosJuego.velocidadMultiplicador = 1;
 	}
 	// Getters
 
@@ -34,6 +32,13 @@ public class Submarino extends ObjetosJuego {
 		return this.puntos;
 	}
 
+	public int getVidas() {
+		return this.vidas;
+	}
+	public int getIntegridadCascoJugador() {
+		return this.integridadCasco;
+	}
+	
 	public boolean estaVivo() {
 		return vidas >= 0;
 	}
@@ -102,41 +107,26 @@ public class Submarino extends ObjetosJuego {
 	}
 
 	private void calcularDaño(float explosionDistancia) {
-		// TODO ponerle los valores y las condiciones de la consigna
-		boolean condicion1 = true;
-		boolean condicion2 = true;
-		int valor1 = 0;
-		int valor2 = 0;
-		int valor3 = 0;
-
-		if (condicion1)
-			dañar(valor1);
-		else if (condicion2)
-			dañar(valor2);
-		else
-			dañar(valor3);
+		if (explosionDistancia < 10)
+			dañar(100);
+		else if (explosionDistancia < 50)
+			dañar(50);
+		else if (explosionDistancia < 100)
+			dañar(30);
 	}
 
 	private void calcularPuntos(float explosionDistancia) {
-		// TODO ponerle los valores y las condiciones de la consigna
-		boolean condicion1 = true;
-		boolean condicion2 = true;
-		int valor1 = 0;
-		int valor2 = 0;
-		int valor3 = 0;
-
-		if (condicion1)
-			añadirPuntos(valor1);
-		else if (condicion2)
-			añadirPuntos(valor2);
-		else
-			añadirPuntos(valor3);
+		if (explosionDistancia > 100)
+			añadirPuntos(30);
+		else if (explosionDistancia > 50)
+			añadirPuntos(10);
 
 	}
 
 	private void dañar(int valor) {
 		this.integridadCasco -= valor;
 		// TODO evento de daño
+		Debugger.printIntegridadSubmarino(valor, this.integridadCasco);
 		if (integridadCasco <= 0) {
 			restarVida();
 		}
@@ -159,12 +149,20 @@ public class Submarino extends ObjetosJuego {
 		ObjetosJuego.velocidadMultiplicador = ObjetosJuego.velocidadMultiplicador * (1 + (porcentaje / 100));
 		// TODO evento de nivel
 		this.nivel++;
+		Debugger.printPasarNivel(this.nivel);
+		añadirPuntos(200);
 	}
 
 	private void restarVida() {
 		this.vidas--;
-		if (vidas >= 0)
+		Debugger.printPerderVida(this.vidas);
+		if (vidas > 0)
+		{
+			Debugger.printRecargarIntegridad();
 			this.integridadCasco = INTEGRIDAD_CASCO_MAX;
+		}
+		else 
+			Debugger.printGameOver();
 	}
 
 	public void moverArriba() {

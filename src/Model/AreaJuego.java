@@ -1,4 +1,4 @@
-package Model;
+package model;
 
 public class AreaJuego {
 	
@@ -6,17 +6,21 @@ public class AreaJuego {
     private int xMin;
     private int yMax;
     private int yMin;
-    private int estadoJuego; //estatico?
-    private final int ESTADO_INICIO = 0;
-    private final int ESTADO_CORRIENDO = 1;
-    private final int ESTADO_PAUSADO = 2;
-    private final int ESTADO_MENU = 3;
+    private Estado estadoJuego;
+    enum Estado{
+    	INICIO,
+    	CORRIENDO,
+    	PAUSADO,
+    	MENU,
+    	SALIR
+    }
 
     public AreaJuego(int xMax , int xMin, int yMax, int yMin) {
         this.xMax = xMax;
         this.xMin = xMin;
         this.yMax = yMax;
         this.yMin = yMin;
+        estadoJuego = Estado.INICIO;
     }
 
     public int getXMax() {
@@ -36,27 +40,33 @@ public class AreaJuego {
     }
 
     public boolean estaEnInicio() {
-        return this.estadoJuego == ESTADO_INICIO;
+        return this.estadoJuego == Estado.INICIO;
     }
     public boolean estaCorriendo() {
-        return this.estadoJuego == ESTADO_CORRIENDO;
+        return this.estadoJuego == Estado.CORRIENDO;
     }
     public boolean estaPausado() {
-        return this.estadoJuego == ESTADO_PAUSADO;
+        return this.estadoJuego == Estado.PAUSADO;
     }
     public boolean estaMenuAbierto() {
-        return this.estadoJuego == ESTADO_MENU;
+        return this.estadoJuego == Estado.MENU;
+    }
+    public boolean estaSaliendo() {
+        return this.estadoJuego == Estado.SALIR;
     }
     public void pausarJuego(){
-    	this.estadoJuego = ESTADO_PAUSADO;
+    	this.estadoJuego = Estado.PAUSADO;
     }
     public void iniciarOReanudarJuego(){
-    	this.estadoJuego = ESTADO_CORRIENDO;
+    	this.estadoJuego = Estado.CORRIENDO;
     }
     public void abrirMenu() {
-        this.estadoJuego = ESTADO_MENU;
+        this.estadoJuego = Estado.MENU;
     }
     public void irAlInicio() {
-        this.estadoJuego = ESTADO_INICIO;
+        this.estadoJuego = Estado.INICIO;
+    }
+    public void finalizarEjecucion() {
+        this.estadoJuego = Estado.SALIR;
     }
 }

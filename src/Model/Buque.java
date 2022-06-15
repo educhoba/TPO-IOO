@@ -1,21 +1,21 @@
-package Model;
+package model;
+
+import java.util.Random;
 
 public class Buque extends ObjetosJuego {
 
 	private float xSoltar;
 	private float xDesaparecer;
 	private CargaProfundidad cargaProfunidad;
+	private static int cantBuques = 0;
 
-	public Buque(int velocidad, int altura, int largo, Coordenada c, CargaProfundidad cp) {
-		// OJ
-		this.velocidad = velocidad; // TODO multiplicar x -1 depende donde aparece?
-		this.altura = altura;
-		this.largo = largo;
-		this.coordenada = c;
+	public Buque(float velocidad, int altura, int largo, Coordenada c, CargaProfundidad cp) {
+		super(velocidad, altura, largo, c);
 		// Buque
 		añadirCarga(cp);
 		setSoltar();
 		setDesaparecer();
+		Buque.cantBuques++;
 	}
 
 	// Getters
@@ -25,13 +25,18 @@ public class Buque extends ObjetosJuego {
 
 	// Setters
 	private void setSoltar() {
-		// TODO numero random dentro del gamearea dependiendo de donde aparece
-		this.xSoltar = 0.0f;
+
+		int xMin =  (int)this.coordenada.getxMin(); //esto ta mal
+		int xMax =  (int)this.coordenada.getxMax(); //esto ta mal
+		this.xSoltar = new Random().nextInt(xMax + 1 - xMin) + xMin; // nro entre xMin y xMax.
+
 	}
 
 	private void setDesaparecer() {
-		// TODO xMax o xMin depende donde aparece
-		this.xDesaparecer = 0.0f;
+		if (velocidad > 0)
+			this.xDesaparecer = coordenada.getxMax();
+		else
+			this.xDesaparecer = coordenada.getxMin();
 	}
 
 	public void moverX(float deltaTiempo) {
@@ -54,13 +59,40 @@ public class Buque extends ObjetosJuego {
 
 	private void soltarCarga() {
 		this.cargaProfunidad.soltar();
-		this.cargaProfunidad = null;
 	}
 
 	public void añadirCarga(CargaProfundidad carga) {
 		this.cargaProfunidad = carga;
-		this.cargaProfunidad.añadir(this);
 		return;
 	}
 
+	//Facu
+	
+	public float getxSoltar() 
+	{
+		return this.xSoltar;
+	}
+	
+	public boolean isxSoltar()
+	{
+		if (velocidad > 0)
+			return coordenada.getX() >= xSoltar && tieneCarga();
+		else
+			return coordenada.getX() <= xSoltar && tieneCarga();
+	}
+
+	public int getCantBuques()
+	{
+		int cant = Buque.cantBuques;
+		if (cant > 10)
+			Buque.cantBuques = 0;
+		return cant;
+	}
+	public boolean isArrived()
+	{
+		if (velocidad > 0)
+			return coordenada.getX() == coordenada.getxMax();
+		else
+			return coordenada.getX() == coordenada.getxMin();
+	}
 }

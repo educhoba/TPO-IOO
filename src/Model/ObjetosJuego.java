@@ -1,4 +1,5 @@
-package Model;
+package model;
+
 public abstract class ObjetosJuego {
     
     protected float velocidad;
@@ -7,8 +8,22 @@ public abstract class ObjetosJuego {
     protected int largo;
     protected Coordenada coordenada;
 
-    public Coordenada getCoordenada() {
-        return this.coordenada;
-    }
+	public ObjetosJuego(float velocidad, int altura, int largo, Coordenada coordenada) 
+	{
+		this.velocidad = velocidad;
+		this.altura = altura;
+		this.largo = largo;
+		this.coordenada = coordenada;
+	}
+
+	public Coordenada getCoordenada() 
+	{
+		return this.coordenada;
+	}
+	
+	public float getVelocidad()
+	{
+		return this.velocidad;
+	}
 
 }
