@@ -107,11 +107,11 @@ public class Submarino extends ObjetosJuego {
 	}
 
 	private void calcularDaño(float explosionDistancia) {
-		if (explosionDistancia < 100)
+		if (explosionDistancia < 10)
 			dañar(100);
-		else if (explosionDistancia < 500)
+		else if (explosionDistancia < 50)
 			dañar(50);
-		else if (explosionDistancia < 1000)
+		else if (explosionDistancia < 100)
 			dañar(30);
 	}
 
