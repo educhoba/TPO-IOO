@@ -1,7 +1,8 @@
-/controlador/
-/model/
-/eventos/
 /module-info.class
-/test/
-/controlador/
+/.classpath
+/.gitignore
+/.project
+/gui/
 /model/
+/controlador/
+/test/
