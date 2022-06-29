@@ -192,7 +192,7 @@ public class Juego {
 			jugador.moverDerecha();
 	}
 
-	public List<BuqueView> getCoordenadasBuques() {
+	public List<BuqueView> getBuquesViews() {
 		List<BuqueView> coords = new ArrayList<BuqueView>();
 		for (Buque item : buques) {
 			coords.add(new BuqueView(item));
@@ -200,7 +200,7 @@ public class Juego {
 		return coords;
 	}
 
-	public List<CargaProfundidadView> getCoordenadasCargas() {
+	public List<CargaProfundidadView> getCargasViews() {
 		List<CargaProfundidadView> coords = new ArrayList<CargaProfundidadView>();
 		for (CargaProfundidad item : cargas) {
 			coords.add(new CargaProfundidadView(item));
@@ -208,7 +208,7 @@ public class Juego {
 		return coords;
 	}
 
-	public SubmarinoView getCoordenadasJugador() {
+	public SubmarinoView getSubmarinoView() {
 		return new SubmarinoView(jugador);
 	}
 	

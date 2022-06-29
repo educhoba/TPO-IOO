@@ -2,7 +2,9 @@ package controlador;
 
 import java.util.List;
 
-import model.CoordenadaView;
+import model.SubmarinoView;
+import model.BuqueView;
+import model.CargaProfundidadView;
 import model.Juego;
 
 public class Controlador {
@@ -64,16 +66,16 @@ public class Controlador {
 
 	}
 
-	public List<CoordenadaView> getCoordenadasBuques() {
-		return juego.getCoordenadasBuques();
+	public List<BuqueView> getBuquesViews() {
+		return juego.getBuquesViews();
 	}
 
-	public CoordenadaView getCoordenadasJugador() {
-		return juego.getCoordenadasJugador();
+	public SubmarinoView getSubmarino() {
+		return juego.getSubmarinoView();
 	}
 	
-	public List<CoordenadaView> getCoordenadasCargas() {
-		return juego.getCoordenadasCargas();
+	public List<CargaProfundidadView> getCargasViews() {
+		return juego.getCargasViews();
 	}
 
 	public boolean estaEnInicio() {
