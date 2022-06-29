@@ -47,17 +47,19 @@ public class Juego {
 		List<Buque> dumpBuque = new ArrayList<Buque>();
 		List<CargaProfundidad> dumpCarga = new ArrayList<CargaProfundidad>();
 		for (Buque obj : buques) {
-			obj.moverX(1);
 			if (obj.finalizoRecorrido())
 				dumpBuque.add(obj);
+			else
+				obj.moverX(1);
 		}
 
 		for (CargaProfundidad obj : cargas) {
-			obj.moverY(1);
 			if (obj.exploto()) {
 				eventoExplosion(obj);
 				dumpCarga.add(obj);
 			}
+			else
+				obj.moverY(1);
 		}
 		for (Buque obj : dumpBuque) {
 			desaparecerBuque(obj);
@@ -190,24 +192,24 @@ public class Juego {
 			jugador.moverDerecha();
 	}
 
-	public List<CoordenadaView> getCoordenadasBuques() {
-		List<CoordenadaView> coords = new ArrayList<CoordenadaView>();
+	public List<BuqueView> getCoordenadasBuques() {
+		List<BuqueView> coords = new ArrayList<BuqueView>();
 		for (Buque item : buques) {
-			coords.add(new CoordenadaView(item.getCoordenada()));
+			coords.add(new BuqueView(item));
 		}
 		return coords;
 	}
 
-	public List<CoordenadaView> getCoordenadasCargas() {
-		List<CoordenadaView> coords = new ArrayList<CoordenadaView>();
+	public List<CargaProfundidadView> getCoordenadasCargas() {
+		List<CargaProfundidadView> coords = new ArrayList<CargaProfundidadView>();
 		for (CargaProfundidad item : cargas) {
-			coords.add(new CoordenadaView(item.getCoordenada()));
+			coords.add(new CargaProfundidadView(item));
 		}
 		return coords;
 	}
 
-	public CoordenadaView getCoordenadasJugador() {
-		return new CoordenadaView(jugador.getCoordenada());
+	public SubmarinoView getCoordenadasJugador() {
+		return new SubmarinoView(jugador);
 	}
 	
 	public boolean estaEnInicio() {

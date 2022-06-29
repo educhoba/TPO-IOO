@@ -2,7 +2,7 @@ package model;
 
 import java.util.Random;
 
-public class CargaProfundidad extends ObjetosJuego {
+public class CargaProfundidad extends ObjetoJuego {
 
 	private float yExplosion;
 	private boolean soltada;
@@ -18,7 +18,7 @@ public class CargaProfundidad extends ObjetosJuego {
 
 	public void moverY(float deltaTime) {
 		if (estaSoltada()) {
-			float distancia = deltaTime * this.velocidad * ObjetosJuego.velocidadMultiplicador;
+			float distancia = deltaTime * this.velocidad * ObjetoJuego.velocidadMultiplicador;
 			this.coordenada.moverY(distancia);
 			//chequeo si tiene que explotar
 			float yActual = this.coordenada.getY();
@@ -44,7 +44,7 @@ public class CargaProfundidad extends ObjetosJuego {
 			this.coordenada.moverX(deltaX);
 	}
 
-	private boolean estaSoltada() {
+	public boolean estaSoltada() {
 		return soltada;
 	}
 	public void soltar() {

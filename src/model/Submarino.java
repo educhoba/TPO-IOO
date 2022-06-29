@@ -2,7 +2,7 @@ package model;
 
 import test.Debugger;
 
-public class Submarino extends ObjetosJuego {
+public class Submarino extends ObjetoJuego {
 
 	private int integridadCasco;
 	private int vidas;
@@ -20,7 +20,7 @@ public class Submarino extends ObjetosJuego {
 		this.nivel = 1;
 		this.vidasExtrasContador = 0;
 		
-		ObjetosJuego.velocidadMultiplicador = 1;
+		ObjetoJuego.velocidadMultiplicador = 1;
 	}
 	// Getters
 
@@ -146,7 +146,7 @@ public class Submarino extends ObjetosJuego {
 	}
 
 	public void pasarDeNivelEIncrementarDificultad(float porcentaje) {
-		ObjetosJuego.velocidadMultiplicador = ObjetosJuego.velocidadMultiplicador * (1 + (porcentaje / 100));
+		ObjetoJuego.velocidadMultiplicador = ObjetoJuego.velocidadMultiplicador * (1 + (porcentaje / 100));
 		// TODO evento de nivel
 		this.nivel++;
 		Debugger.printPasarNivel(this.nivel);

@@ -1,14 +1,15 @@
 package model;
 
-public abstract class ObjetosJuego {
-    
+public abstract class ObjetoJuego {
+
+    protected int id;
     protected float velocidad;
     protected static float velocidadMultiplicador;
     protected int altura;
     protected int largo;
     protected Coordenada coordenada;
 
-	public ObjetosJuego(float velocidad, int altura, int largo, Coordenada coordenada) 
+	public ObjetoJuego(float velocidad, int altura, int largo, Coordenada coordenada) 
 	{
 		this.velocidad = velocidad;
 		this.altura = altura;

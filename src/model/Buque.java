@@ -2,7 +2,7 @@ package model;
 
 import java.util.Random;
 
-public class Buque extends ObjetosJuego {
+public class Buque extends ObjetoJuego {
 
 	private float xSoltar;
 	private CargaProfundidad cargaProfunidad;
@@ -31,7 +31,7 @@ public class Buque extends ObjetosJuego {
 	}
 
 	public void moverX(float deltaTiempo) {
-		float distancia = deltaTiempo * this.velocidad * ObjetosJuego.velocidadMultiplicador;
+		float distancia = deltaTiempo * this.velocidad * ObjetoJuego.velocidadMultiplicador;
 
 		this.coordenada.moverX(distancia);
 		if (this.tieneCarga()) {
