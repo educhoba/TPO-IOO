@@ -400,23 +400,23 @@ public class VentanaJuego extends JFrame {
 			{
 				if (tecla == 87 || tecla == 38) // W o FlechaArriba
 				{
-					y -= 10;
+					y -= 63;
 				}
 				else if (tecla == 83 || tecla == 40) // S o FlechaAbajo
 				{
-					y += 10;
+					y += 63;
 				}
 				else if (tecla == 68 || tecla == 39) // D o FlechaDerecha
 				{
 					submarinos[0].setVisible(true);
 					submarinos[1].setVisible(false);
-					x += 10;
+					x += 63;
 				}
 				else if (tecla == 65 || tecla == 37) // A o FlechaIzquierda
 				{
 					submarinos[0].setVisible(false);
 					submarinos[1].setVisible(true);
-					x -= 10;
+					x -= 63;
 				}
 				
 				submarinos[0].setBounds(x, y, 125, 43);

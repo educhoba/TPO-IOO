@@ -7,6 +7,10 @@ import javax.swing.JFrame;
 import controlador.Controlador;
 
 public class EventoTeclado extends JFrame implements KeyListener {
+	
+	/*
+	 * ESTA CLASE LA TIENE VENTANA JUEGO. POR LO TANTO HAY QUE ELIMINARLA. 
+	 */
 
 	private static final long serialVersionUID = 1572466681311892571L;
 	Controlador controlador;

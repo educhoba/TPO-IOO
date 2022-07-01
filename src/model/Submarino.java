@@ -8,7 +8,7 @@ public class Submarino extends ObjetoJuego {
 	private int vidas;
 	private int puntos;
 	private int nivel;
-	private int vidasExtrasContador;
+	private int vidasExtrasContador; // NO LA NECESITAMOS CON LA INTERFAZ GRAFICA
 	private static final int INTEGRIDAD_CASCO_MAX = 100;
 
 	public Submarino(float velocidad, int altura, int largo, Coordenada c) {
@@ -18,7 +18,7 @@ public class Submarino extends ObjetoJuego {
 		this.puntos = 0;
 		this.vidas = 3;
 		this.nivel = 1;
-		this.vidasExtrasContador = 0;
+		this.vidasExtrasContador = 0; // CON LA INTERFAZ, ESTA VARIABLE NO ES NECESARIA
 		
 		ObjetoJuego.velocidadMultiplicador = 1;
 	}
@@ -35,6 +35,7 @@ public class Submarino extends ObjetoJuego {
 	public int getVidas() {
 		return this.vidas;
 	}
+	
 	public int getIntegridadCasco() {
 		return this.integridadCasco;
 	}

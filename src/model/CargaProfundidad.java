@@ -21,9 +21,9 @@ public class CargaProfundidad extends ObjetoJuego {
 			float distancia = deltaTime * this.velocidad * ObjetoJuego.velocidadMultiplicador;
 			this.coordenada.moverY(distancia);
 			//chequeo si tiene que explotar
-			float yActual = this.coordenada.getY();
+			float yActual = this.coordenada.getY(); // NO ES NECESARIO DEFINIR UNA VARIABLE LOCAL
 			if (yActual <= this.yExplosion)
-				explotar();
+				explotar(); // FALTA CHEQUEAR QUE NO ESTE YA EXPLOTADA, PORQUE SI NO SE ELIMINA, VA A EXPLOTAR MUCHAS VECES.
 		}
 	}
 
@@ -31,7 +31,7 @@ public class CargaProfundidad extends ObjetoJuego {
 		explotada = true;
 	}
 	
-	private void setAlturaExplosion( float yMaxExplosion, float yMinExplosion) {
+	private void setAlturaExplosion(float yMaxExplosion, float yMinExplosion) {
 		int yMax =  -(int)yMinExplosion;
 		int yMin =  -(int)yMaxExplosion;
 		
@@ -48,7 +48,7 @@ public class CargaProfundidad extends ObjetoJuego {
 		return soltada;
 	}
 	public void soltar() {
-		soltada =true;
+		soltada = true;
 	}
 	public boolean exploto() {
 		return explotada;

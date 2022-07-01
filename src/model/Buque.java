@@ -17,7 +17,7 @@ public class Buque extends ObjetoJuego {
 	}
 
 	// Getters
-	private boolean tieneCarga() {
+	private boolean tieneCarga() { // NO ES NECESARIO YA QUE PODEMOS ACCEDER AL ATRIBUTO PORQUE EL METODO ES PRIVADO.
 		return this.cargaProfunidad != null;
 	}
 
@@ -31,7 +31,7 @@ public class Buque extends ObjetoJuego {
 	}
 
 	public void moverX(float deltaTiempo) {
-		float distancia = deltaTiempo * this.velocidad * ObjetoJuego.velocidadMultiplicador;
+		float distancia = deltaTiempo * this.velocidad * ObjetoJuego.velocidadMultiplicador; // EL TIEMPO LO MANEJA LA INTERFAZ GRAFICA
 
 		this.coordenada.moverX(distancia);
 		if (this.tieneCarga()) {
@@ -51,37 +51,43 @@ public class Buque extends ObjetoJuego {
 		}
 	}
 
-	private void soltarCarga() {
+	private void soltarCarga() { // TIENE QUE SETEAR cargaProfundidad A NULL
 		this.cargaProfunidad.soltar();
 	}
 
-	public void añadirCarga(CargaProfundidad carga) {
+	public void añadirCarga(CargaProfundidad carga) { // TIENE QUE SER PRIVADO, NO SE ACCEDE DESDE AFUERA.
 		this.cargaProfunidad = carga;
 	}
 
 	// Facu
 
-	public float getxSoltar() {
+	public float getxSoltar() { // NO LO ESTAMOS UTILIZANDO
 		return this.xSoltar;
 	}
 
-	public boolean isxSoltar() {
-		if (velocidad > 0)
-			return coordenada.getX() >= xSoltar && tieneCarga();
-		else
-			return coordenada.getX() <= xSoltar && tieneCarga();
+	public boolean isxSoltar() { // TIENE QUE SER PRIVADO PORQUE LO ACCEDEMOS SOLO DESDE MOVER
+		boolean soltar = false;
+		if (tieneCarga())
+		{
+			if (velocidad > 0) // Si se mueve de izq a der
+				soltar = coordenada.getX() >= xSoltar;
+			else
+				soltar = coordenada.getX() <= xSoltar;
+		}
+		return soltar;
 	}
 
 	public static int getCantidadBuques() {
 		return Buque.cantBuques;
 	}
+	
 	public static void resetCantidadBuques()
 	{
 		Buque.cantBuques = 1;
 	}
 
 	public boolean finalizoRecorrido() {
-		if (velocidad > 0)
+		if (velocidad > 0) // Si se mueve de izq a der
 			return coordenada.getX() == coordenada.getxMax();
 		else
 			return coordenada.getX() == coordenada.getxMin();

@@ -1,6 +1,8 @@
 package model;
 
 public class SubmarinoView {
+	
+	// DEBERIA EXTENDER DE OBJETO JUEGO VIEW
 
 	public SubmarinoView(ObjetoJuego oj) {
     	this.xCoordenada = oj.getCoordenada().getX();

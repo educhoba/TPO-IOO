@@ -38,7 +38,7 @@ public class Controlador {
 	public void obtenerEntradaTeclado(int entrada) {
 		switch (entrada) {
 		case 27: // Escape
-			juego.abrirOSalirDelMenuSiElJuegoEstaCorriendo();
+			juego.abrirOSalirDelMenuSiElJuegoEstaCorriendo(); // TODA LA PARTE DE PAUSAS LA TIENE LA INTERFAZ PORQUE TIENE EL TIMER
 			break;
 		case 40: // Flecha abajo.
 		case 83:// S

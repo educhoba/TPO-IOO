@@ -4,6 +4,7 @@ public class CargaProfundidadView extends ObjetoJuegoView{
 
 	private boolean exploto;
 	private boolean soltada;
+	
 	public CargaProfundidadView(CargaProfundidad cp) {
     	super(cp);
     	exploto = cp.exploto();

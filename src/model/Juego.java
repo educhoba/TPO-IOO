@@ -14,10 +14,10 @@ public class Juego {
 	Submarino jugador;
 
 	public Juego() {
-		areaJuego = null;
+		areaJuego = null; // EL AREA DE JUEGO YA ES NULL, NO ES NECESARIA ESTA LINEA.
 		cargas = new ArrayList<CargaProfundidad>();
 		buques = new ArrayList<Buque>();
-		jugador = null;
+		jugador = null; // EL SUBMARINO YA ES NULL, NO ES NECESARIA ESTA LINEA.
 		crearAreaJuego();
 	}
 
@@ -40,18 +40,29 @@ public class Juego {
 	public void actualizarJuego() {
 		// cuando sea grafico hay que poner el delta tiempo
 		if (jugador == null) {
+			/* ES PREFERIBLE INICIALIZAR EL SUBMARINO EN EL CONSTRUCTOR, ESTO SE VA A EJECUTAR UNA SOLA VEZ
+			 * Y SE VA A RECORRER ESE IF EN CADA ITERACION SIN EJECUTARSE (SALVO LA PRIMERA VEZ). */
 			inicializarSubmarino();
-			aparecerBuque();
+			aparecerBuque(); // APARECER BUQUE PUEDE QUEDAR CON UN IF APARTE, EN CASO DE SACAR ESTE IF.
 		}
 
 		List<Buque> dumpBuque = new ArrayList<Buque>();
 		List<CargaProfundidad> dumpCarga = new ArrayList<CargaProfundidad>();
+		
 		for (Buque obj : buques) {
 			if (obj.finalizoRecorrido())
 				dumpBuque.add(obj);
 			else
 				obj.moverX(1);
 		}
+		
+//		for (int i = buques.size() - 1; i >= 0; i--)
+//		{
+//			if (buques.get(i).finalizoRecorrido())
+//				buques.remove(i);
+//			else
+//				buques.get(i).moverX(1);
+//		}
 
 		for (CargaProfundidad obj : cargas) {
 			if (obj.exploto()) {
@@ -61,6 +72,19 @@ public class Juego {
 			else
 				obj.moverY(1);
 		}
+		
+//		for (int i = cargas.size() - 1; i >= 0; i--)
+//		{
+//			if (cargas.get(i).exploto())
+//			{
+//				eventoExplosion(cargas.get(i));
+//				cargas.remove(i);
+//			}
+//			else
+//				cargas.get(i).moverY(1);
+//		}
+		
+		
 		for (Buque obj : dumpBuque) {
 			desaparecerBuque(obj);
 		}
@@ -82,12 +106,10 @@ public class Juego {
 
 	private void crearAreaJuego() {
 		areaJuego = new AreaJuego(150, 0, -800, 0);
-		// int xMax, int xMin, int yMax, int yMin
 	}
 
 	private void eventoExplosion(CargaProfundidad carga) {
 		jugador.calcularExplosion(carga.getCoordenada());
-
 	}
 
 	private void pasarDeNivel() {
@@ -134,7 +156,6 @@ public class Juego {
 			areaJuego.iniciarOReanudarJuego();
 		else if (areaJuego.estaCorriendo())
 			areaJuego.abrirMenu();
-
 	}
 
 	public void comenzarJuegoSiEstaEnInicio() {
@@ -184,11 +205,11 @@ public class Juego {
 	public void moverSubmarino(int entrada) {
 		if (entrada == 87 || entrada == 38)
 			jugador.moverArriba();
-		if (entrada == 65 || entrada == 37)
+		else if (entrada == 65 || entrada == 37)
 			jugador.moverIzquierda();
-		if (entrada == 83 || entrada == 40)
+		else if (entrada == 83 || entrada == 40)
 			jugador.moverAbajo();
-		if (entrada == 68 || entrada == 39)
+		else if (entrada == 68 || entrada == 39)
 			jugador.moverDerecha();
 	}
 
