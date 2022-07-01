@@ -7,7 +7,7 @@ public class CargaProfundidadView extends ObjetoJuegoView{
 	
 	public CargaProfundidadView(CargaProfundidad cp) {
     	super(cp);
-    	exploto = cp.exploto();
+    	exploto = cp.estaExplotada();
     	soltada = cp.estaSoltada();
     }
 	

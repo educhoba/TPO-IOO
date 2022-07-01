@@ -40,7 +40,7 @@ public class EventoTeclado extends JFrame implements KeyListener {
 	@Override
 	public void keyReleased(KeyEvent e) 
 	{
-		controlador.obtenerEntradaTeclado(e.getKeyCode());
+		controlador.recibirEntradaTeclado(e.getKeyCode());
 	}
 
 }

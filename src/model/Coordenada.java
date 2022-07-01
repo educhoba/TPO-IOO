@@ -2,16 +2,9 @@ package model;
 
 public class Coordenada {
 
-    /**
-     * Default constructor
-     */
-    public Coordenada() {
-    }
-
+    private AreaJuego areaJuego;
     private float xCoordenada;
     private float yCoordenada;
-    private AreaJuego areaJuego;
-
 	private float xMin;
 	private float yMin;
 	private float xMax;
@@ -28,6 +21,7 @@ public class Coordenada {
 		this.yMax = areaJuego.getYMax();
 	}
 	
+	// Sobrecarga de constructores para definir la coordenada del submarino.
 	public Coordenada(float xCoordenada, float yCoordenada, AreaJuego areaJuego, float xMin, float yMin, float xMax, float yMax) 
 	{
 		this.xCoordenada = xCoordenada;

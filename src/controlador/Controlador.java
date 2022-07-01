@@ -2,14 +2,18 @@ package controlador;
 
 import java.util.List;
 
-import model.SubmarinoView;
+import model.AreaJuego;
 import model.BuqueView;
 import model.CargaProfundidadView;
 import model.Juego;
+import model.Submarino;
+import model.SubmarinoView;
 
 public class Controlador {
 
 	Juego juego;
+	Submarino s;
+	AreaJuego aj;
 	
 	public Controlador() {
 		juego = new Juego();
@@ -20,38 +24,28 @@ public class Controlador {
 	}
 	
 	public int getNivel() {
-		return juego.getNivel();
+		return s.getNivel();
 	}
 
 	public int getVidasJugador() {
-		return juego.getVidasJugador();
+		return s.getVidas();
 	}
 
 	public int getIntegridadCasco() {
-		return juego.getIntegridadCasco();
+		return s.getIntegridadCasco();
 	}
 
 	public int getPuntosJugador() {
-		return juego.getPuntosJugador();
+		return s.getPuntos();
 	}
 
-	public void obtenerEntradaTeclado(int entrada) {
+	public void recibirEntradaTeclado(int entrada) {
 		switch (entrada) {
 		case 27: // Escape
 			juego.abrirOSalirDelMenuSiElJuegoEstaCorriendo(); // TODA LA PARTE DE PAUSAS LA TIENE LA INTERFAZ PORQUE TIENE EL TIMER
 			break;
-		case 40: // Flecha abajo.
-		case 83:// S
-		case 37: // Flecha izquierda.
-		case 65:// A
-		case 39: // Flecha derecha.
-		case 68:// D
-		case 38: // Flecha arriba.
-		case 87:// W
+		case 40, 83, 37, 65, 39, 68, 38, 87: // WASD y Flechas
 			juego.moverSubmarino(entrada);
-			break;
-		case 78:// N
-			// lo puse x las dudas
 			break;
 		case 80:// P
 			juego.pausarOReanudarJuegoSiElJuegoEstaCorriendo();
@@ -60,18 +54,15 @@ public class Controlador {
 			juego.terminarJuegoSiEstaElMenuAbierto();
 			juego.comenzarJuegoSiEstaEnInicio();
 			break;
-		default:
-			break;
 		}
-
-	}
-
-	public List<BuqueView> getBuquesViews() {
-		return juego.getBuquesViews();
 	}
 
 	public SubmarinoView getSubmarino() {
 		return juego.getSubmarinoView();
+	}
+	
+	public BuqueView getBuqueView() {
+		return juego.getBuqueView();
 	}
 	
 	public List<CargaProfundidadView> getCargasViews() {
@@ -79,23 +70,23 @@ public class Controlador {
 	}
 
 	public boolean estaEnInicio() {
-		return juego.estaEnInicio();
+		return aj.estaEnInicio();
 	}
 
 	public boolean estaCorriendo() {
-		return juego.estaCorriendo();
+		return aj.estaCorriendo();
 	}
 
 	public boolean estaPausado() {
-		return juego.estaPausado();
+		return aj.estaPausado();
 	}
 
 	public boolean estaMenuAbierto() {
-		return juego.estaMenuAbierto();
+		return aj.estaMenuAbierto();
 	}
 
 	public boolean estaCerrando() {
-		return juego.estaCerrando();
+		return aj.estaSaliendo();
 	}
 	
 }

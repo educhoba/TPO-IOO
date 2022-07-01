@@ -2,7 +2,6 @@ package model;
 
 public abstract class ObjetoJuego {
 
-    protected int id; // NO UTILIZAMOS EL ID
     protected float velocidad;
     protected static float velocidadMultiplicador;
     protected int altura;
@@ -20,11 +19,6 @@ public abstract class ObjetoJuego {
 	public Coordenada getCoordenada() 
 	{
 		return this.coordenada;
-	}
-	
-	public float getVelocidad() // LO UTILIZAMOS EN ALGUN MOMENTO??
-	{
-		return this.velocidad;
 	}
 
 }

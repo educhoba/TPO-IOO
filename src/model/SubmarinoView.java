@@ -1,22 +1,9 @@
 package model;
 
-public class SubmarinoView {
-	
-	// DEBERIA EXTENDER DE OBJETO JUEGO VIEW
+public class SubmarinoView extends ObjetoJuegoView{
 
-	public SubmarinoView(ObjetoJuego oj) {
-    	this.xCoordenada = oj.getCoordenada().getX();
-    	this.yCoordenada = oj.getCoordenada().getY();
-    }
+	public SubmarinoView(Submarino s) {
+		super(s);
+	}
 
-	protected float xCoordenada;
-    protected float yCoordenada;
-	
-    public float getX() {
-        return this.xCoordenada;
-    }
-
-    public float getY() {
-        return this.yCoordenada;
-    }
 }
