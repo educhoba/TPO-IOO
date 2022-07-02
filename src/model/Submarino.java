@@ -69,6 +69,7 @@ public class Submarino extends ObjetoJuego {
 		// (A,D) (B,D)
 
 		float explosionDistancia = calcularDistanciaMinima(A,B,C,D,xExplosion,yExplosion);
+		System.out.println(explosionDistancia);
 
 		calcularPuntos(explosionDistancia);
 		calcularDaño(explosionDistancia);
@@ -158,7 +159,7 @@ public class Submarino extends ObjetoJuego {
 	private void restarVida() {
 		this.vidas--;
 		Debugger.printPerderVida(this.vidas);
-		if (vidas >= 0)
+		if (vidas > 0)
 		{
 			Debugger.printRecargarIntegridad();
 			this.integridadCasco = INTEGRIDAD_CASCO_MAX;

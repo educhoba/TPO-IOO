@@ -71,4 +71,9 @@ public class Buque extends ObjetoJuego {
 		else
 			return coordenada.getX() == coordenada.getxMin();
 	}
+	
+	public float getVelocidad()
+	{
+		return this.velocidad;
+	}
 }

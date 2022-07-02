@@ -17,6 +17,8 @@ public class Controlador {
 	
 	public Controlador() {
 		juego = new Juego();
+		aj = juego.getAreaJuego();
+		s = juego.getSubmarino();
 	}
 
 	public void actualizarJuego() {
@@ -28,15 +30,26 @@ public class Controlador {
 	}
 
 	public int getVidasJugador() {
-		return s.getVidas();
+		int vidas = s.getVidas();
+		if (vidas < 0)
+			vidas = 0;
+		return vidas;
 	}
 
 	public int getIntegridadCasco() {
-		return s.getIntegridadCasco();
+		int integridad = s.getIntegridadCasco();
+		if (integridad < 0)
+			integridad = 0;
+		return integridad;
 	}
 
 	public int getPuntosJugador() {
 		return s.getPuntos();
+	}
+	
+	public boolean estaVivo()
+	{
+		return s.estaVivo();
 	}
 
 	public void recibirEntradaTeclado(int entrada) {
@@ -57,7 +70,7 @@ public class Controlador {
 		}
 	}
 
-	public SubmarinoView getSubmarino() {
+	public SubmarinoView getSubmarinoView() {
 		return juego.getSubmarinoView();
 	}
 	
@@ -67,6 +80,26 @@ public class Controlador {
 	
 	public List<CargaProfundidadView> getCargasViews() {
 		return juego.getCargasViews();
+	}
+	
+	public int getXMax()
+	{
+		return aj.getXMax();
+	}
+	
+	public int getXMin()
+	{
+		return aj.getXMin();
+	}
+	
+	public int getYMax()
+	{
+		return aj.getYMax();
+	}
+	
+	public int getYMin()
+	{
+		return aj.getYMin();
 	}
 
 	public boolean estaEnInicio() {

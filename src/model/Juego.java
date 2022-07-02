@@ -19,6 +19,16 @@ public class Juego {
 		inicializarSubmarino();
 	}
 	
+	public Submarino getSubmarino()
+	{
+		return jugador;
+	}
+	
+	public AreaJuego getAreaJuego()
+	{
+		return areaJuego;
+	}
+	
 	private void inicializarAreaJuego() {
 		areaJuego = new AreaJuego(150, 0, -800, 0);
 	}
@@ -26,7 +36,7 @@ public class Juego {
 	private void inicializarSubmarino() {
 		Coordenada coordSubmarino = new Coordenada(areaJuego.getXMax() / 2, areaJuego.getYMax() / 2, areaJuego,
 				areaJuego.getXMin(), -300, areaJuego.getXMax(), -800);
-		this.jugador = new Submarino(10, 3, 5, coordSubmarino);
+		this.jugador = new Submarino(5, 3, 5, coordSubmarino);
 	}
 	
 	public void actualizarJuego() {
@@ -74,10 +84,10 @@ public class Juego {
 
 		if (lado == 0) { // Si da 0, aparece por la izquierda.
 			x = areaJuego.getXMin();
-			velocidad = 8f;
+			velocidad = 1f;
 		} else { // Si da 1, aparece por la derecha.
 			x = areaJuego.getXMax();
-			velocidad = -8f;
+			velocidad = -1f;
 		}
 		
 		CargaProfundidad carga = crearCargaProfundidad(x);
@@ -93,7 +103,7 @@ public class Juego {
 
 	private CargaProfundidad crearCargaProfundidad(int xBuque) {
 		Coordenada c = new Coordenada(xBuque, areaJuego.getYMin(), areaJuego);
-		return new CargaProfundidad(6f, 1, 1, c, -300, -700);
+		return new CargaProfundidad(2f, 1, 1, c, -300, -700);
 	}
 	
 	private void aparecerCarga(CargaProfundidad c) {
@@ -131,7 +141,10 @@ public class Juego {
 	}
 
 	public BuqueView getBuqueView() {
-		return new BuqueView(buque);
+//		if (buque != null)
+			return new BuqueView(buque);
+//		else
+//			return null;
 	}
 
 	public List<CargaProfundidadView> getCargasViews() {
