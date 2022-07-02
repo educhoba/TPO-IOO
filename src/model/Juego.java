@@ -35,7 +35,7 @@ public class Juego {
 	
 	private void inicializarSubmarino() {
 		Coordenada coordSubmarino = new Coordenada(areaJuego.getXMax() / 2, areaJuego.getYMax() / 2, areaJuego,
-				areaJuego.getXMin(), -300, areaJuego.getXMax(), -800);
+				areaJuego.getXMin(), -300, areaJuego.getXMax(), -750);
 		this.jugador = new Submarino(5, 3, 5, coordSubmarino);
 	}
 	

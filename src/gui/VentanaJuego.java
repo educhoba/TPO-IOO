@@ -64,7 +64,6 @@ public class VentanaJuego extends JFrame {
     private float yEscalar;
     private float xEscalarSubmarino;
     private float xEscalarBuque;
-    private int direccJugador;
     private JLabel lblgameover;
     private ImageIcon imgCarga;
     
@@ -91,7 +90,6 @@ public class VentanaJuego extends JFrame {
     long inicioExpl = 0;
     private void actualizar()
     {
-    	
     	c.actualizarJuego();
     	
     	// DIBUJO VISIBLE TODAS LAS CANTIDADES.
@@ -113,6 +111,7 @@ public class VentanaJuego extends JFrame {
     	
     	//DIBUJO VISIBLE EL BUQUE EN SU NUEVA POS.
     	buques[buqueView.getDireccion()].setBounds((int)(buqueView.getX() * xEscalarBuque - 115), 150, 125, 47);
+//    	buques[buqueView.getDireccion()].setBounds((int)(buqueView.getX() * xEscalarSubmarino), 150, 125, 47);
     	
     	if (cargasViews.size() != cargas.size()) // SI SE CREARON CARGAS NUEVAS.
     	{
@@ -120,7 +119,6 @@ public class VentanaJuego extends JFrame {
     		for (int i = 0; i < j; i++) // ITERO LA CANTIDAD DE CARGAS NUEVAS CREADAS.
     		{
     			JLabel lbl = new JLabel();
-//    			lbl.setIcon(new ImageIcon(getClass().getResource("/imagenes/carga/carga32.png")));
     			lbl.setIcon(imgCarga);
     			
     			cargas.add(lbl); // CREO LA NUEVA CARGA Y LA DIBUJO INVISIBLE.
@@ -229,8 +227,6 @@ public class VentanaJuego extends JFrame {
     		buques[i].setIcon(new ImageIcon(getClass().getResource("/imagenes/buque/buque"+i+".png")));
     	}
     	
-//    	carga.setIcon(new ImageIcon(getClass().getResource("/imagenes/carga/carga32.png")));
-//    	imgCarga.setIcon(new ImageIcon(getClass().getResource("/imagenes/carga/carga32.png")));
     	imgCarga = new ImageIcon(getClass().getResource("/imagenes/carga/carga32.png"));
     }
     
@@ -387,7 +383,7 @@ public class VentanaJuego extends JFrame {
     private void inicializarVariables()
     {
     	c = new Controlador();
-    	timer = new Timer(1, new AccionTimer());
+    	timer = new Timer(24, new AccionTimer());
     	
     	cargas = new ArrayList<JLabel>();
     	
@@ -549,12 +545,10 @@ public class VentanaJuego extends JFrame {
 						c.recibirEntradaTeclado(tecla);
 						submarinos[0].setVisible(true);
 						submarinos[1].setVisible(false);
-						direccJugador = 0;
 					}
 					else if (tecla == 65 || tecla == 37) // A o FlechaIzquierda
 					{
 						c.recibirEntradaTeclado(tecla);
-						direccJugador = 1;
 						submarinos[0].setVisible(false);
 						submarinos[1].setVisible(true);
 					}
