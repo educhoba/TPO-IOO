@@ -4,7 +4,9 @@ package gui;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.Insets;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -55,7 +57,6 @@ public class VentanaJuego extends JFrame {
     private List<JLabel> cargas;
     private JLabel explosion;
     private Timer timer;
-    private Timer timerExplosion;
     private Controlador c;
     private SubmarinoView submarinoView;
     private BuqueView buqueView;
@@ -63,10 +64,9 @@ public class VentanaJuego extends JFrame {
     private float yEscalar;
     private float xEscalarSubmarino;
     private float xEscalarBuque;
-    private float xEscalarCarga;
     private int direccJugador;
-    private ImageIcon imgExplosion;
     private JLabel lblgameover;
+    private ImageIcon imgCarga;
     
     // FINAL DE DECLARACION DE ATRIBUTOS
 	
@@ -79,20 +79,12 @@ public class VentanaJuego extends JFrame {
     	
     	inicializarComponentesVisuales();
     	
+    	setIconImage(getIconImage());
+    	
     	addKeyListener(new EventoTeclado());
     	
-    	// INICIO CODIGO DE PRUEBA: QUITAR
     	timer.start();
     	
-//    	panel.add(buques[0]);
-//    	buques[0].setBounds(0, 150, 125, 47);
-//    	panel.add(carga);
-//    	carga.setBounds(47, 300, 32, 32);
-    	// FIN DE CODIGO DE PRUEBA: QUITAR
-    }
-    
-    private void finalizarJuego()
-    {
     }
     
     
@@ -102,77 +94,82 @@ public class VentanaJuego extends JFrame {
     	
     	c.actualizarJuego();
     	
+    	// DIBUJO VISIBLE TODAS LAS CANTIDADES.
     	cantNivel.setText(String.valueOf(c.getNivel()));
     	cantIntegridad.setText(String.valueOf(c.getIntegridadCasco()));
     	cantVidas.setText(String.valueOf(c.getVidasJugador()));
     	cantPuntos.setText(String.valueOf(c.getPuntosJugador()));
     	
+    	// RECIBO LAS VIEWS PARA PODER DIBUJAR.
     	submarinoView = c.getSubmarinoView();
     	buqueView = c.getBuqueView();
     	cargasViews = c.getCargasViews();
     	
-    	submarinos[direccJugador].setBounds((int)(submarinoView.getX() * xEscalarSubmarino), 
+    	//DIBUJO VISIBLE EL SUBMARINO EN SU NUEVA POS.
+    	submarinos[0].setBounds((int)(submarinoView.getX() * xEscalarSubmarino), 
+    			(int)((submarinoView.getY() * -1) * yEscalar + 180), 125, 43);
+    	submarinos[1].setBounds((int)(submarinoView.getX() * xEscalarSubmarino), 
     			(int)((submarinoView.getY() * -1) * yEscalar + 180), 125, 43);
     	
+    	//DIBUJO VISIBLE EL BUQUE EN SU NUEVA POS.
     	buques[buqueView.getDireccion()].setBounds((int)(buqueView.getX() * xEscalarBuque - 115), 150, 125, 47);
     	
-    	if (cargasViews.size() != cargas.size())
+    	if (cargasViews.size() != cargas.size()) // SI SE CREARON CARGAS NUEVAS.
     	{
     		int j = cargasViews.size() - cargas.size();
-    		for (int i = 0; i < j; i++)
+    		for (int i = 0; i < j; i++) // ITERO LA CANTIDAD DE CARGAS NUEVAS CREADAS.
     		{
     			JLabel lbl = new JLabel();
-    			lbl.setIcon(new ImageIcon(getClass().getResource("/imagenes/carga/carga32.png")));
+//    			lbl.setIcon(new ImageIcon(getClass().getResource("/imagenes/carga/carga32.png")));
+    			lbl.setIcon(imgCarga);
     			
-    			cargas.add(lbl);
+    			cargas.add(lbl); // CREO LA NUEVA CARGA Y LA DIBUJO INVISIBLE.
     			
-    			int k = cargas.size() - 1;
+    			int k = cargas.size() - 1; // ENCUENTRO EL INDICE EN Cargas DE LA NUEVA CARGA CREADA Y LO ANIADO AL CONTENEDOR.
     			panel.add(cargas.get(k));
     		}
     	}
     	
-    	
-    	for (int i = cargasViews.size() - 1; i >= 0; i--)
+    	for (int i = cargasViews.size() - 1; i >= 0; i--) // RECORRO TODAS LAS CARGAS EXISTENTES.
     	{
-    		if (cargasViews.get(i).estaExplotada())
+    		if (cargasViews.get(i).estaExplotada()) // SI LA CARGA ESTA EXPLOTADA.
     		{
-    			cargas.get(i).setVisible(false);
+    			cargas.get(i).setVisible(false); // DESAPAREZCO LA CARGA.
+    			
+    			// DIBUJO LA EXPLOSION.
     			inicioExpl = System.currentTimeMillis();
     			explosion.setVisible(true);
     			explosion.setBounds((int)(cargasViews.get(i).getX() * xEscalarSubmarino) - 70, 
     					(int)((cargasViews.get(i).getY() * -1) * yEscalar + 125),
     					168, 100);
-    			panel.remove(cargas.get(i));
+    			
+    			panel.remove(cargas.get(i)); // REMUEVO LA CARGA.
     			cargas.remove(i);
     		}
-    		else if (cargasViews.get(i).estaSoltada())
+    		
+    		else if (cargasViews.get(i).estaSoltada()) // SI LA CARGA NO ESTA EXPLOTADA, PERO SI SOLTADA.
     		{
-    			cargas.get(i).setVisible(true);
+    			cargas.get(i).setVisible(true); // DIBUJO VISIBLE LA CARGA EN SU NUEVA POSICION.
     			cargas.get(i).setBounds((int)(cargasViews.get(i).getX() * xEscalarSubmarino), 
     					(int)((cargasViews.get(i).getY() * -1) * yEscalar + 180),
     					32, 32);
     		}
     	}
     	
+    	// CUMPLIDO EL TIEMPO, DESAPAREZCO EL DIBUJO DE EXPLOSION.
     	long finExpl = System.currentTimeMillis();
     	if (finExpl - inicioExpl >= 250)
     	{
     		explosion.setVisible(false);
     	}
     	
-    	if (c.getVidasJugador() <= 0 && c.getIntegridadCasco() <= 0)
+    	// SI EL JUGADOR NO TIENE VIDAS NI INTEGRIDAD.
+    	if (!c.estaVivo())
     	{
     		timer.stop();
-    		lblgameover.setVisible(true);
+    		lblgameover.setVisible(true); // DETENGO EL TIEMPO Y DIBUJO GAME OVER.
     		lblgameover.setBounds(129, 100, 720, 631);
-    		
     	}
-    		
-    		
-    	
-    	
-//    	intPuntos++;
-//		cantPuntos.setText(String.valueOf(intPuntos));
     }
     
     
@@ -191,6 +188,7 @@ public class VentanaJuego extends JFrame {
             }
         };
     }
+    
     
     private void inicializarJLabels()
     {
@@ -217,8 +215,6 @@ public class VentanaJuego extends JFrame {
     	
     	explosion.setIcon(new ImageIcon(getClass().getResource("/imagenes/carga/explosion.png")));
     	
-    	imgExplosion = new ImageIcon(getClass().getResource("/imagenes/carga/explosion.png"));
-    	
     	lblPausa.setIcon(new ImageIcon(getClass().getResource("/imagenes/estados/labelpausa.png")));
     	
     	for (int i = 0; i < submarinos.length; i++)
@@ -234,6 +230,16 @@ public class VentanaJuego extends JFrame {
     	}
     	
 //    	carga.setIcon(new ImageIcon(getClass().getResource("/imagenes/carga/carga32.png")));
+//    	imgCarga.setIcon(new ImageIcon(getClass().getResource("/imagenes/carga/carga32.png")));
+    	imgCarga = new ImageIcon(getClass().getResource("/imagenes/carga/carga32.png"));
+    }
+    
+    
+    @Override
+    public Image getIconImage()
+    {
+    	Image icono = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/imagenes/icono/icono.png"));
+    	return icono;
     }
     
     
@@ -264,6 +270,10 @@ public class VentanaJuego extends JFrame {
     
     private void dibujarJLabelsIniciales()
     {
+    	panel.add(lblPausa);
+    	lblPausa.setBounds(240, 300, 500, 285);
+    	lblPausa.setVisible(false);
+    	
     	panel.add(lblgameover);
     	
     	panel.add(explosion);
@@ -271,22 +281,12 @@ public class VentanaJuego extends JFrame {
     	panel.add(buques[0]);
     	panel.add(buques[1]);
     	
-    	System.out.println("width" +panel.getWidth());
-    	System.out.println("height" +panel.getHeight());
-    	
-    	panel.add(lblPausa);
-    	lblPausa.setBounds(240, 300, 500, 285);
-    	lblPausa.setVisible(false);
-    	
-        panel.add(submarinos[0]);
-        submarinos[0].setBounds(x, y, 125, 43);
-//        submarinos[0].setBounds((int)(submarinoView.getX() * xEscalarSubmarino), 
-//    			(int)((submarinoView.getY() * -1) * yEscalar + 180), 125, 43);
+    	panel.add(submarinos[0]);
         panel.add(submarinos[1]);
-        submarinos[1].setBounds(x, y, 125, 43);
-//        submarinos[1].setBounds((int)(submarinoView.getX() * xEscalarSubmarino), 
-//    			(int)((submarinoView.getY() * -1) * yEscalar + 180), 125, 43);
         submarinos[1].setVisible(false);
+    	
+    	
+        
         
         Font fuente = new Font("Press Start 2P", 0, 20);
         
@@ -358,7 +358,7 @@ public class VentanaJuego extends JFrame {
         pausar.setMargin(new Insets(6, 6, 6, 6));
         pausar.setPreferredSize(new Dimension(90, 35));
         pausa.add(pausar);
-
+        
         reanudar.setFont(fuenteItem);
         reanudar.setText("Reanudar");
         reanudar.setMargin(new Insets(6, 6, 6, 6));
@@ -366,7 +366,7 @@ public class VentanaJuego extends JFrame {
         pausa.add(reanudar);
 
         BarraMenu.add(pausa);
-
+        
         salir.setText("Salir");
         salir.setFont(fuenteMenu);
         salir.setMargin(new Insets(6, 10, 6, 6));
@@ -388,16 +388,12 @@ public class VentanaJuego extends JFrame {
     {
     	c = new Controlador();
     	timer = new Timer(1, new AccionTimer());
-    	timerExplosion = new Timer(1000, new AccionTimer());
     	
     	cargas = new ArrayList<JLabel>();
     	
     	yEscalar =  (790f - 150) / 800;
     	xEscalarBuque = ((975f - (-115)) / 150);
-    	xEscalarCarga = ((956f - (-4)) / 150);
     	xEscalarSubmarino = (860f / 150);
-    	
-    	
     }
     
     
@@ -446,40 +442,36 @@ public class VentanaJuego extends JFrame {
     
     
     
-    // INICIO DE DECLARACION DE CLASES
+    /*
+     * 
+     * 
+     * 
+     * INICIO DE DECLARACION DE CLASES
+     * 
+     * 
+     * 
+    */ 
     
     class ManejoTimerMenu implements ActionListener{
 
 		@Override
 		public void actionPerformed(ActionEvent e) 
 		{
-			if(e.getActionCommand().equalsIgnoreCase("Reanudar"))
+			if (c.estaVivo())
 			{
-				lblPausa.setVisible(false);
-				timer.start();
+				if(e.getActionCommand().equalsIgnoreCase("Reanudar"))
+				{
+					lblPausa.setVisible(false);
+					timer.start();
+				}
+				else
+				{
+					lblPausa.setVisible(true);
+					timer.stop();
+				}
 			}
-			else
-			{
-				lblPausa.setVisible(true);
-				timer.stop();
-			}
-			
 		}
 	}
-    
-    
-    // ESTA CLASE NO SE UTILIZA PORQUE NO FUNCIONA
-    class ManejoTimerTeclado implements ActionListener{
-
-		@Override
-		public void actionPerformed(ActionEvent e) 
-		{
-			if (timer.isRunning())
-				timer.stop();
-			else
-				timer.start();
-		}
-    }
     
     
     class AccionTimer implements ActionListener{
@@ -487,17 +479,11 @@ public class VentanaJuego extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) 
 		{
-			// INICIO CODIGO DE PRUEBA: QUITAR
 			actualizar();
-//			intPuntos++;
-//			cantPuntos.setText(String.valueOf(intPuntos));
-			// FIN CODIGO DE PRUEBA: QUITAR
 		}
 	}
     
     
-    int x = 0;
-    int y = 790;
     class EventoTeclado implements KeyListener{
 
 		@Override
@@ -508,71 +494,72 @@ public class VentanaJuego extends JFrame {
 		{
 
 			// INICIO CODIGO DE PRUEBA: QUITAR
-			System.out.println(e.getKeyCode());
+//			System.out.println(e.getKeyCode());
 			int tecla = e.getKeyCode();
 			
-			if (tecla == 32)
+			if (c.estaVivo())
 			{
-				
-				new VentanaJuego().setVisible(true);
-				finalizarJuego();
-				
-			}
-			
-			else if (tecla == 78)
-			{
-				lblgameover.setVisible(true);
-	    		lblgameover.setBounds(129, 100, 720, 631);
-			}
-			
-			else if (tecla == 80 || tecla == 27) // P o ESC
-			{
-				if (timer.isRunning())
+				if (tecla == 32) // ESPACIO
 				{
-					lblPausa.setVisible(true);
-					timer.stop();
-				}
-				else
-				{
-					lblPausa.setVisible(false);
-					timer.start();
-				}
-			}
-			
-			else if (timer.isRunning())
-			{
-				if (tecla == 87 || tecla == 38) // W o FlechaArriba
-				{
-					c.recibirEntradaTeclado(tecla);
-//					y -= 5;
-				}
-				else if (tecla == 83 || tecla == 40) // S o FlechaAbajo
-				{
-					c.recibirEntradaTeclado(tecla);
-//					y += 5;
-				}
-				else if (tecla == 68 || tecla == 39) // D o FlechaDerecha
-				{
-					c.recibirEntradaTeclado(tecla);
-					submarinos[0].setVisible(true);
-					submarinos[1].setVisible(false);
-					direccJugador = 0;
-//					x += 5;
-				}
-				else if (tecla == 65 || tecla == 37) // A o FlechaIzquierda
-				{
-					c.recibirEntradaTeclado(tecla);
-					direccJugador = 1;
-					submarinos[0].setVisible(false);
-					submarinos[1].setVisible(true);
-//					x -= 5;
+//					new VentanaJuego().setVisible(true); // REINICIAR JUEGO
 				}
 				
-//				submarinos[0].setBounds(x, y, 125, 43);
-//				submarinos[1].setBounds(x, y, 125, 43);
+				else if (tecla == 78) // N  -- PARA PROBAR COMO SE VE GAME OVER
+				{
+					if (!lblgameover.isVisible())
+					{
+						lblgameover.setVisible(true);
+						timer.stop();
+			    		lblgameover.setBounds(129, 100, 720, 631);
+					}
+					
+					else
+					{
+						lblgameover.setVisible(false);
+						timer.start();
+					}
+				}
 				
-				submarinos[direccJugador].setBounds((int)(submarinoView.getX() * xEscalarSubmarino), 
-		    			(int)((submarinoView.getY() * -1) * yEscalar + 180), 125, 43);
+				else if (tecla == 80 || tecla == 27) // P o ESC
+				{
+					if (timer.isRunning())
+					{
+						lblPausa.setVisible(true);
+						timer.stop();
+					}
+					else
+					{
+						lblPausa.setVisible(false);
+						timer.start();
+					}
+				}
+				
+				else if (timer.isRunning())
+				{
+					if (tecla == 87 || tecla == 38) // W o FlechaArriba
+					{
+						c.recibirEntradaTeclado(tecla);
+					}
+					else if (tecla == 83 || tecla == 40) // S o FlechaAbajo
+					{
+						c.recibirEntradaTeclado(tecla);
+					}
+					else if (tecla == 68 || tecla == 39) // D o FlechaDerecha
+					{
+						c.recibirEntradaTeclado(tecla);
+						submarinos[0].setVisible(true);
+						submarinos[1].setVisible(false);
+						direccJugador = 0;
+					}
+					else if (tecla == 65 || tecla == 37) // A o FlechaIzquierda
+					{
+						c.recibirEntradaTeclado(tecla);
+						direccJugador = 1;
+						submarinos[0].setVisible(false);
+						submarinos[1].setVisible(true);
+					}
+					
+				}
 			}
 			// FIN CODIGO DE PRUEBA: QUITAR
 		}
@@ -582,14 +569,22 @@ public class VentanaJuego extends JFrame {
     	
     }
     
-    // FINAL DE DECLARACION DE CLASES
-    
+    /* 
+     * 
+     * 
+     * 
+     * FINAL DE DECLARACION DE CLASES
+     * 
+     * 
+     * 
+     * 
+    */
     
     
     // METODO MAIN
     public static void main(String args[]) 
     {
-    	new VentanaJuego().setVisible(true);
+		new VentanaJuego().setVisible(true);
     }
 
 }

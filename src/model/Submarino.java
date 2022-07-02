@@ -42,7 +42,15 @@ public class Submarino extends ObjetoJuego {
 	}
 	
 	public boolean estaVivo() {
-		return vidas >= 0;
+		boolean vivo = false;
+		if (vidas > 0)
+			vivo = true;
+		else if (vidas == 0)
+		{
+			if (integridadCasco > 0)
+				vivo = true;
+		}
+		return vivo;
 	}
 
 	// Setters
