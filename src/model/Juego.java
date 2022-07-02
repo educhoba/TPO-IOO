@@ -41,10 +41,12 @@ public class Juego {
 	
 	public void actualizarJuego() {
 		
+		float milisegundos = 0.024f;
+		
 		if (buque == null || buque.finalizoRecorrido())
 			aparecerBuque();
 		else
-			buque.moverX(1);
+			buque.moverX(milisegundos);
 			
 		
 		for (int i = cargas.size() - 1; i >= 0; i--)
@@ -55,7 +57,7 @@ public class Juego {
 				cargas.remove(i);
 			}
 			else
-				cargas.get(i).moverY(1);
+				cargas.get(i).moverY(milisegundos);
 		}
 
 		if (!jugador.estaVivo()) {
@@ -79,15 +81,14 @@ public class Juego {
 			pasarDeNivel();
 
 		int lado = new Random().nextInt(1 + 1); // nro 0 o 1.
-		float velocidad;
+		float velocidad = 50f;
 		int x;
 
 		if (lado == 0) { // Si da 0, aparece por la izquierda.
 			x = areaJuego.getXMin();
-			velocidad = 1f;
 		} else { // Si da 1, aparece por la derecha.
 			x = areaJuego.getXMax();
-			velocidad = -1f;
+			velocidad *= -1f;
 		}
 		
 		CargaProfundidad carga = crearCargaProfundidad(x);
@@ -103,7 +104,7 @@ public class Juego {
 
 	private CargaProfundidad crearCargaProfundidad(int xBuque) {
 		Coordenada c = new Coordenada(xBuque, areaJuego.getYMin(), areaJuego);
-		return new CargaProfundidad(2f, 1, 1, c, -300, -700);
+		return new CargaProfundidad(200f, 1, 1, c, -300, -700);
 	}
 	
 	private void aparecerCarga(CargaProfundidad c) {

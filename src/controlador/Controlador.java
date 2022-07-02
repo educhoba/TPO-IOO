@@ -54,19 +54,19 @@ public class Controlador {
 
 	public void recibirEntradaTeclado(int entrada) {
 		switch (entrada) {
-		case 27: // Escape
-			juego.abrirOSalirDelMenuSiElJuegoEstaCorriendo(); // TODA LA PARTE DE PAUSAS LA TIENE LA INTERFAZ PORQUE TIENE EL TIMER
-			break;
+//		case 27: // Escape
+//			juego.abrirOSalirDelMenuSiElJuegoEstaCorriendo(); // TODA LA PARTE DE PAUSAS LA TIENE LA INTERFAZ PORQUE TIENE EL TIMER
+//			break;
 		case 40, 83, 37, 65, 39, 68, 38, 87: // WASD y Flechas
 			juego.moverSubmarino(entrada);
 			break;
-		case 80:// P
-			juego.pausarOReanudarJuegoSiElJuegoEstaCorriendo();
-			break;
-		case 89:// Y
-			juego.terminarJuegoSiEstaElMenuAbierto();
-			juego.comenzarJuegoSiEstaEnInicio();
-			break;
+//		case 80:// P
+//			juego.pausarOReanudarJuegoSiElJuegoEstaCorriendo();
+//			break;
+//		case 89:// Y
+//			juego.terminarJuegoSiEstaElMenuAbierto();
+//			juego.comenzarJuegoSiEstaEnInicio();
+//			break;
 		}
 	}
 
@@ -102,24 +102,24 @@ public class Controlador {
 		return aj.getYMin();
 	}
 
-	public boolean estaEnInicio() {
-		return aj.estaEnInicio();
-	}
-
-	public boolean estaCorriendo() {
-		return aj.estaCorriendo();
-	}
-
-	public boolean estaPausado() {
-		return aj.estaPausado();
-	}
-
-	public boolean estaMenuAbierto() {
-		return aj.estaMenuAbierto();
-	}
-
-	public boolean estaCerrando() {
-		return aj.estaSaliendo();
-	}
+//	public boolean estaEnInicio() {
+//		return aj.estaEnInicio();
+//	}
+//
+//	public boolean estaCorriendo() {
+//		return aj.estaCorriendo();
+//	}
+//
+//	public boolean estaPausado() {
+//		return aj.estaPausado();
+//	}
+//
+//	public boolean estaMenuAbierto() {
+//		return aj.estaMenuAbierto();
+//	}
+//
+//	public boolean estaCerrando() {
+//		return aj.estaSaliendo();
+//	}
 	
 }

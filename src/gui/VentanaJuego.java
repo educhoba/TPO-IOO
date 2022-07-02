@@ -52,8 +52,8 @@ public class VentanaJuego extends JFrame {
     private JLabel cantVidas;
     private JLabel puntos;
     private JLabel cantPuntos;
-    private JLabel submarinos[];
-    private JLabel buques[];
+    private JLabel submarinos[]; //es un array xq hay 2 imagenes ( <- y -> )
+    private JLabel buques[];//idem submarino
     private List<JLabel> cargas;
     private JLabel explosion;
     private Timer timer;
@@ -109,7 +109,7 @@ public class VentanaJuego extends JFrame {
     	submarinos[1].setBounds((int)(submarinoView.getX() * xEscalarSubmarino), 
     			(int)((submarinoView.getY() * -1) * yEscalar + 180), 125, 43);
     	
-    	//DIBUJO VISIBLE EL BUQUE EN SU NUEVA POS.
+    	//DIBUJO VISIBLE EL BUQUE EN SU NUEVA POS. buqueView.getDireccion() = 0 o 1 depende para donde va
     	buques[buqueView.getDireccion()].setBounds((int)(buqueView.getX() * xEscalarBuque - 115), 150, 125, 47);
 //    	buques[buqueView.getDireccion()].setBounds((int)(buqueView.getX() * xEscalarSubmarino), 150, 125, 47);
     	
@@ -387,7 +387,7 @@ public class VentanaJuego extends JFrame {
     	
     	cargas = new ArrayList<JLabel>();
     	
-    	yEscalar =  (790f - 150) / 800;
+    	yEscalar =  (790f - 150) / 750;
     	xEscalarBuque = ((975f - (-115)) / 150);
     	xEscalarSubmarino = (860f / 150);
     }
@@ -495,28 +495,12 @@ public class VentanaJuego extends JFrame {
 			
 			if (c.estaVivo())
 			{
-				if (tecla == 32) // ESPACIO
-				{
-//					new VentanaJuego().setVisible(true); // REINICIAR JUEGO
-				}
-				
-				else if (tecla == 78) // N  -- PARA PROBAR COMO SE VE GAME OVER
-				{
-					if (!lblgameover.isVisible())
-					{
-						lblgameover.setVisible(true);
-						timer.stop();
-			    		lblgameover.setBounds(129, 100, 720, 631);
-					}
-					
-					else
-					{
-						lblgameover.setVisible(false);
-						timer.start();
-					}
-				}
-				
-				else if (tecla == 80 || tecla == 27) // P o ESC
+//				if (tecla == 32) // ESPACIO
+//				{
+////					new VentanaJuego().setVisible(true); // REINICIAR JUEGO
+//				}
+//				
+				if (tecla == 80 || tecla == 27) // P o ESC
 				{
 					if (timer.isRunning())
 					{
@@ -532,28 +516,19 @@ public class VentanaJuego extends JFrame {
 				
 				else if (timer.isRunning())
 				{
-					if (tecla == 87 || tecla == 38) // W o FlechaArriba
+					if (tecla == 68 || tecla == 39) // D o FlechaDerecha
 					{
-						c.recibirEntradaTeclado(tecla);
-					}
-					else if (tecla == 83 || tecla == 40) // S o FlechaAbajo
-					{
-						c.recibirEntradaTeclado(tecla);
-					}
-					else if (tecla == 68 || tecla == 39) // D o FlechaDerecha
-					{
-						c.recibirEntradaTeclado(tecla);
 						submarinos[0].setVisible(true);
 						submarinos[1].setVisible(false);
 					}
 					else if (tecla == 65 || tecla == 37) // A o FlechaIzquierda
 					{
-						c.recibirEntradaTeclado(tecla);
 						submarinos[0].setVisible(false);
 						submarinos[1].setVisible(true);
 					}
-					
+					c.recibirEntradaTeclado(tecla);
 				}
+				
 			}
 			// FIN CODIGO DE PRUEBA: QUITAR
 		}

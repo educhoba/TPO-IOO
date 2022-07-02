@@ -2,6 +2,7 @@ package test;
 
 public class Debugger {
 
+	boolean debuggerON = true;
 	public static void printIntegridadSubmarino(int daño, int integridadCasco) {
 		System.out.println("\n-" +daño +"INTEGRIDAD.\nIntegridad Submarino: " +integridadCasco +"\n");
 	}
