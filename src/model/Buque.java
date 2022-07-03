@@ -8,7 +8,7 @@ public class Buque extends ObjetoJuego {
 
 	private float xSoltar;
 	private CargaProfundidad cargaProfunidad;
-	private static int cantBuques = 1;
+	private static int cantBuques;
 
 	public Buque(float velocidad, int altura, int largo, Coordenada c, CargaProfundidad cp) {
 		super(velocidad, altura, largo, c);
@@ -65,7 +65,7 @@ public class Buque extends ObjetoJuego {
 	
 	public static void resetCantidadBuques()
 	{
-		Buque.cantBuques = 1;
+		Buque.cantBuques = 0;
 	}
 
 	public boolean finalizoRecorrido() {

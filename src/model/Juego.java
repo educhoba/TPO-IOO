@@ -13,13 +13,13 @@ public class Juego {
 	private final static float PORCENTAJE_INCREMENTO_DIFICULTAD = 10;
 	
 	private final static int AREA_JUEGO_PROFUNDIDAD = -800;
-	private final static int AREA_JUEGO_LARGO = 150;
+	private final static int AREA_JUEGO_LARGO = 600;
 	
 	private final static int SUBMARINO_Y_MIN = -800;
 	private final static int SUBMARINO_Y_MAX = -300;
-	private final static float SUBMARINO_VELOCIDAD = 5;
-	private final static int SUBMARINO_ALTO = 3;
-	private final static int SUBMARINO_LARGO = 5;
+	private final static float SUBMARINO_VELOCIDAD = 10;
+	private final static int SUBMARINO_ALTO = 18;
+	private final static int SUBMARINO_LARGO = 50;
 	
 	private final static float BUQUE_VELOCIDAD = 50;
 	private final static int BUQUE_ALTO = 1;
@@ -34,6 +34,7 @@ public class Juego {
 	AreaJuego areaJuego;
 	Submarino jugador;
 	Buque buque;
+	
 	List<CargaProfundidad> cargas;
 
 	public Juego() {

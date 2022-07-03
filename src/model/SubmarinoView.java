@@ -7,7 +7,7 @@ public class SubmarinoView extends ObjetoJuegoView{
 	
 	public SubmarinoView(Submarino s) {
 		super(s);
-		largo = s.altura;
+		largo = s.largo;
 		alto = s.altura;
 	}
 

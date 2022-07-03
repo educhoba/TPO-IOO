@@ -4,6 +4,7 @@ package gui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Insets;
 import java.awt.Toolkit;
@@ -78,11 +79,12 @@ public class VentanaJuego extends JFrame {
     private ImageIcon imgCarga;
     private int ultimaResolucionX = 0;
     private int ultimaResolucionY = 0;
+	private int altoBarraVentana = 39;
     private boolean recargarResolucion = false;
     // FINAL DE DECLARACION DE ATRIBUTOS
 	
     JLabel gameArea;
-    boolean testArea = true;
+    boolean modoTest = false;
     
     
     // CONSTRUCTOR
@@ -92,15 +94,25 @@ public class VentanaJuego extends JFrame {
         setTitle("Submarine Attack");
         //setResizable(false);
         getContentPane().setLayout(null);
-        setPreferredSize(new Dimension(150, 800));
-        setMinimumSize(new Dimension(150, 800));
-        setSize(new Dimension(150, 800));
         
     	inicializarVariables();
     	
     	inicializarComponentesVisuales();
+     
+    	setPreferredSize(new Dimension(c.getXMax(), -c.getYMax() + BarraMenu.getHeight() + altoBarraVentana));
+        setMinimumSize(new Dimension(c.getXMax(), -c.getYMax() + BarraMenu.getHeight()+ altoBarraVentana));
+        setSize(new Dimension(c.getXMax(), -c.getYMax() + BarraMenu.getHeight() + altoBarraVentana));
     	
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int ancho = (int)screenSize.getWidth();
+        int alto = (int)screenSize.getHeight();
+        int anchoVentana = getWidth();
+        int altoVentana = getHeight();
+        //this.setLocation(0,0);
+        this.setLocation(ancho/2 - anchoVentana/2, alto/2 - altoVentana/2);
+        
     	setIconImage(getIconImage());
+
     	
     	addKeyListener(new EventoTeclado());
     	
@@ -130,16 +142,33 @@ public class VentanaJuego extends JFrame {
     	//DIBUJO VISIBLE EL SUBMARINO EN SU NUEVA POS.
     	submarinos[0].setBounds(x0 + (submarinoView.getX() -submarinoView.getLargo()/2)*xEscalar, y0 + (-submarinoView.getY() - submarinoView.getAlto()/2 )* yEscalar, 
     							submarinoView.getLargo()*xEscalar, submarinoView.getAlto()* yEscalar);
-		setImageIcon(recargarResolucion, submarinos[0],"1x1.png");
     	submarinos[1].setBounds(x0 + (submarinoView.getX() -submarinoView.getLargo()/2)*xEscalar, y0 + (-submarinoView.getY() - submarinoView.getAlto()/2)* yEscalar, 
     							submarinoView.getLargo()*xEscalar, submarinoView.getAlto()* yEscalar);
-		setImageIcon(recargarResolucion, submarinos[1],"1x1.png");
-    	
+		if(modoTest) {
+	    	setImageIcon(recargarResolucion, submarinos[0],"1x1.png");
+	    	setImageIcon(recargarResolucion, submarinos[1],"1x1.png");
+		}
+		else {
+			setImageIcon(recargarResolucion, submarinos[0],"imagenes\\submarino\\submarino0.png");
+			setImageIcon(recargarResolucion, submarinos[1],"imagenes\\submarino\\submarino1.png");
+		}
+			
     	//DIBUJO VISIBLE EL BUQUE EN SU NUEVA POS. buqueView.getDireccion() = 0 o 1 depende para donde va
-    	buques[0].setBounds(x0 + (buqueView.getX())*xEscalar, y0 + buqueView.getY()* yEscalar, 1*xEscalar, 1* yEscalar); //125, 47
     	buques[1].setBounds(x0 + (buqueView.getX())*xEscalar, y0 + buqueView.getY()* yEscalar, 1*xEscalar, 1* yEscalar); //125, 47
-		setImageIcon(recargarResolucion, buques[0],"1x1.png");
-		setImageIcon(recargarResolucion, buques[1],"1x1.png");
+    	buques[0].setBounds(x0 + (buqueView.getX())*xEscalar, y0 + buqueView.getY()* yEscalar, 1*xEscalar, 1* yEscalar); //125, 47
+    	
+    	if(modoTest) {
+    		setImageIcon(recargarResolucion, buques[0],"1x1.png");
+    		setImageIcon(recargarResolucion, buques[1],"1x1.png");
+    	}
+    	else
+    	{
+            	for (int i = 0; i < buques.length; i++)
+            	{	buques[i].setBounds(buques[i].getX(),buques[i].getY(),125,47);
+            		buques[i].setIcon(new ImageIcon(getClass().getResource("/imagenes/buque/buque"+i+".png")));
+            	}
+    	}
+    		
 		
 //    	buques[buqueView.getDireccion()].setBounds((int)(buqueView.getX() * xEscalarSubmarino), 150, 125, 47);
     	
@@ -172,7 +201,11 @@ public class VentanaJuego extends JFrame {
     			explosion.setBounds(x0 + (cargasViews.get(i).getX()*xEscalar) - rangoExplosionX*xEscalar , 
     					y0 -cargasViews.get(i).getY()* yEscalar - rangoExplosionY* yEscalar,
     					rangoExplosionX*2*xEscalar, rangoExplosionY*2* yEscalar);
-    			setImageIcon(true, explosion,"200x200circle.png");
+    			if(modoTest) 
+    				setImageIcon(true, explosion,"200x200circle.png");
+    			else
+    				setImageIcon(true, explosion,"imagenes\\carga\\explosionBurbuja.png");
+    			
     			
     			panel.remove(cargas.get(i)); // REMUEVO LA CARGA.
     			cargas.remove(i);
@@ -183,7 +216,15 @@ public class VentanaJuego extends JFrame {
     			cargas.get(i).setBounds(x0 + cargasViews.get(i).getX()*xEscalar, 
     					y0 - cargasViews.get(i).getY()* yEscalar,
     					1*xEscalar, 1* yEscalar);
-    			setImageIcon(true, cargas.get(i),"1x1.png");
+    			
+    			if(modoTest) 
+        			setImageIcon(true, cargas.get(i),"1x1.png"); 
+    			else
+    			{
+    				cargas.get(i).setBounds(cargas.get(i).getX(), cargas.get(i).getY(),
+        					32,32);
+        			cargas.get(i).setIcon(imgCarga);
+    			}
     		}
     	}
     	
@@ -200,14 +241,11 @@ public class VentanaJuego extends JFrame {
     		timer.stop();
     		lblgameover.setVisible(true); // DETENGO EL TIEMPO Y DIBUJO GAME OVER.
     		lblgameover.setBounds(xResolucion/2 -(150*xResolucion)/2, yResolucion/2 -(600*yResolucion)/2, 150*xResolucion, 600*yResolucion);
-			setImageIcon(recargarResolucion, lblgameover,"1x1.png");
+			setImageIcon(recargarResolucion, lblgameover,"imagenes\\estados\\gameover.png");
     	}
     	
     	panel.add(gameArea);
-    	
     }
-    
-    
     
     // INICIO DE DECLARACION DE METODOS
     
@@ -217,11 +255,17 @@ public class VentanaJuego extends JFrame {
 
 			private static final long serialVersionUID = 2013056688719049185L;
 
-//			public void paintComponent(Graphics g)
-//            {
-//                ImageIcon icon = new ImageIcon(getClass().getResource("/imagenes/fondo/fondo.png"));
-//                g.drawImage(icon.getImage(), 0, 0, getWidth(), getHeight(), this);
-//            }
+			public void paintComponent(Graphics g)
+            {
+				if(modoTest) {
+		               ImageIcon icon = new ImageIcon(getClass().getResource("/imagenes/fondo/fondo2.png"));
+		                g.drawImage(icon.getImage(), 0, 0, getWidth(), getHeight(), this);
+				}
+				else {
+		               ImageIcon icon = new ImageIcon(getClass().getResource("/imagenes/fondo/fondo.png"));
+		                g.drawImage(icon.getImage(), 0, 0, getWidth(), getHeight(), this);
+				}
+            }
         };
     }
     
@@ -239,7 +283,7 @@ public class VentanaJuego extends JFrame {
         cantPuntos = new JLabel();
         cantNivel = new JLabel();
         
-        explosion = new JLabel();
+        explosion = new JLabel(); 
         //Un JLabel para cada dirección
         
         submarinos = new JLabel[2];
@@ -310,9 +354,8 @@ public class VentanaJuego extends JFrame {
     	ultimaResolucionY = yResolucion = getHeight();
     	ultimaResolucionX = xResolucion = getWidth();
         //setPreferredSize(new Dimension(xResolucion, yResolucion));
-        setSize(new Dimension(xResolucion, yResolucion));
+    	setPreferredSize(new Dimension(xResolucion, yResolucion));
 
-        
         panel.setPreferredSize(new Dimension(xResolucion, yResolucion));
         panel.setLayout(null);
 
@@ -321,7 +364,7 @@ public class VentanaJuego extends JFrame {
     	
     	x0 = xResolucion/2 - c.getXMax()*xEscalar/2;
     	
-    	y0 = yResolucion/2 + c.getYMax()/2;
+    	y0 = (yResolucion-BarraMenu.getHeight()-altoBarraVentana)/2 + c.getYMax()*yEscalar/2 ;
     }
     
     
@@ -341,7 +384,6 @@ public class VentanaJuego extends JFrame {
     	panel.add(submarinos[0]);
         panel.add(submarinos[1]);
         submarinos[1].setVisible(false);
-    	
     	
         Font fuente = new Font("Press Start 2P", 0, 2 * yEscalar * xEscalar);
         
@@ -392,7 +434,7 @@ public class VentanaJuego extends JFrame {
         panel.add(cantPuntos);
         cantPuntos.setBounds(x0+ divisionLbls * 3, 50, 140, 20);
 
-    	if(testArea) {
+    	if(modoTest) {
     		panel.add(gameArea);
         	gameArea.setBounds(x0, y0, c.getXMax()*xEscalar, -c.getYMax() * yEscalar);
     	}
@@ -468,7 +510,9 @@ public class VentanaJuego extends JFrame {
     	eventos();
 
         pack();
-        setLocationRelativeTo(null);
+        
+        //setLocationRelativeTo(null);
+        
     }                       
 
     // FINAL DE DECLARACION DE METODOS
@@ -478,11 +522,8 @@ public class VentanaJuego extends JFrame {
     // INICIO DE DECLARACION DE METODO DE EVENTOS
     
     private void cargarBGs() {
-    		String imgPath = "/100x100.png";
-
-    		setImageIcon(true, gameArea, "1000x1000.png");
-    		setImageIcon(true, lblPausa, "100x100.png");
-
+    		//setImageIcon(true, gameArea, "1000x1000.png");
+    		setImageIcon(true, lblPausa, "imagenes\\estados\\labelpausa.png");
 	}
 
 
