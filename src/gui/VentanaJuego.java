@@ -3,6 +3,7 @@ package gui;
 
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Insets;
@@ -11,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -239,6 +241,22 @@ public class VentanaJuego extends JFrame {
     }
     
     
+	public Font cargarFuente(String ubicacionFuente, int estilo, int size)
+    {
+    	Font fuente = new Font("Arial", estilo, size);
+    	try 
+    	{
+			fuente = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream(ubicacionFuente));
+			fuente = fuente.deriveFont(estilo, size);
+		} 
+    	catch (FontFormatException | IOException e) 
+    	{
+			System.err.println("No se cargo la fuente");
+		}
+		return fuente;
+    }
+    
+    
     private void inicializarBarraMenu()
     {
     	BarraMenu = new JMenuBar();
@@ -282,9 +300,7 @@ public class VentanaJuego extends JFrame {
         submarinos[1].setVisible(false);
     	
     	
-        
-        
-        Font fuente = new Font("Press Start 2P", 0, 20);
+        Font fuente = cargarFuente("/fuentes/PressStart2P-Regular.ttf", 0, 20);
         
         // PARA WIDTH Y HEIGHT: 20px ES LO QUE OCUPA UN SOLO CARACTER DE ALTO/ANCHO. (ya que la letra esta en 20)
         nivel.setFont(fuente);
