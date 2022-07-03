@@ -70,6 +70,8 @@ public class VentanaJuego extends JFrame {
     private ImageIcon imgCarga;
     private Sonido sonidoExplosion;
     private Sonido musicaFondo;
+    private JMenu volumen;
+    private JMenuItem volDesactivado, volBajo, volMedio, volAlto;
     
     // FINAL DE DECLARACION DE ATRIBUTOS
 	
@@ -270,6 +272,11 @@ public class VentanaJuego extends JFrame {
         reanudar = new JMenuItem();
         salir = new JMenu();
         finalizar = new JMenuItem();
+        volumen = new JMenu();
+        volDesactivado = new JMenuItem();
+        volBajo = new JMenuItem();
+        volMedio = new JMenuItem();
+        volAlto = new JMenuItem();
     }
     
     
@@ -364,7 +371,38 @@ public class VentanaJuego extends JFrame {
     	
     	Font fuenteMenu = new Font("Press Start 2P", 0, 12);
     	Font fuenteItem = new Font("Press Start 2P", 0, 10);
+    	
+    	volumen.setText("Volumen");
+    	volumen.setFont(fuenteMenu);
+    	volumen.setMargin(new Insets(6, 6, 6, 10)); //MARGENES
+    	volumen.setPreferredSize(new Dimension(105, 18));
 
+        volDesactivado.setFont(fuenteItem);
+        volDesactivado.setText("Desactivar");
+        volDesactivado.setMargin(new Insets(6, 6, 6, 6));
+        volDesactivado.setPreferredSize(new Dimension(140, 35));
+        volumen.add(volDesactivado);
+        
+        volBajo.setFont(fuenteItem);
+        volBajo.setText("Volumen bajo");
+        volBajo.setMargin(new Insets(6, 6, 6, 6));
+        volBajo.setPreferredSize(new Dimension(140, 35));
+        volumen.add(volBajo);
+        
+        volMedio.setFont(fuenteItem);
+        volMedio.setText("Volumen medio");
+        volMedio.setMargin(new Insets(6, 6, 6, 6));
+        volMedio.setPreferredSize(new Dimension(140, 35));
+        volumen.add(volMedio);
+        
+        volAlto.setFont(fuenteItem);
+        volAlto.setText("Volumen alto");
+        volAlto.setMargin(new Insets(6, 6, 6, 6));
+        volAlto.setPreferredSize(new Dimension(140, 35));
+        volumen.add(volAlto);
+        
+        BarraMenu.add(volumen);
+    	
         pausa.setText("Pausa");
         pausa.setFont(fuenteMenu);
         pausa.setMargin(new Insets(6, 6, 6, 10)); //MARGENES
@@ -413,9 +451,13 @@ public class VentanaJuego extends JFrame {
     	xEscalarSubmarino = (860f / 150);
     	
     	musicaFondo = new Sonido(Sonido.musicaFondo);
-    	musicaFondo.cambiarVolumen(70);
+    	musicaFondo.cambiarVolumen(75);
     	sonidoExplosion = new Sonido(Sonido.explosion);
-    	sonidoExplosion.cambiarVolumen(70);
+    	sonidoExplosion.cambiarVolumen(75);
+    	
+    	// VOLUMEN MINIMO TENDRIA QUE SER 50, MAS BAJO NO SE LLEGA A ESCUCHAR
+    	// VOLUMEN MEDIO 75
+    	// VOLUMEN MAXIMO 100
     }
     
     
@@ -458,6 +500,10 @@ public class VentanaJuego extends JFrame {
 		});
 		pausar.addActionListener(new ManejoTimerMenu());
 		reanudar.addActionListener(new ManejoTimerMenu());
+		volDesactivado.addActionListener(new ManejoVolumen());
+		volBajo.addActionListener(new ManejoVolumen());
+		volMedio.addActionListener(new ManejoVolumen());
+		volAlto.addActionListener(new ManejoVolumen());
 	}
     
     // FINAL DE DECLARACION DE METODO DE EVENTOS
@@ -473,6 +519,35 @@ public class VentanaJuego extends JFrame {
      * 
      * 
     */ 
+    
+    class ManejoVolumen implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if(e.getActionCommand().equalsIgnoreCase("Desactivar"))
+			{
+				musicaFondo.cambiarVolumen(0);
+				sonidoExplosion.cambiarVolumen(0);
+			}
+			else if(e.getActionCommand().equalsIgnoreCase("Volumen bajo"))
+			{
+				musicaFondo.cambiarVolumen(55);
+				sonidoExplosion.cambiarVolumen(50);
+			}
+			else if(e.getActionCommand().equalsIgnoreCase("Volumen medio"))
+			{
+				musicaFondo.cambiarVolumen(75);
+				sonidoExplosion.cambiarVolumen(75);
+			}
+			else if(e.getActionCommand().equalsIgnoreCase("Volumen alto"))
+			{
+				musicaFondo.cambiarVolumen(100);
+				sonidoExplosion.cambiarVolumen(100);
+			}
+		}
+    	
+    }
+    
     
     class ManejoTimerMenu implements ActionListener{
 
