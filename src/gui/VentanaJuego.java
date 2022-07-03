@@ -68,6 +68,8 @@ public class VentanaJuego extends JFrame {
     private float xEscalarBuque;
     private JLabel lblgameover;
     private ImageIcon imgCarga;
+    private Sonido sonidoExplosion;
+    private Sonido musicaFondo;
     
     // FINAL DE DECLARACION DE ATRIBUTOS
 	
@@ -84,8 +86,8 @@ public class VentanaJuego extends JFrame {
     	
     	addKeyListener(new EventoTeclado());
     	
+    	musicaFondo.loopear();
     	timer.start();
-    	
     }
     
     
@@ -142,6 +144,9 @@ public class VentanaJuego extends JFrame {
     			explosion.setBounds((int)(cargasViews.get(i).getX() * xEscalarSubmarino) - 70, 
     					(int)((cargasViews.get(i).getY() * -1) * yEscalar + 125),
     					168, 100);
+//    			if (!sonidoExplosion.termino())
+				sonidoExplosion.detener();
+    			sonidoExplosion.reproducir();
     			
     			panel.remove(cargas.get(i)); // REMUEVO LA CARGA.
     			cargas.remove(i);
@@ -406,6 +411,11 @@ public class VentanaJuego extends JFrame {
     	yEscalar =  (790f - 150) / 750;
     	xEscalarBuque = ((975f - (-115)) / 150);
     	xEscalarSubmarino = (860f / 150);
+    	
+    	musicaFondo = new Sonido(Sonido.musicaFondo);
+    	musicaFondo.cambiarVolumen(70);
+    	sonidoExplosion = new Sonido(Sonido.explosion);
+    	sonidoExplosion.cambiarVolumen(70);
     }
     
     
@@ -474,11 +484,13 @@ public class VentanaJuego extends JFrame {
 				if(e.getActionCommand().equalsIgnoreCase("Reanudar"))
 				{
 					lblPausa.setVisible(false);
+					musicaFondo.continuarLoopeo();
 					timer.start();
 				}
 				else
 				{
 					lblPausa.setVisible(true);
+					musicaFondo.detener();
 					timer.stop();
 				}
 			}
@@ -521,11 +533,13 @@ public class VentanaJuego extends JFrame {
 					if (timer.isRunning())
 					{
 						lblPausa.setVisible(true);
+						musicaFondo.detener();
 						timer.stop();
 					}
 					else
 					{
 						lblPausa.setVisible(false);
+						musicaFondo.continuarLoopeo();
 						timer.start();
 					}
 				}
