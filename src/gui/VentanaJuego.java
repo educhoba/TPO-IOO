@@ -1,9 +1,9 @@
 package gui;
 
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Insets;
 import java.awt.Toolkit;
@@ -11,9 +11,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -22,6 +26,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.Timer;
+import javax.swing.border.LineBorder;
 
 import controlador.Controlador;
 import model.BuqueView;
@@ -61,14 +66,21 @@ public class VentanaJuego extends JFrame {
     private SubmarinoView submarinoView;
     private BuqueView buqueView;
     private List<CargaProfundidadView> cargasViews;
-    private float yEscalar;
-    private float xEscalarSubmarino;
-    private float xEscalarBuque;
+    private int xResolucion = 1;
+    private int yResolucion = 1;
+    private int y0 = 0;
+    private int x0 = 0;
+    private int xEscalar = 1;
+    private int yEscalar = 1;
+    private int rangoExplosionX = 100;
+    private int rangoExplosionY = 100;
     private JLabel lblgameover;
     private ImageIcon imgCarga;
     
     // FINAL DE DECLARACION DE ATRIBUTOS
 	
+    JLabel gameArea;
+    boolean testArea = true;
     
     
     // CONSTRUCTOR
@@ -83,7 +95,6 @@ public class VentanaJuego extends JFrame {
     	addKeyListener(new EventoTeclado());
     	
     	timer.start();
-    	
     }
     
     
@@ -91,7 +102,7 @@ public class VentanaJuego extends JFrame {
     private void actualizar()
     {
     	c.actualizarJuego();
-    	
+
     	// DIBUJO VISIBLE TODAS LAS CANTIDADES.
     	cantNivel.setText(String.valueOf(c.getNivel()));
     	cantIntegridad.setText(String.valueOf(c.getIntegridadCasco()));
@@ -104,13 +115,15 @@ public class VentanaJuego extends JFrame {
     	cargasViews = c.getCargasViews();
     	
     	//DIBUJO VISIBLE EL SUBMARINO EN SU NUEVA POS.
-    	submarinos[0].setBounds((int)(submarinoView.getX() * xEscalarSubmarino), 
-    			(int)((submarinoView.getY() * -1) * yEscalar + 180), 125, 43);
-    	submarinos[1].setBounds((int)(submarinoView.getX() * xEscalarSubmarino), 
-    			(int)((submarinoView.getY() * -1) * yEscalar + 180), 125, 43);
+    	submarinos[0].setBounds(x0 + (submarinoView.getX() -submarinoView.getLargo()/2)*xEscalar, y0 + (-submarinoView.getY() - submarinoView.getAlto()/2 ), 
+    							submarinoView.getLargo()*xEscalar, submarinoView.getAlto());
+    	submarinos[1].setBounds(x0 + (submarinoView.getX() -submarinoView.getLargo()/2)*xEscalar, y0 + (-submarinoView.getY() - submarinoView.getAlto()/2), 
+    							submarinoView.getLargo()*xEscalar, submarinoView.getAlto());
+    	
     	
     	//DIBUJO VISIBLE EL BUQUE EN SU NUEVA POS. buqueView.getDireccion() = 0 o 1 depende para donde va
-    	buques[buqueView.getDireccion()].setBounds((int)(buqueView.getX() * xEscalarBuque - 115), 150, 125, 47);
+    	buques[buqueView.getDireccion()].setBounds(x0 + (buqueView.getX())*xEscalar, y0 + buqueView.getY(), 1*xEscalar, 1); //125, 47
+    	
 //    	buques[buqueView.getDireccion()].setBounds((int)(buqueView.getX() * xEscalarSubmarino), 150, 125, 47);
     	
     	if (cargasViews.size() != cargas.size()) // SI SE CREARON CARGAS NUEVAS.
@@ -119,12 +132,14 @@ public class VentanaJuego extends JFrame {
     		for (int i = 0; i < j; i++) // ITERO LA CANTIDAD DE CARGAS NUEVAS CREADAS.
     		{
     			JLabel lbl = new JLabel();
+
     			lbl.setIcon(imgCarga);
     			
     			cargas.add(lbl); // CREO LA NUEVA CARGA Y LA DIBUJO INVISIBLE.
     			
     			int k = cargas.size() - 1; // ENCUENTRO EL INDICE EN Cargas DE LA NUEVA CARGA CREADA Y LO ANIADO AL CONTENEDOR.
     			panel.add(cargas.get(k));
+    			
     		}
     	}
     	
@@ -137,20 +152,20 @@ public class VentanaJuego extends JFrame {
     			// DIBUJO LA EXPLOSION.
     			inicioExpl = System.currentTimeMillis();
     			explosion.setVisible(true);
-    			explosion.setBounds((int)(cargasViews.get(i).getX() * xEscalarSubmarino) - 70, 
-    					(int)((cargasViews.get(i).getY() * -1) * yEscalar + 125),
-    					168, 100);
+    			
+    			explosion.setBounds(x0 + (cargasViews.get(i).getX()*xEscalar) - (rangoExplosionX*xEscalar) , 
+    					y0 -cargasViews.get(i).getY() - rangoExplosionY,
+    					rangoExplosionX*2*xEscalar, rangoExplosionY*2);
     			
     			panel.remove(cargas.get(i)); // REMUEVO LA CARGA.
     			cargas.remove(i);
     		}
-    		
     		else if (cargasViews.get(i).estaSoltada()) // SI LA CARGA NO ESTA EXPLOTADA, PERO SI SOLTADA.
     		{
     			cargas.get(i).setVisible(true); // DIBUJO VISIBLE LA CARGA EN SU NUEVA POSICION.
-    			cargas.get(i).setBounds((int)(cargasViews.get(i).getX() * xEscalarSubmarino), 
-    					(int)((cargasViews.get(i).getY() * -1) * yEscalar + 180),
-    					32, 32);
+    			cargas.get(i).setBounds(x0 + cargasViews.get(i).getX()*xEscalar, 
+    					y0 - cargasViews.get(i).getY(),
+    					1, 1);
     		}
     	}
     	
@@ -168,7 +183,10 @@ public class VentanaJuego extends JFrame {
     		lblgameover.setVisible(true); // DETENGO EL TIEMPO Y DIBUJO GAME OVER.
     		lblgameover.setBounds(129, 100, 720, 631);
     	}
+    	
+    	panel.add(gameArea);
     }
+    
     
     
     // INICIO DE DECLARACION DE METODOS
@@ -179,11 +197,11 @@ public class VentanaJuego extends JFrame {
 
 			private static final long serialVersionUID = 2013056688719049185L;
 
-			public void paintComponent(Graphics g)
-            {
-                ImageIcon icon = new ImageIcon(getClass().getResource("/imagenes/fondo/fondo.png"));
-                g.drawImage(icon.getImage(), 0, 0, getWidth(), getHeight(), this);
-            }
+//			public void paintComponent(Graphics g)
+//            {
+//                ImageIcon icon = new ImageIcon(getClass().getResource("/imagenes/fondo/fondo.png"));
+//                g.drawImage(icon.getImage(), 0, 0, getWidth(), getHeight(), this);
+//            }
         };
     }
     
@@ -201,9 +219,22 @@ public class VentanaJuego extends JFrame {
         cantPuntos = new JLabel();
         cantNivel = new JLabel();
         
-        submarinos = new JLabel[2];
-        buques = new JLabel[2];
         explosion = new JLabel();
+        //Un JLabel para cada dirección
+        
+        submarinos = new JLabel[2];
+    	for (int i = 0; i < submarinos.length; i++)
+    	{
+    		submarinos[i] = new JLabel();
+    	}
+    	
+        buques = new JLabel[2];
+    	for (int i = 0; i < buques.length; i++)
+    	{
+    		buques[i] = new JLabel();
+    	}
+    	
+    	gameArea = new JLabel();
     }
     
     
@@ -211,19 +242,17 @@ public class VentanaJuego extends JFrame {
     {
     	lblgameover.setIcon(new ImageIcon(getClass().getResource("/imagenes/estados/gameover2.png")));
     	
-    	explosion.setIcon(new ImageIcon(getClass().getResource("/imagenes/carga/explosion.png")));
+    	explosion.setIcon(new ImageIcon(getClass().getResource("/imagenes/carga/explosionBurbuja.png")));
     	
     	lblPausa.setIcon(new ImageIcon(getClass().getResource("/imagenes/estados/labelpausa.png")));
     	
     	for (int i = 0; i < submarinos.length; i++)
     	{
-    		submarinos[i] = new JLabel();
     		submarinos[i].setIcon(new ImageIcon(getClass().getResource("/imagenes/submarino/submarino"+i+".png")));
     	}
     	
     	for (int i = 0; i < buques.length; i++)
     	{
-    		buques[i] = new JLabel();
     		buques[i].setIcon(new ImageIcon(getClass().getResource("/imagenes/buque/buque"+i+".png")));
     	}
     	
@@ -259,8 +288,24 @@ public class VentanaJuego extends JFrame {
         setResizable(false);
         getContentPane().setLayout(null);
         
-        panel.setPreferredSize(new Dimension(1000, 931));
+        panel.setPreferredSize(new Dimension(1000, 1000));
         panel.setLayout(null);
+
+//	    xResolucion = (int)Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+//	    yResolucion = (int)Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+    	
+    	yResolucion = getHeight();
+    	xResolucion = getWidth();
+    	
+    	yEscalar =  yResolucion / -c.getYMax();
+    	//xEscalar =  xResolucion / c.getXMax();
+    	xEscalar =  1;
+    	
+    	x0 = (int) (xResolucion/2 - c.getXMax()*xEscalar/2);
+    	
+    	y0 = yResolucion/2 + c.getYMax()/2;
+//    	xEscalarBuque = ((975f - (-115)) / 150);
+//    	xEscalarSubmarino = (860f / 150);
     }
     
     
@@ -282,8 +327,6 @@ public class VentanaJuego extends JFrame {
         submarinos[1].setVisible(false);
     	
     	
-        
-        
         Font fuente = new Font("Press Start 2P", 0, 20);
         
         // PARA WIDTH Y HEIGHT: 20px ES LO QUE OCUPA UN SOLO CARACTER DE ALTO/ANCHO. (ya que la letra esta en 20)
@@ -330,10 +373,15 @@ public class VentanaJuego extends JFrame {
         cantPuntos.setText(String.valueOf(c.getPuntosJugador()));
         panel.add(cantPuntos);
         cantPuntos.setBounds(821, 50, 140, 20);
-        
+
+    	if(testArea) {
+    		panel.add(gameArea);
+        	gameArea.setBounds(x0, y0, (int) (c.getXMax()*xEscalar), -c.getYMax());
+    	}
+    	
         // ANIADIR EL CONTENEDOR A LA VENTANA PARA QUE CARGUE CORRECTAMENTE LOS JLABELS.
         getContentPane().add(panel);
-        panel.setBounds(0, 0, 1000, 931);
+        panel.setBounds(0, 0, xResolucion, yResolucion);
     }
     
     
@@ -386,10 +434,8 @@ public class VentanaJuego extends JFrame {
     	timer = new Timer(24, new AccionTimer());
     	
     	cargas = new ArrayList<JLabel>();
-    	
-    	yEscalar =  (790f - 150) / 750;
-    	xEscalarBuque = ((975f - (-115)) / 150);
-    	xEscalarSubmarino = (860f / 150);
+
+
     }
     
     
@@ -399,8 +445,11 @@ public class VentanaJuego extends JFrame {
         
     	inicializarJLabels();
     	
-    	cargarImagenes();
-        
+    	if(!testArea)
+    		cargarImagenes();
+    	else
+    		cargarBGs();
+    	
     	inicializarBarraMenu();
 
     	configurarVentana();
@@ -421,7 +470,44 @@ public class VentanaJuego extends JFrame {
     
     // INICIO DE DECLARACION DE METODO DE EVENTOS
     
-    public void eventos() 
+    private void cargarBGs() {
+    		String imgPath = "/100x100.png";
+
+        	gameArea.setIcon(new ImageIcon(getClass().getResource("/1000x1000.png")));
+        	
+    		lblgameover.setIcon(new ImageIcon(getClass().getResource(imgPath)));
+        	
+        	explosion.setIcon(new ImageIcon(getClass().getResource("/200x200circle.png")));
+        	
+        	lblPausa.setIcon(new ImageIcon(getClass().getResource(imgPath)));
+        	
+        	for (int i = 0; i < submarinos.length; i++)
+        	{
+        		submarinos[i].setIcon(new ImageIcon(getClass().getResource(imgPath)));
+        	}
+        	
+        	for (int i = 0; i < buques.length; i++)
+        	{
+        		buques[i].setIcon(new ImageIcon(getClass().getResource(imgPath)));
+        	}
+        	
+        	imgCarga = new ImageIcon(getClass().getResource(imgPath));
+	}
+
+
+    private void setImageIcon(JLabel lbl, String path) {
+		BufferedImage img = null;
+		try {
+			img = ImageIO.read(new File(path));
+	} catch (IOException e) {
+		e.printStackTrace();
+		}
+		Image dimg = img.getScaledInstance(1, 1,
+		        Image.SCALE_SMOOTH);
+		
+		lbl.setIcon(new ImageIcon(dimg));
+    } 
+	public void eventos() 
 	{
 		finalizar.addActionListener(new ActionListener() {
 			

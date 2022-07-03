@@ -68,6 +68,9 @@ public class Coordenada {
 //    		}
     }
 
+    public void setX(float x) {
+    	this.xCoordenada = x;
+	}
     
 	public float getxMin() {
 		return xMin;

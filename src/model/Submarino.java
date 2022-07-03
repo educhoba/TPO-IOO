@@ -58,12 +58,12 @@ public class Submarino extends ObjetoJuego {
 	public void calcularExplosion(Coordenada coordenadaCarga) {
 
 		float xExplosion = coordenadaCarga.getX();
-		float yExplosion = coordenadaCarga.getY();
+		float yExplosion = -coordenadaCarga.getY();
 		float xSubmarino = this.coordenada.getX();
-		float ySubmarino = this.coordenada.getY();
+		float ySubmarino = -this.coordenada.getY();
 
 		float mediaAltura = this.altura / 2.0f;
-		float medioLargo = this.altura / 2.0f;
+		float medioLargo = this.largo / 2.0f;
 
 		float A = xSubmarino - medioLargo; // xVerticeIzquierdo
 		float B = xSubmarino + medioLargo; // xVerticeDerecho

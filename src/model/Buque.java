@@ -2,6 +2,8 @@ package model;
 
 import java.util.Random;
 
+import test.Debugger;
+
 public class Buque extends ObjetoJuego {
 
 	private float xSoltar;
@@ -19,6 +21,7 @@ public class Buque extends ObjetoJuego {
 		int xMin = (int) this.coordenada.getxMin(); // esto ta mal
 		int xMax = (int) this.coordenada.getxMax(); // esto ta mal
 		this.xSoltar = new Random().nextInt(xMax + 1 - xMin) + xMin; // nro entre xMin y xMax.
+		Debugger.PrintXSoltar(this.xSoltar);
 	}
 
 	public void moverX(float deltaTiempo) {
@@ -36,7 +39,7 @@ public class Buque extends ObjetoJuego {
 	}
 
 	private void soltarCarga() {
-		this.cargaProfunidad.soltar();
+		this.cargaProfunidad.soltar(xSoltar);
 		this.cargaProfunidad = null;
 	}
 

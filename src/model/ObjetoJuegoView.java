@@ -2,19 +2,19 @@ package model;
 
 abstract class ObjetoJuegoView {
 	
-	protected float xCoordenada;
-    protected float yCoordenada;
+	protected int xCoordenada;
+    protected int yCoordenada;
 
 	public ObjetoJuegoView(ObjetoJuego oj) {
-    	this.xCoordenada = oj.getCoordenada().getX();
-    	this.yCoordenada = oj.getCoordenada().getY();
+    	this.xCoordenada = (int)oj.getCoordenada().getX();
+    	this.yCoordenada = (int)oj.getCoordenada().getY();
     }
 	
-    public float getX() {
+    public int getX() {
         return this.xCoordenada;
     }
 
-    public float getY() {
+    public int getY() {
         return this.yCoordenada;
     }
 }

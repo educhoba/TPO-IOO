@@ -14,4 +14,26 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>1000x1000.png</name>
+			<type>1</type>
+			<location>C:/Users/Edu/Downloads/UADE/Repos/JavaWorkspace/TPO-IOO/src/1000x1000.png</location>
+		</link>
+		<link>
+			<name>100x100.png</name>
+			<type>1</type>
+			<location>C:/Users/Edu/Downloads/UADE/Repos/JavaWorkspace/TPO-IOO/src/100x100.png</location>
+		</link>
+		<link>
+			<name>1x1.png</name>
+			<type>1</type>
+			<location>C:/Users/Edu/Downloads/UADE/Repos/JavaWorkspace/TPO-IOO/src/1x1.png</location>
+		</link>
+		<link>
+			<name>imagenes/carga/explosionBurbuja.png</name>
+			<type>1</type>
+			<location>C:/Users/Edu/Downloads/UADE/Repos/JavaWorkspace/TPO-IOO/src/imagenes/carga/explosionBurbujas.png</location>
+		</link>
+	</linkedResources>
 </projectDescription>

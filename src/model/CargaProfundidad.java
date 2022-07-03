@@ -46,8 +46,9 @@ public class CargaProfundidad extends ObjetoJuego {
 		return soltada;
 	}
 	
-	public void soltar() {
+	public void soltar(float xSoltar) {
 		soltada = true;
+		this.coordenada.setX(xSoltar);
 	}
 	
 	public boolean estaExplotada() {

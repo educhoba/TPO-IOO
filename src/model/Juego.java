@@ -8,6 +8,29 @@ import test.Debugger;
 
 public class Juego {
 
+	private final static float TIEMPO_REFRESCO_MS = 0.024f;
+	private final static int BUQUES_POR_NIVEL = 10;
+	private final static float PORCENTAJE_INCREMENTO_DIFICULTAD = 10;
+	
+	private final static int AREA_JUEGO_PROFUNDIDAD = -800;
+	private final static int AREA_JUEGO_LARGO = 150;
+	
+	private final static int SUBMARINO_Y_MIN = -800;
+	private final static int SUBMARINO_Y_MAX = -300;
+	private final static float SUBMARINO_VELOCIDAD = 5;
+	private final static int SUBMARINO_ALTO = -300;
+	private final static int SUBMARINO_LARGO = -300;
+	
+	private final static float BUQUE_VELOCIDAD = 50;
+	private final static int BUQUE_ALTO = 1;
+	private final static int BUQUE_LARGO = 1;
+
+	private final static int CARGA_Y_MIN = -700;
+	private final static int CARGA_Y_MAX = -300;
+	private final static float CARGA_VELOCIDAD = 200;
+	private final static int CARGA_ALTO = 1;
+	private final static int CARGA_LARGO = 1;
+	
 	AreaJuego areaJuego;
 	Submarino jugador;
 	Buque buque;
@@ -30,25 +53,22 @@ public class Juego {
 	}
 	
 	private void inicializarAreaJuego() {
-		areaJuego = new AreaJuego(150, 0, -800, 0);
+		areaJuego = new AreaJuego(AREA_JUEGO_LARGO, 0, AREA_JUEGO_PROFUNDIDAD, 0);
 	}
 	
 	private void inicializarSubmarino() {
 		Coordenada coordSubmarino = new Coordenada(areaJuego.getXMax() / 2, areaJuego.getYMax() / 2, areaJuego,
-				areaJuego.getXMin(), -300, areaJuego.getXMax(), -750);
-		this.jugador = new Submarino(5, 3, 5, coordSubmarino);
+				areaJuego.getXMin(), SUBMARINO_Y_MAX, areaJuego.getXMax(), SUBMARINO_Y_MIN);
+		this.jugador = new Submarino(SUBMARINO_VELOCIDAD, SUBMARINO_ALTO, SUBMARINO_LARGO, coordSubmarino);
 	}
 	
 	public void actualizarJuego() {
 		
-		float milisegundos = 0.024f;
-		
 		if (buque == null || buque.finalizoRecorrido())
 			aparecerBuque();
 		else
-			buque.moverX(milisegundos);
+			buque.moverX(TIEMPO_REFRESCO_MS);
 			
-		
 		for (int i = cargas.size() - 1; i >= 0; i--)
 		{
 			if (cargas.get(i).estaExplotada())
@@ -57,7 +77,7 @@ public class Juego {
 				cargas.remove(i);
 			}
 			else
-				cargas.get(i).moverY(milisegundos);
+				cargas.get(i).moverY(TIEMPO_REFRESCO_MS);
 		}
 
 		if (!jugador.estaVivo()) {
@@ -77,11 +97,11 @@ public class Juego {
 
 	private void aparecerBuque() {
 
-		if (Buque.getCantidadBuques() == 10)
+		if (Buque.getCantidadBuques() == BUQUES_POR_NIVEL)
 			pasarDeNivel();
 
 		int lado = new Random().nextInt(1 + 1); // nro 0 o 1.
-		float velocidad = 50f;
+		float velocidad = BUQUE_VELOCIDAD;
 		int x;
 
 		if (lado == 0) { // Si da 0, aparece por la izquierda.
@@ -93,18 +113,18 @@ public class Juego {
 		
 		CargaProfundidad carga = crearCargaProfundidad(x);
 		Coordenada coordBuque = new Coordenada(x, areaJuego.getYMin(), areaJuego);
-		buque = new Buque(velocidad, 3, 5, coordBuque, carga);
+		buque = new Buque(velocidad, BUQUE_ALTO, BUQUE_LARGO, coordBuque, carga);
 		aparecerCarga(carga);
 	}
 	
 	private void pasarDeNivel() {
-		jugador.pasarDeNivelEIncrementarDificultad(10);
+		jugador.pasarDeNivelEIncrementarDificultad(PORCENTAJE_INCREMENTO_DIFICULTAD);
 		Buque.resetCantidadBuques();
 	}
 
 	private CargaProfundidad crearCargaProfundidad(int xBuque) {
 		Coordenada c = new Coordenada(xBuque, areaJuego.getYMin(), areaJuego);
-		return new CargaProfundidad(200f, 1, 1, c, -300, -700);
+		return new CargaProfundidad(CARGA_VELOCIDAD, CARGA_ALTO, CARGA_LARGO, c, CARGA_Y_MAX, CARGA_Y_MIN);
 	}
 	
 	private void aparecerCarga(CargaProfundidad c) {
