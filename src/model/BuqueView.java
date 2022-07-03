@@ -28,4 +28,5 @@ public class BuqueView extends ObjetoJuegoView{
 		return direccion;
 	}
 	
+	
 }

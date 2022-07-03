@@ -17,4 +17,5 @@ abstract class ObjetoJuegoView {
     public int getY() {
         return this.yCoordenada;
     }
+    
 }

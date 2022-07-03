@@ -13,7 +13,6 @@ public class Submarino extends ObjetoJuego {
 
 	public Submarino(float velocidad, int altura, int largo, Coordenada c) {
 		super(velocidad, altura, largo, c);
-
 		this.integridadCasco = INTEGRIDAD_CASCO_MAX;
 		this.puntos = 0;
 		this.vidas = 3;
