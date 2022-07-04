@@ -68,10 +68,12 @@ public class VentanaJuego extends JFrame {
     private float xEscalarBuque;
     private JLabel lblgameover;
     private ImageIcon imgCarga;
-    private Sonido sonidoExplosion;
+//    private Sonido sonidoExplosion;
     private Sonido musicaFondo;
     private JMenu volumen;
     private JMenuItem volDesactivado, volBajo, volMedio, volAlto;
+    private List<Sonido> sonidosExplosiones;
+    private int volumenActual;
     
     // FINAL DE DECLARACION DE ATRIBUTOS
 	
@@ -88,7 +90,7 @@ public class VentanaJuego extends JFrame {
     	
     	addKeyListener(new EventoTeclado());
     	
-    	musicaFondo.loopear();
+    	musicaFondo.iniciarLoopeo();
     	timer.start();
     }
     
@@ -143,12 +145,22 @@ public class VentanaJuego extends JFrame {
     			// DIBUJO LA EXPLOSION.
     			inicioExpl = System.currentTimeMillis();
     			explosion.setVisible(true);
+//    			explosion.setBounds((int)(cargasViews.get(i).getX() * xEscalarSubmarino) - 70, 
+//    					(int)((cargasViews.get(i).getY() * -1) * yEscalar + 125),
+//    					168, 100);
     			explosion.setBounds((int)(cargasViews.get(i).getX() * xEscalarSubmarino) - 70, 
     					(int)((cargasViews.get(i).getY() * -1) * yEscalar + 125),
-    					168, 100);
+    					200, 200);
 //    			if (!sonidoExplosion.termino())
-				sonidoExplosion.detener();
-    			sonidoExplosion.reproducir();
+//				sonidoExplosion.detener();
+//    			sonidoExplosion.reproducir();
+    			
+//    			Sonido expl = new Sonido(Sonido.explosion);
+//    	    	expl.cambiarVolumen(volumenActual);
+//    	    	expl.reproducir();
+//    	    	sonidosExplosiones.add(expl);
+    			sonidosExplosiones.add(reproducirSonidoExplosion());
+    	    	System.out.println("Size lista explosiones: " +sonidosExplosiones.size());
     			
     			panel.remove(cargas.get(i)); // REMUEVO LA CARGA.
     			cargas.remove(i);
@@ -170,6 +182,15 @@ public class VentanaJuego extends JFrame {
     		explosion.setVisible(false);
     	}
     	
+    	// SI FINALIZO EL SONIDO DE EXPLOSION, LO REMUEVO DE LA LISTA.
+    	for (int i = sonidosExplosiones.size() - 1; i >= 0; i--)
+    	{
+    		if (sonidosExplosiones.get(i).isFinalizado())
+    			sonidosExplosiones.remove(i);
+    	}
+    	
+    	
+    	
     	// SI EL JUGADOR NO TIENE VIDAS NI INTEGRIDAD.
     	if (!c.estaVivo())
     	{
@@ -179,6 +200,14 @@ public class VentanaJuego extends JFrame {
     	}
     }
     
+    
+    private Sonido reproducirSonidoExplosion()
+    {
+    	Sonido expl = new Sonido("/sonidos/explosion.wav");
+    	expl.cambiarVolumen(volumenActual);
+    	expl.reproducir();
+    	return expl;
+    }
     
     // INICIO DE DECLARACION DE METODOS
     
@@ -220,7 +249,7 @@ public class VentanaJuego extends JFrame {
     {
     	lblgameover.setIcon(new ImageIcon(getClass().getResource("/imagenes/estados/gameover2.png")));
     	
-    	explosion.setIcon(new ImageIcon(getClass().getResource("/imagenes/carga/explosion.png")));
+    	explosion.setIcon(new ImageIcon(getClass().getResource("/imagenes/carga/explosion_200.png")));
     	
     	lblPausa.setIcon(new ImageIcon(getClass().getResource("/imagenes/estados/labelpausa.png")));
     	
@@ -450,10 +479,14 @@ public class VentanaJuego extends JFrame {
     	xEscalarBuque = ((975f - (-115)) / 150);
     	xEscalarSubmarino = (860f / 150);
     	
+    	volumenActual = 75;
+    	
     	musicaFondo = new Sonido(Sonido.musicaFondo);
-    	musicaFondo.cambiarVolumen(75);
-    	sonidoExplosion = new Sonido(Sonido.explosion);
-    	sonidoExplosion.cambiarVolumen(75);
+    	musicaFondo.cambiarVolumen(volumenActual);
+//    	sonidoExplosion = new Sonido(Sonido.explosion);
+//    	sonidoExplosion.cambiarVolumen(volumenActual);
+    	
+    	sonidosExplosiones = new ArrayList<Sonido>();
     	
     	// VOLUMEN MINIMO TENDRIA QUE SER 50, MAS BAJO NO SE LLEGA A ESCUCHAR
     	// VOLUMEN MEDIO 75
@@ -480,7 +513,11 @@ public class VentanaJuego extends JFrame {
     	eventos();
 
         pack();
-        setLocationRelativeTo(null);
+//        setLocationRelativeTo(null);
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        double width = screenSize.getWidth();
+        double height = screenSize.getHeight();
+        this.setLocation(((int)width - this.getWidth())/2, ((int)height - this.getHeight())/2);
     }                       
 
     // FINAL DE DECLARACION DE METODOS
@@ -527,22 +564,26 @@ public class VentanaJuego extends JFrame {
 			if(e.getActionCommand().equalsIgnoreCase("Desactivar"))
 			{
 				musicaFondo.cambiarVolumen(0);
-				sonidoExplosion.cambiarVolumen(0);
+//				sonidoExplosion.cambiarVolumen(0);
+				volumenActual = 0;
 			}
 			else if(e.getActionCommand().equalsIgnoreCase("Volumen bajo"))
 			{
 				musicaFondo.cambiarVolumen(55);
-				sonidoExplosion.cambiarVolumen(50);
+//				sonidoExplosion.cambiarVolumen(50);
+				volumenActual = 50;
 			}
 			else if(e.getActionCommand().equalsIgnoreCase("Volumen medio"))
 			{
-				musicaFondo.cambiarVolumen(75);
-				sonidoExplosion.cambiarVolumen(75);
+				musicaFondo.cambiarVolumen(0);
+//				sonidoExplosion.cambiarVolumen(75);
+				volumenActual = 75;
 			}
 			else if(e.getActionCommand().equalsIgnoreCase("Volumen alto"))
 			{
-				musicaFondo.cambiarVolumen(100);
-				sonidoExplosion.cambiarVolumen(100);
+				musicaFondo.cambiarVolumen(0);
+//				sonidoExplosion.cambiarVolumen(100);
+				volumenActual = 100;
 			}
 		}
     	

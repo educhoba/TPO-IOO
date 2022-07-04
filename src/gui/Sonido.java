@@ -24,6 +24,13 @@ public class Sonido {
 	}
 	
 	
+	public Sonido(String ubicacionSonido)
+	{
+		this.sonido = CargarSonido.cargarSonido(ubicacionSonido);
+		this.volumen = (FloatControl)sonido.getControl(FloatControl.Type.MASTER_GAIN);
+	}
+	
+	
 	public void reproducir()
 	{
 		sonido.setFramePosition(0);
@@ -35,12 +42,7 @@ public class Sonido {
 		sonido.stop();
 	}
 	
-	public void continuar()
-	{
-		sonido.start();
-	}
-	
-	public void loopear()
+	public void iniciarLoopeo()
 	{
 		sonido.setFramePosition(0);
 		sonido.loop(Clip.LOOP_CONTINUOUSLY);
@@ -51,7 +53,7 @@ public class Sonido {
 		sonido.loop(Clip.LOOP_CONTINUOUSLY);
 	}
 	
-	public boolean termino()
+	public boolean isFinalizado()
 	{
 		return sonido.isRunning();
 	}
