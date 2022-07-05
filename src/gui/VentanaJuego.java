@@ -247,7 +247,7 @@ public class VentanaJuego extends JFrame {
     
     private void cargarImagenes()
     {
-    	lblgameover.setIcon(new ImageIcon(getClass().getResource("/imagenes/estados/gameover2.png")));
+    	lblgameover.setIcon(new ImageIcon(getClass().getResource("/imagenes/estados/gameover.png")));
     	
     	explosion.setIcon(new ImageIcon(getClass().getResource("/imagenes/carga/explosion_200.png")));
     	
