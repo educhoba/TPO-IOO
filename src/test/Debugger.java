@@ -1,5 +1,7 @@
 package test;
 
+import model.Submarino;
+
 public class Debugger {
 
 	boolean debuggerON = true;
@@ -28,6 +30,11 @@ public class Debugger {
 	}
 	public static void PrintXSoltar(float xSoltar) {
 		System.out.println("\nX SOLTAR:: " + xSoltar +"\n");
+		
+	}
+	public static void PrintCoordenadasSubmarino(Submarino jugador) {
+		System.out.println("\nX :: " + jugador.getCoordenada().getX() +"\n");
+		System.out.println("\nY :: " + jugador.getCoordenada().getY() +"\n");
 		
 	}
 	
