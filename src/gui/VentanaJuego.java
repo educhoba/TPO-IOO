@@ -1,24 +1,18 @@
 package gui;
 
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -27,12 +21,15 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.Timer;
-import javax.swing.border.LineBorder;
 
 import controlador.Controlador;
-import model.BuqueView;
-import model.CargaProfundidadView;
-import model.SubmarinoView;
+import gui.gameLabels.BuqueGUI;
+import gui.gameLabels.CargaProfundidadGUI;
+import gui.gameLabels.SubmarinoGUI;
+import gui.gameRes.Fuente;
+import gui.gameRes.Imagen;
+import gui.gameRes.Sonido;
+import utilidades.Vector2D;
 
 
 public class VentanaJuego extends JFrame {
@@ -44,210 +41,105 @@ public class VentanaJuego extends JFrame {
 	
 	private JPanel panel;
 	private JMenuBar BarraMenu;
-	private JMenu pausa;
-	private JMenu salir;
-	private JMenuItem pausar;
-	private JMenuItem reanudar;
-	private JMenuItem finalizar;
-	private JLabel lblPausa;
-	private JLabel nivel;
-	private JLabel cantNivel;
-	private JLabel integridad;
-    private JLabel cantIntegridad;
-    private JLabel vidas;
-    private JLabel cantVidas;
-    private JLabel puntos;
-    private JLabel cantPuntos;
-    private JLabel submarinos[]; //es un array xq hay 2 imagenes ( <- y -> )
-    private JLabel buques[];//idem submarino
+	private JMenu pausa, salir, volumen, resolucion;
+	private JMenuItem pausar, reanudar, finalizar;
+	private JMenuItem volDesactivado, volBajo, volMedio, volAlto, musFondoDes, musFondoAc;
+	private JMenuItem resPantCompl, res1920, res1366, res1024, res800;
+	
+	private JLabel lblPausa, lblgameover;
+	private JLabel nivel, integridad, vidas, puntos;
+	private JLabel cantNivel, cantIntegridad, cantVidas, cantPuntos;
+    private JLabel submarino, buque;
     private List<JLabel> cargas;
-    private JLabel explosion;
+    
+    private Sonido musicaFondo;
+    private int volumenActual;
+    private SubmarinoGUI submarinoGUI;
+    private BuqueGUI buqueGUI;
+    private CargaProfundidadGUI cargasGUI;
+    
     private Timer timer;
     private Controlador c;
-    private SubmarinoView submarinoView;
-    private BuqueView buqueView;
-    private List<CargaProfundidadView> cargasViews;
-    private int xResolucion = 1;
-    private int yResolucion = 1;
-    private int y0 = 0;
-    private int x0 = 0;
-    private int xEscalar = 1;
-    private int yEscalar = 1;
-    private int rangoExplosionX = 100;
-    private int rangoExplosionY = 100;
-    private JLabel lblgameover;
-    private ImageIcon imgCarga;
-    private int ultimaResolucionX = 0;
-    private int ultimaResolucionY = 0;
-	private int altoBarraVentana = 39;
-    private boolean recargarResolucion = false;
+    private boolean bRedibujar;
+    
+    private int anchoPantalla;
+	private int altoPantalla;
+	private int correccion;
+	private Vector2D vEscalar;
+    
     // FINAL DE DECLARACION DE ATRIBUTOS
 	
-    JLabel gameArea;
-    boolean modoTest = false;
     
     
     // CONSTRUCTOR
     public VentanaJuego() 
     {
-    	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setTitle("Submarine Attack");
-        //setResizable(false);
-        getContentPane().setLayout(null);
-        
     	inicializarVariables();
     	
     	inicializarComponentesVisuales();
-     
-    	setPreferredSize(new Dimension(c.getXMax(), -c.getYMax() + BarraMenu.getHeight() + altoBarraVentana));
-        setMinimumSize(new Dimension(c.getXMax(), -c.getYMax() + BarraMenu.getHeight()+ altoBarraVentana));
-        setSize(new Dimension(c.getXMax(), -c.getYMax() + BarraMenu.getHeight() + altoBarraVentana));
-    	
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int ancho = (int)screenSize.getWidth();
-        int alto = (int)screenSize.getHeight();
-        int anchoVentana = getWidth();
-        int altoVentana = getHeight();
-        //this.setLocation(0,0);
-        this.setLocation(ancho/2 - anchoVentana/2, alto/2 - altoVentana/2);
-        
-    	setIconImage(getIconImage());
-
     	
     	addKeyListener(new EventoTeclado());
     	
+    	musicaFondo.iniciarLoopeo();
     	timer.start();
     }
     
     
-    long inicioExpl = 0;
     private void actualizar()
     {
-    	c.actualizarJuego();
-    	recargarResolucion = ultimaResolucionX != getWidth() || ultimaResolucionY != getHeight();
-    	if(recargarResolucion){
-    		cargarResolucionNueva();
+    	if (!bRedibujar)
+    		c.actualizarJuego();
+    	
+    	actualizarCantidades();
+    	
+    	submarino = submarinoGUI.actualizar();
+    	panel.add(submarino);
+    	submarino.setBounds(submarinoGUI.getX(), submarinoGUI.getY(), submarinoGUI.getLargo(), submarinoGUI.getAlto());
+    	
+    	buque = buqueGUI.actualizar();
+    	panel.add(buque);
+    	buque.setBounds(buqueGUI.getX(), buqueGUI.getY(), buqueGUI.getLargo(), buqueGUI.getAlto());
+    	
+    	cargas = cargasGUI.actualizar();
+    	for (int i = cargas.size() - 1; i >= 0; i--)
+    	{
+    		panel.add(cargas.get(i));
+    		cargas.get(i).setBounds(cargasGUI.getX(i), cargasGUI.getY(i), cargasGUI.getLargo(i), cargasGUI.getAlto(i));
     	}
+    	
+    	if (!c.estaVivo())
+    	{
+    		timer.stop();
+    		lblgameover.setVisible(true);
+    	}
+    }
+    
+    
+    private void actualizarCantidades()
+    {
     	// DIBUJO VISIBLE TODAS LAS CANTIDADES.
     	cantNivel.setText(String.valueOf(c.getNivel()));
     	cantIntegridad.setText(String.valueOf(c.getIntegridadCasco()));
     	cantVidas.setText(String.valueOf(c.getVidasJugador()));
     	cantPuntos.setText(String.valueOf(c.getPuntosJugador()));
-    	
-    	// RECIBO LAS VIEWS PARA PODER DIBUJAR.
-    	submarinoView = c.getSubmarinoView();
-    	buqueView = c.getBuqueView();
-    	cargasViews = c.getCargasViews();
-    	
-    	//DIBUJO VISIBLE EL SUBMARINO EN SU NUEVA POS.
-    	submarinos[0].setBounds(x0 + (submarinoView.getX() -submarinoView.getLargo()/2)*xEscalar, y0 + (-submarinoView.getY() - submarinoView.getAlto()/2 )* yEscalar, 
-    							submarinoView.getLargo()*xEscalar, submarinoView.getAlto()* yEscalar);
-    	submarinos[1].setBounds(x0 + (submarinoView.getX() -submarinoView.getLargo()/2)*xEscalar, y0 + (-submarinoView.getY() - submarinoView.getAlto()/2)* yEscalar, 
-    							submarinoView.getLargo()*xEscalar, submarinoView.getAlto()* yEscalar);
-		if(modoTest) {
-	    	setImageIcon(recargarResolucion, submarinos[0],"1x1.png");
-	    	setImageIcon(recargarResolucion, submarinos[1],"1x1.png");
-		}
-		else {
-			setImageIcon(recargarResolucion, submarinos[0],"imagenes\\submarino\\submarino0.png");
-			setImageIcon(recargarResolucion, submarinos[1],"imagenes\\submarino\\submarino1.png");
-		}
-			
-    	//DIBUJO VISIBLE EL BUQUE EN SU NUEVA POS. buqueView.getDireccion() = 0 o 1 depende para donde va
-    	buques[1].setBounds(x0 + (buqueView.getX())*xEscalar, y0 + buqueView.getY()* yEscalar, 1*xEscalar, 1* yEscalar); //125, 47
-    	buques[0].setBounds(x0 + (buqueView.getX())*xEscalar, y0 + buqueView.getY()* yEscalar, 1*xEscalar, 1* yEscalar); //125, 47
-    	
-    	if(modoTest) {
-    		setImageIcon(recargarResolucion, buques[0],"1x1.png");
-    		setImageIcon(recargarResolucion, buques[1],"1x1.png");
-    	}
-    	else
-    	{
-            	for (int i = 0; i < buques.length; i++)
-            	{	buques[i].setBounds(buques[i].getX(),buques[i].getY(),125,47);
-            		buques[i].setIcon(new ImageIcon(getClass().getResource("/imagenes/buque/buque"+i+".png")));
-            	}
-    	}
-    		
-		
-//    	buques[buqueView.getDireccion()].setBounds((int)(buqueView.getX() * xEscalarSubmarino), 150, 125, 47);
-    	
-    	if (cargasViews.size() != cargas.size()) // SI SE CREARON CARGAS NUEVAS.
-    	{
-    		int j = cargasViews.size() - cargas.size();
-    		for (int i = 0; i < j; i++) // ITERO LA CANTIDAD DE CARGAS NUEVAS CREADAS.
-    		{
-    			JLabel lbl = new JLabel();
-
-    			
-    			cargas.add(lbl); // CREO LA NUEVA CARGA Y LA DIBUJO INVISIBLE.
-    			
-    			int k = cargas.size() - 1; // ENCUENTRO EL INDICE EN Cargas DE LA NUEVA CARGA CREADA Y LO ANIADO AL CONTENEDOR.
-    			panel.add(cargas.get(k));
-    			
-    		}
-    	}
-    	
-    	for (int i = cargasViews.size() - 1; i >= 0; i--) // RECORRO TODAS LAS CARGAS EXISTENTES.
-    	{
-    		if (cargasViews.get(i).estaExplotada()) // SI LA CARGA ESTA EXPLOTADA.
-    		{
-    			cargas.get(i).setVisible(false); // DESAPAREZCO LA CARGA.
-    			
-    			// DIBUJO LA EXPLOSION.
-    			inicioExpl = System.currentTimeMillis();
-    			explosion.setVisible(true);
-    			
-    			explosion.setBounds(x0 + (cargasViews.get(i).getX()*xEscalar) - rangoExplosionX*xEscalar , 
-    					y0 -cargasViews.get(i).getY()* yEscalar - rangoExplosionY* yEscalar,
-    					rangoExplosionX*2*xEscalar, rangoExplosionY*2* yEscalar);
-    			if(modoTest) 
-    				setImageIcon(true, explosion,"200x200circle.png");
-    			else
-    				setImageIcon(true, explosion,"imagenes\\carga\\explosionBurbuja.png");
-    			
-    			
-    			panel.remove(cargas.get(i)); // REMUEVO LA CARGA.
-    			cargas.remove(i);
-    		}
-    		else if (cargasViews.get(i).estaSoltada()) // SI LA CARGA NO ESTA EXPLOTADA, PERO SI SOLTADA.
-    		{
-    			cargas.get(i).setVisible(true); // DIBUJO VISIBLE LA CARGA EN SU NUEVA POSICION.
-    			cargas.get(i).setBounds(x0 + cargasViews.get(i).getX()*xEscalar, 
-    					y0 - cargasViews.get(i).getY()* yEscalar,
-    					1*xEscalar, 1* yEscalar);
-    			
-    			if(modoTest) 
-        			setImageIcon(true, cargas.get(i),"1x1.png"); 
-    			else
-    			{
-    				cargas.get(i).setBounds(cargas.get(i).getX(), cargas.get(i).getY(),
-        					32,32);
-        			cargas.get(i).setIcon(imgCarga);
-    			}
-    		}
-    	}
-    	
-    	// CUMPLIDO EL TIEMPO, DESAPAREZCO EL DIBUJO DE EXPLOSION.
-    	long finExpl = System.currentTimeMillis();
-    	if (finExpl - inicioExpl >= 250)
-    	{
-    		explosion.setVisible(false);
-    	}
-    	
-    	// SI EL JUGADOR NO TIENE VIDAS NI INTEGRIDAD.
-    	if (!c.estaVivo())
-    	{
-    		timer.stop();
-    		lblgameover.setVisible(true); // DETENGO EL TIEMPO Y DIBUJO GAME OVER.
-    		lblgameover.setBounds(xResolucion/2 -(150*xResolucion)/2, yResolucion/2 -(600*yResolucion)/2, 150*xResolucion, 600*yResolucion);
-			setImageIcon(recargarResolucion, lblgameover,"imagenes\\estados\\gameover.png");
-    	}
-    	
-    	panel.add(gameArea);
     }
     
-    // INICIO DE DECLARACION DE METODOS
+    
+    private void inicializarVariables()
+    {
+    	c = new Controlador();
+    	c.actualizarJuego();
+    	timer = new Timer(42, new AccionTimer());
+    	bRedibujar = false;
+    	
+    	volumenActual = 75; // VOLUMEN MINIMO TENDRIA QUE SER 50, MAS BAJO NO SE LLEGA A ESCUCHAR
+    	
+    	musicaFondo = new Sonido(Sonido.musicaFondo);
+    	musicaFondo.cambiarVolumen(volumenActual);
+    	
+    	cargas = new ArrayList<JLabel>();
+    }
+    
     
     private void crearContenedor()
     {
@@ -257,84 +149,75 @@ public class VentanaJuego extends JFrame {
 
 			public void paintComponent(Graphics g)
             {
-				if(modoTest) {
-		               ImageIcon icon = new ImageIcon(getClass().getResource("/imagenes/fondo/fondo2.png"));
-		                g.drawImage(icon.getImage(), 0, 0, getWidth(), getHeight(), this);
-				}
-				else {
-		               ImageIcon icon = new ImageIcon(getClass().getResource("/imagenes/fondo/fondo.png"));
-		                g.drawImage(icon.getImage(), 0, 0, getWidth(), getHeight(), this);
-				}
+                ImageIcon icon = new ImageIcon(getClass().getResource("/res/imagenes/fondo/fondo.png"));
+                g.drawImage(icon.getImage(), 0, 0, getWidth(), getHeight(), this);
             }
         };
     }
     
     
-    private void inicializarJLabels()
+    private void tamanioPantalla()
+	{
+		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
+		anchoPantalla = d.width;
+		altoPantalla = d.height;
+		
+		calcularAreaJuegoGUI();
+	}
+    
+    
+    private void establecerNuevaResolucion()
     {
-    	lblgameover = new JLabel();
-    	lblPausa = new JLabel();
-    	integridad = new JLabel();
-        puntos = new JLabel();
-        vidas = new JLabel();
-        nivel = new JLabel();
-        cantVidas = new JLabel();
-        cantIntegridad = new JLabel();
-        cantPuntos = new JLabel();
-        cantNivel = new JLabel();
-        
-        explosion = new JLabel(); 
-        //Un JLabel para cada dirección
-        
-        submarinos = new JLabel[2];
-    	for (int i = 0; i < submarinos.length; i++)
-    	{
-    		submarinos[i] = new JLabel();
-    	}
-    	
-        buques = new JLabel[2];
-    	for (int i = 0; i < buques.length; i++)
-    	{
-    		buques[i] = new JLabel();
-    	}
-    	
-    	gameArea = new JLabel();
-    }
-    
-    
-    private void cargarImagenes()
-    {
-    	lblgameover.setIcon(new ImageIcon(getClass().getResource("/imagenes/estados/gameover2.png")));
-    	
-    	explosion.setIcon(new ImageIcon(getClass().getResource("/imagenes/carga/explosionBurbuja.png")));
-    	
-    	lblPausa.setIcon(new ImageIcon(getClass().getResource("/imagenes/estados/labelpausa.png")));
-    	
-    	for (int i = 0; i < submarinos.length; i++)
-    	{
-    		submarinos[i].setIcon(new ImageIcon(getClass().getResource("/imagenes/submarino/submarino"+i+".png")));
-    	}
-    	
-    	for (int i = 0; i < buques.length; i++)
-    	{
-    		buques[i].setIcon(new ImageIcon(getClass().getResource("/imagenes/buque/buque"+i+".png")));
-    	}
-    	
-    	imgCarga = new ImageIcon(getClass().getResource("/imagenes/carga/carga32.png"));
-    }
-    
-    
-    private void cargarResolucionNueva() {
-    	configurarVentana();
+    	calcularAreaJuegoGUI();
+    	setSize(new Dimension(anchoPantalla, altoPantalla));
+    	setLocationRelativeTo(null);
+    	configurarContenedor();
+    	submarinoGUI.redimensionarSubmarino(correccion, vEscalar);
+    	buqueGUI.redimensionarBuque(correccion, vEscalar);
+    	cargasGUI.redimensionarCargaProfundidad(correccion, vEscalar);
+    	bRedibujar = true;
     	dibujarJLabelsIniciales();
-        cargarBGs();
+    	actualizar();
     }
     
-    @Override
-    public Image getIconImage()
+    
+    private void calcularAreaJuegoGUI()
     {
-    	Image icono = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/imagenes/icono/icono.png"));
-    	return icono;
+    	int pIX = -2;
+		int pFX = anchoPantalla - 2;
+		int pIY = Math.round((altoPantalla - IniGUI.BARRA_MENU_ALTO) * IniGUI.P_INI_MAR / (IniGUI.RES_Y_INI - IniGUI.BARRA_MENU_ALTO));
+		int pFY = Math.round((altoPantalla - IniGUI.BARRA_MENU_ALTO) * IniGUI.P_INI_ARENA / (IniGUI.RES_Y_INI - IniGUI.BARRA_MENU_ALTO));
+		Vector2D vAreaJuegoGUI = new Vector2D(pFX - pIX, pFY - pIY);
+		Vector2D vAreaJuegoDom = c.getAreaJuego();
+		float xEscalar = vAreaJuegoGUI.getFloatX()	/ vAreaJuegoDom.getX();
+		float yEscalar = vAreaJuegoGUI.getFloatY() / vAreaJuegoDom.getY();
+		
+		correccion = pIY;
+		vEscalar = new Vector2D(xEscalar, yEscalar);
+    }
+    
+    
+    private void configurarVentana()
+    {
+    	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setTitle("Submarine Attack");
+        setPreferredSize(new Dimension(anchoPantalla, altoPantalla));
+        setResizable(false);
+        getContentPane().setLayout(null);
+        setLocationRelativeTo(null);
+        setUndecorated(true);
+        setIconImage(new Imagen().getIconImage("/res/imagenes/icono/icono.png"));
+    }
+    
+    
+    private void configurarContenedor()
+    {
+    	int x = anchoPantalla;
+        int y = altoPantalla - IniGUI.BARRA_MENU_ALTO;
+        panel.setPreferredSize(new Dimension(x, y));
+        panel.setLayout(null);
+        getContentPane().add(panel);
+        panel.setBounds(0, 0, x, y);
     }
     
     
@@ -346,112 +229,72 @@ public class VentanaJuego extends JFrame {
         reanudar = new JMenuItem();
         salir = new JMenu();
         finalizar = new JMenuItem();
-    }
-    
-    
-    private void configurarVentana()
-    {
-    	ultimaResolucionY = yResolucion = getHeight();
-    	ultimaResolucionX = xResolucion = getWidth();
-        //setPreferredSize(new Dimension(xResolucion, yResolucion));
-    	setPreferredSize(new Dimension(xResolucion, yResolucion));
-
-        panel.setPreferredSize(new Dimension(xResolucion, yResolucion));
-        panel.setLayout(null);
-
-    	yEscalar =  yResolucion / -c.getYMax();
-    	xEscalar =  xResolucion / c.getXMax();
-    	
-    	x0 = xResolucion/2 - c.getXMax()*xEscalar/2;
-    	
-    	y0 = (yResolucion-BarraMenu.getHeight()-altoBarraVentana)/2 + c.getYMax()*yEscalar/2 ;
-    }
-    
-    
-    private void dibujarJLabelsIniciales()
-    {
-    	panel.add(lblPausa);
-    	lblPausa.setBounds(xResolucion/2 -100*xEscalar/2, yResolucion/2-285*yEscalar/2, 100*xEscalar, 285*yEscalar);
-    	lblPausa.setVisible(false);
-    	
-    	panel.add(lblgameover);
-    	
-    	panel.add(explosion);
-    	
-    	panel.add(buques[0]);
-    	panel.add(buques[1]);
-    	
-    	panel.add(submarinos[0]);
-        panel.add(submarinos[1]);
-        submarinos[1].setVisible(false);
-    	
-        Font fuente = new Font("Press Start 2P", 0, 2 * yEscalar * xEscalar);
-        
-        int cantPaneles = 4;
-        int divisionLbls =  xResolucion / cantPaneles;
-        // PARA WIDTH Y HEIGHT: 20px ES LO QUE OCUPA UN SOLO CARACTER DE ALTO/ANCHO. (ya que la letra esta en 20)
-        nivel.setFont(fuente);
-        nivel.setText("NIVEL");
-        panel.add(nivel);
-        nivel.setBounds(x0 + divisionLbls * 0, 20, 100, 20);
-        
-        cantNivel.setFont(fuente);
-        cantNivel.setHorizontalAlignment(JLabel.CENTER);
-        cantNivel.setText(String.valueOf(c.getNivel()));
-        panel.add(cantNivel);
-        cantNivel.setBounds(x0 + divisionLbls * 0, 50, 60, 20);
-        
-        integridad.setFont(fuente);
-        integridad.setText("INTEGRIDAD");
-        panel.add(integridad);
-        integridad.setBounds(x0+ divisionLbls * 1, 20, 200, 20);
-        
-        cantIntegridad.setFont(fuente);
-        cantIntegridad.setHorizontalAlignment(JLabel.CENTER);
-        cantIntegridad.setText(String.valueOf(c.getIntegridadCasco()));
-        panel.add(cantIntegridad);
-        cantIntegridad.setBounds(x0+ divisionLbls * 1, 50, 60, 20);
-        
-        vidas.setFont(fuente);
-        vidas.setText("VIDAS");
-        panel.add(vidas);
-        vidas.setBounds(x0+ divisionLbls * 2, 20, 100, 20);
-        
-        cantVidas.setFont(fuente);
-        cantVidas.setHorizontalAlignment(JLabel.CENTER);
-        cantVidas.setText(String.valueOf(c.getVidasJugador()));
-        panel.add(cantVidas);
-        cantVidas.setBounds(x0 + divisionLbls * 2, 50, 60, 20);
-
-        puntos.setFont(fuente);
-        puntos.setText("PUNTOS");
-        panel.add(puntos);
-        puntos.setBounds(x0+ divisionLbls * 3, 20, 120, 20);
-
-        cantPuntos.setFont(fuente);
-        cantPuntos.setHorizontalAlignment(JLabel.CENTER);
-        cantPuntos.setText(String.valueOf(c.getPuntosJugador()));
-        panel.add(cantPuntos);
-        cantPuntos.setBounds(x0+ divisionLbls * 3, 50, 140, 20);
-
-    	if(modoTest) {
-    		panel.add(gameArea);
-        	gameArea.setBounds(x0, y0, c.getXMax()*xEscalar, -c.getYMax() * yEscalar);
-    	}
-    	
-        // ANIADIR EL CONTENEDOR A LA VENTANA PARA QUE CARGUE CORRECTAMENTE LOS JLABELS.
-        getContentPane().add(panel);
-        panel.setBounds(0, 0, xResolucion, yResolucion);
+        volumen = new JMenu();
+        volDesactivado = new JMenuItem();
+        volBajo = new JMenuItem();
+        volMedio = new JMenuItem();
+        volAlto = new JMenuItem();
+        musFondoAc = new JMenuItem();
+        musFondoDes = new JMenuItem();
+        resolucion = new JMenu();
+        resPantCompl = new JMenuItem();
+        res1920 = new JMenuItem();
+        res1366 = new JMenuItem();
+        res1024 = new JMenuItem();
+        res800 = new JMenuItem();
     }
     
     
     private void dibujarBarraMenu()
     {
-    	BarraMenu.setPreferredSize(new Dimension(152, 30));
+    	BarraMenu.setPreferredSize(new Dimension(IniGUI.BARRA_MENU_ANCHO, IniGUI.BARRA_MENU_ALTO));
     	
-    	Font fuenteMenu = new Font("Press Start 2P", 0, 12);
-    	Font fuenteItem = new Font("Press Start 2P", 0, 10);
+    	Font fuenteMenu = new Fuente().cargarFuente("/res/fuentes/PressStart2P-Regular.ttf", 0, IniGUI.TAM_LETRA_MENU);
+    	Font fuenteItem = new Fuente().cargarFuente("/res/fuentes/PressStart2P-Regular.ttf", 0, IniGUI.TAM_LETRA_MENU_ITEM);
+    	
+    	volumen.setText("Volumen");
+    	volumen.setFont(fuenteMenu);
+    	volumen.setMargin(new Insets(6, 6, 6, 10));
+    	volumen.setPreferredSize(new Dimension(105, 18));
 
+        volDesactivado.setFont(fuenteItem);
+        volDesactivado.setText("Desactivar");
+        volDesactivado.setMargin(new Insets(6, 6, 6, 6));
+        volDesactivado.setPreferredSize(new Dimension(140, 35));
+        volumen.add(volDesactivado);
+        
+        volBajo.setFont(fuenteItem);
+        volBajo.setText("Volumen bajo");
+        volBajo.setMargin(new Insets(6, 6, 6, 6));
+        volBajo.setPreferredSize(new Dimension(140, 35));
+        volumen.add(volBajo);
+        
+        volMedio.setFont(fuenteItem);
+        volMedio.setText("Volumen medio");
+        volMedio.setMargin(new Insets(6, 6, 6, 6));
+        volMedio.setPreferredSize(new Dimension(140, 35));
+        volumen.add(volMedio);
+        
+        volAlto.setFont(fuenteItem);
+        volAlto.setText("Volumen alto");
+        volAlto.setMargin(new Insets(6, 6, 6, 6));
+        volAlto.setPreferredSize(new Dimension(140, 35));
+        volumen.add(volAlto);
+        
+        musFondoAc.setFont(fuenteItem);
+        musFondoAc.setText("Activar musica");
+        musFondoAc.setMargin(new Insets(6, 6, 6, 6));
+        musFondoAc.setPreferredSize(new Dimension(140, 35));
+        volumen.add(musFondoAc);
+        
+        musFondoDes.setFont(fuenteItem);
+        musFondoDes.setText("Desactivar musica");
+        musFondoDes.setMargin(new Insets(6, 6, 6, 6));
+        musFondoDes.setPreferredSize(new Dimension(185, 35));
+        volumen.add(musFondoDes);
+        
+        BarraMenu.add(volumen);
+    	
         pausa.setText("Pausa");
         pausa.setFont(fuenteMenu);
         pausa.setMargin(new Insets(6, 6, 6, 10)); //MARGENES
@@ -471,6 +314,43 @@ public class VentanaJuego extends JFrame {
 
         BarraMenu.add(pausa);
         
+        resolucion.setText("Resolucion");
+        resolucion.setFont(fuenteMenu);
+        resolucion.setMargin(new Insets(6, 10, 6, 6));
+        resolucion.setPreferredSize(new Dimension(139, 18));
+
+        res1920.setFont(fuenteItem);
+        res1920.setText("1920x1080");
+        res1920.setMargin(new Insets(6, 6, 6, 6));
+        res1920.setPreferredSize(new Dimension(170, 35));
+        resolucion.add(res1920);
+        
+        res1366.setFont(fuenteItem);
+        res1366.setText("1366x768");
+        res1366.setMargin(new Insets(6, 6, 6, 6));
+        res1366.setPreferredSize(new Dimension(170, 35));
+        resolucion.add(res1366);
+        
+        res1024.setFont(fuenteItem);
+        res1024.setText("1024x720");
+        res1024.setMargin(new Insets(6, 6, 6, 6));
+        res1024.setPreferredSize(new Dimension(170, 35));
+        resolucion.add(res1024);
+        
+        res800.setFont(fuenteItem);
+        res800.setText("800x600");
+        res800.setMargin(new Insets(6, 6, 6, 6));
+        res800.setPreferredSize(new Dimension(170, 35));
+        resolucion.add(res800);
+        
+        resPantCompl.setFont(fuenteItem);
+        resPantCompl.setText("Pantalla completa");
+        resPantCompl.setMargin(new Insets(6, 6, 6, 6));
+        resPantCompl.setPreferredSize(new Dimension(190, 35));
+        resolucion.add(resPantCompl);
+
+        BarraMenu.add(resolucion);
+        
         salir.setText("Salir");
         salir.setFont(fuenteMenu);
         salir.setMargin(new Insets(6, 10, 6, 6));
@@ -488,64 +368,7 @@ public class VentanaJuego extends JFrame {
     }
     
     
-    private void inicializarVariables()
-    {
-    	c = new Controlador();
-    	timer = new Timer(24, new AccionTimer());
-    	
-    	cargas = new ArrayList<JLabel>();
-    }
-    
-    
-    private void inicializarComponentesVisuales() 
-    {
-    	crearContenedor();
-        
-    	inicializarJLabels();
-    	
-    	inicializarBarraMenu();
-
-    	dibujarBarraMenu();
-    	
-    	eventos();
-
-        pack();
-        
-        //setLocationRelativeTo(null);
-        
-    }                       
-
-    // FINAL DE DECLARACION DE METODOS
-    
-    
-    
-    // INICIO DE DECLARACION DE METODO DE EVENTOS
-    
-    private void cargarBGs() {
-    		//setImageIcon(true, gameArea, "1000x1000.png");
-    		setImageIcon(true, lblPausa, "imagenes\\estados\\labelpausa.png");
-	}
-
-
-    private void setImageIcon(boolean recargar, JLabel lbl, String path) {
-    	if(recargar) {
-    		BufferedImage img = null;
-    		try {
-    			img = ImageIO.read(new File(path));
-    			if(lbl.getWidth() > 0 && lbl.getHeight() > 0) {
-    				
-    				if(lbl.getWidth() < 1) ;
-        			Image dimg = img.getScaledInstance(lbl.getWidth() < 1? 1: lbl.getWidth(), lbl.getHeight() < 1? 1: lbl.getHeight(),
-        			        Image.SCALE_SMOOTH);
-        			
-        			lbl.setIcon(new ImageIcon(dimg));
-    			}
-    	} catch (IOException e) {
-    		e.printStackTrace();
-    		}
-    	}
-    } 
-	public void eventos() 
+    public void eventos() 
 	{
 		finalizar.addActionListener(new ActionListener() {
 			
@@ -556,21 +379,224 @@ public class VentanaJuego extends JFrame {
 		});
 		pausar.addActionListener(new ManejoTimerMenu());
 		reanudar.addActionListener(new ManejoTimerMenu());
+		volDesactivado.addActionListener(new ManejoVolumen());
+		volBajo.addActionListener(new ManejoVolumen());
+		volMedio.addActionListener(new ManejoVolumen());
+		volAlto.addActionListener(new ManejoVolumen());
+		musFondoAc.addActionListener(new ManejoVolumen());
+		musFondoDes.addActionListener(new ManejoVolumen());
+		resPantCompl.addActionListener(new ManejoResolucion());
+		res1920.addActionListener(new ManejoResolucion());
+		res1366.addActionListener(new ManejoResolucion());
+		res1024.addActionListener(new ManejoResolucion());
+		res800.addActionListener(new ManejoResolucion());
 	}
+    
+    
+    private void inicializarJLabels()
+    {
+    	lblgameover = new JLabel();
+    	lblPausa = new JLabel();
+    	integridad = new JLabel();
+        puntos = new JLabel();
+        vidas = new JLabel();
+        nivel = new JLabel();
+        cantVidas = new JLabel();
+        cantIntegridad = new JLabel();
+        cantPuntos = new JLabel();
+        cantNivel = new JLabel();
+    }
+    
+    
+    private void dibujarJLabelsIniciales()
+    {
+    	lblPausa.setIcon(new Imagen().crearImagen(Imagen.URL_PAUSA, 500 * anchoPantalla / 1000, 285 * altoPantalla / 1000));
+    	panel.add(lblPausa);
+    	lblPausa.setBounds(240 * anchoPantalla / 1000, 300 * altoPantalla / 1000
+    			, 500 * anchoPantalla / 1000, 285 * altoPantalla / 1000);
+    	
+    	lblgameover.setIcon(new Imagen().crearImagen(Imagen.URL_GAME_OVER, 720 * anchoPantalla / 1000, 631 * altoPantalla / 1000));
+    	panel.add(lblgameover);
+		lblgameover.setBounds(129 * anchoPantalla / 1000, 100 * altoPantalla / 1000, 720 * anchoPantalla / 1000
+				, 631 * altoPantalla / 1000);
+		
+		if (!bRedibujar)
+		{
+			lblPausa.setVisible(false);
+			lblgameover.setVisible(false);
+		}
+    	
+		int tamFuente = Math.round(IniGUI.TAM_LETRA_LABELS * anchoPantalla / 1000);
+        Font fuente = new Fuente().cargarFuente("/res/fuentes/PressStart2P-Regular.ttf", 0, tamFuente);
+        
+        // PARA WIDTH Y HEIGHT: 20px ES LO QUE OCUPA UN SOLO CARACTER DE ALTO/ANCHO. (ya que la letra esta en 20)
+        nivel.setFont(fuente);
+        nivel.setText(IniGUI.NIVEL);
+        panel.add(nivel);
+        nivel.setBounds(50 * anchoPantalla / 1024, 20 * altoPantalla / 720
+        		, tamFuente * IniGUI.NIVEL.length(), tamFuente);
+        
+        cantNivel.setFont(fuente);
+        cantNivel.setHorizontalAlignment(JLabel.CENTER);
+        cantNivel.setText(String.valueOf(c.getNivel()));
+        panel.add(cantNivel);
+        cantNivel.setBounds(39 * anchoPantalla / 1024, 50 * altoPantalla / 720, tamFuente * 6, tamFuente);
+        
+        integridad.setFont(fuente);
+        integridad.setText(IniGUI.INTEGRIDAD);
+        panel.add(integridad);
+        integridad.setBounds(260 * anchoPantalla / 1024, 20 * altoPantalla / 720
+        		, tamFuente * IniGUI.INTEGRIDAD.length(), tamFuente);
+        
+        cantIntegridad.setFont(fuente);
+        cantIntegridad.setHorizontalAlignment(JLabel.CENTER);
+        cantIntegridad.setText(String.valueOf(c.getIntegridadCasco()));
+        panel.add(cantIntegridad);
+        cantIntegridad.setBounds(300 * anchoPantalla / 1024, 50 * altoPantalla / 720, tamFuente * 6, tamFuente);
+        
+        vidas.setFont(fuente);
+        vidas.setText(IniGUI.VIDAS);
+        panel.add(vidas);
+        vidas.setBounds(590 * anchoPantalla / 1024, 20 * altoPantalla / 720
+        		, tamFuente * IniGUI.VIDAS.length(), tamFuente);
+        
+        cantVidas.setFont(fuente);
+        cantVidas.setHorizontalAlignment(JLabel.CENTER);
+        cantVidas.setText(String.valueOf(c.getVidasJugador()));
+        panel.add(cantVidas);
+        cantVidas.setBounds(578 * anchoPantalla / 1024, 50 * altoPantalla / 720, tamFuente * 6, tamFuente);
+
+        puntos.setFont(fuente);
+        puntos.setText(IniGUI.PUNTOS);
+        panel.add(puntos);
+        puntos.setBounds(830 * anchoPantalla / 1024, 20 * altoPantalla / 720
+        		, tamFuente * IniGUI.PUNTOS.length(), tamFuente);
+
+        cantPuntos.setFont(fuente);
+        cantPuntos.setHorizontalAlignment(JLabel.CENTER);
+        cantPuntos.setText(String.valueOf(c.getPuntosJugador()));
+        panel.add(cantPuntos);
+        cantPuntos.setBounds(832 * anchoPantalla / 1024, 50 * altoPantalla / 720, tamFuente * 6, tamFuente);
+    }
+
+    
+    private void inicializarComponentesVisuales() 
+    {
+    	crearContenedor();
+    	
+    	tamanioPantalla();
+    	
+    	configurarVentana();
+    	
+    	configurarContenedor();
+    	
+    	inicializarBarraMenu();
+
+    	dibujarBarraMenu();
+    	
+    	eventos();
+    	
+    	submarinoGUI = new SubmarinoGUI(this.correccion, this.vEscalar, c);
+    	
+    	buqueGUI = new BuqueGUI(this.correccion, this.vEscalar, c);
+    	
+    	cargasGUI = new CargaProfundidadGUI(this.correccion, this.vEscalar, c);
+        
+    	inicializarJLabels();
+    	
+    	dibujarJLabelsIniciales();
+
+        pack();
+        setLocationRelativeTo(null);
+    }                       
+
+    
+    // FINAL DE DECLARACION DE METODOS
+    
+    
+    
+    // INICIO DE DECLARACION DE METODO DE EVENTOS
+    
+    
     
     // FINAL DE DECLARACION DE METODO DE EVENTOS
     
     
     
-    /*
-     * 
-     * 
-     * 
-     * INICIO DE DECLARACION DE CLASES
-     * 
-     * 
-     * 
-    */ 
+    
+    
+    class ManejoResolucion implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) 
+		{
+			if(e.getActionCommand().equalsIgnoreCase("Pantalla completa"))
+			{
+				tamanioPantalla();
+				establecerNuevaResolucion();
+			}
+			else if(e.getActionCommand().equalsIgnoreCase("1920x1080"))
+			{
+				anchoPantalla = 1920;
+				altoPantalla = 1080;
+				establecerNuevaResolucion();
+			}
+			else if(e.getActionCommand().equalsIgnoreCase("1366x768"))
+			{
+				anchoPantalla = 1366;
+				altoPantalla = 768;
+				establecerNuevaResolucion();
+			}
+			else if(e.getActionCommand().equalsIgnoreCase("1024x720"))
+			{
+				anchoPantalla = 1024;
+				altoPantalla = 720;
+				establecerNuevaResolucion();
+			}
+			else if(e.getActionCommand().equalsIgnoreCase("800x600"))
+			{
+				anchoPantalla = 800;
+				altoPantalla = 600;
+				establecerNuevaResolucion();
+			}
+		}
+    	
+    }
+    
+    
+    
+    class ManejoVolumen implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if(e.getActionCommand().equalsIgnoreCase("Desactivar"))
+			{
+				musicaFondo.cambiarVolumen(0);
+			}
+			else if(e.getActionCommand().equalsIgnoreCase("Volumen bajo"))
+			{
+				musicaFondo.cambiarVolumen(55);
+			}
+			else if(e.getActionCommand().equalsIgnoreCase("Volumen medio"))
+			{
+				musicaFondo.cambiarVolumen(75);
+			}
+			else if(e.getActionCommand().equalsIgnoreCase("Volumen alto"))
+			{
+				musicaFondo.cambiarVolumen(100);
+			}
+			else if(e.getActionCommand().equalsIgnoreCase("Activar musica"))
+			{
+				musicaFondo.continuarLoopeo();
+			}
+			else if(e.getActionCommand().equalsIgnoreCase("Desactivar musica"))
+			{
+				musicaFondo.detener();
+			}
+		}
+    	
+    }
+    
     
     class ManejoTimerMenu implements ActionListener{
 
@@ -582,11 +608,13 @@ public class VentanaJuego extends JFrame {
 				if(e.getActionCommand().equalsIgnoreCase("Reanudar"))
 				{
 					lblPausa.setVisible(false);
+					musicaFondo.continuarLoopeo();
 					timer.start();
 				}
 				else
 				{
 					lblPausa.setVisible(true);
+					musicaFondo.detener();
 					timer.stop();
 				}
 			}
@@ -599,9 +627,11 @@ public class VentanaJuego extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) 
 		{
+			bRedibujar = false;
 			actualizar();
 		}
 	}
+    
     
     
     class EventoTeclado implements KeyListener{
@@ -612,49 +642,32 @@ public class VentanaJuego extends JFrame {
 		@Override
 		public void keyPressed(KeyEvent e) 
 		{
-
-			// INICIO CODIGO DE PRUEBA: QUITAR
-//			System.out.println(e.getKeyCode());
 			int tecla = e.getKeyCode();
 			
 			if (c.estaVivo())
 			{
-//				if (tecla == 32) // ESPACIO
-//				{
-////					new VentanaJuego().setVisible(true); // REINICIAR JUEGO
-//				}
-//				
 				if (tecla == 80 || tecla == 27) // P o ESC
 				{
 					if (timer.isRunning())
 					{
 						lblPausa.setVisible(true);
+						musicaFondo.detener();
 						timer.stop();
 					}
 					else
 					{
 						lblPausa.setVisible(false);
+						musicaFondo.continuarLoopeo();
 						timer.start();
 					}
 				}
 				
 				else if (timer.isRunning())
 				{
-					if (tecla == 68 || tecla == 39) // D o FlechaDerecha
-					{
-						submarinos[0].setVisible(true);
-						submarinos[1].setVisible(false);
-					}
-					else if (tecla == 65 || tecla == 37) // A o FlechaIzquierda
-					{
-						submarinos[0].setVisible(false);
-						submarinos[1].setVisible(true);
-					}
-					c.recibirEntradaTeclado(tecla);
+					c.moverSubmarino(tecla);
 				}
 				
 			}
-			// FIN CODIGO DE PRUEBA: QUITAR
 		}
 
 		@Override
@@ -662,19 +675,11 @@ public class VentanaJuego extends JFrame {
     	
     }
     
-    /* 
-     * 
-     * 
-     * 
-     * FINAL DE DECLARACION DE CLASES
-     * 
-     * 
-     * 
-     * 
-    */
     
     
     // METODO MAIN
+
+
     public static void main(String args[]) 
     {
 		new VentanaJuego().setVisible(true);

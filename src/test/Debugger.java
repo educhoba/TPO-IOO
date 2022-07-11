@@ -2,7 +2,7 @@ package test;
 
 public class Debugger {
 
-	boolean debuggerON = true;
+	boolean debuggerON = false;
 	public static void printIntegridadSubmarino(int daño, int integridadCasco) {
 		//System.out.println("\n-" +daño +"INTEGRIDAD.\nIntegridad Submarino: " +integridadCasco +"\n");
 	}
@@ -27,7 +27,7 @@ public class Debugger {
 		
 	}
 	public static void PrintXSoltar(float xSoltar) {
-		System.out.println("\nX SOLTAR:: " + xSoltar +"\n");
+//		System.out.println("\nX SOLTAR:: " + xSoltar +"\n");
 		
 	}
 	
