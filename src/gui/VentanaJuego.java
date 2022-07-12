@@ -637,7 +637,10 @@ public class VentanaJuego extends JFrame {
 		public void keyTyped(KeyEvent e) {}
 
 		@Override
-		public void keyPressed(KeyEvent e) 
+		public void keyPressed(KeyEvent e) {}
+
+		@Override
+		public void keyReleased(KeyEvent e)
 		{
 			int tecla = e.getKeyCode();
 			
@@ -666,9 +669,6 @@ public class VentanaJuego extends JFrame {
 				
 			}
 		}
-
-		@Override
-		public void keyReleased(KeyEvent e){}
     	
     }
     

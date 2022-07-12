@@ -257,7 +257,12 @@ public class Submarino extends ObjetoJuego {
 		this.integridadCasco -= valor;
 		Debugger.printIntegridadSubmarino(valor, this.integridadCasco);
 		if (integridadCasco <= 0)
+		{
+			int x = -integridadCasco;
 			restarVida();
+			if (this.vidas > 0)
+				dañar(x);
+		}
 	}
 
 	private void añadirPuntos(int valor) {
