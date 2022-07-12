@@ -16,7 +16,8 @@ public class Imagen
     public static final String URL_BUQUE_0 = "/res/imagenes/buque/buque0.png";
     public static final String URL_BUQUE_1 = "/res/imagenes/buque/buque1.png";
     public static final String URL_CARGA = "/res/imagenes/carga/carga.png";
-    public static final String URL_EXPLOSION = "/res/imagenes/carga/explosion.png";
+//    public static final String URL_EXPLOSION = "/res/imagenes/carga/explosion.png";
+    public static final String URL_EXPLOSION = "/res/imagenes/carga/explosion1.png";
 	
 	
     public Image getIconImage(String ubicacion)

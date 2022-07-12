@@ -53,7 +53,6 @@ public class VentanaJuego extends JFrame {
     private List<JLabel> cargas;
     
     private Sonido musicaFondo;
-    private int volumenActual;
     private SubmarinoGUI submarinoGUI;
     private BuqueGUI buqueGUI;
     private CargaProfundidadGUI cargasGUI;
@@ -132,10 +131,8 @@ public class VentanaJuego extends JFrame {
     	timer = new Timer(42, new AccionTimer());
     	bRedibujar = false;
     	
-    	volumenActual = 75; // VOLUMEN MINIMO TENDRIA QUE SER 50, MAS BAJO NO SE LLEGA A ESCUCHAR
-    	
     	musicaFondo = new Sonido(Sonido.musicaFondo);
-    	musicaFondo.cambiarVolumen(volumenActual);
+    	musicaFondo.cambiarVolumen(75);
     	
     	cargas = new ArrayList<JLabel>();
     }

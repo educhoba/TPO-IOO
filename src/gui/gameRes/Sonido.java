@@ -14,21 +14,21 @@ public class Sonido {
 	public static final String URL_SONIDO_EXPLOSION = "/res/sonidos/explosion.wav";
 	
 	private Clip sonido; 
-	private static FloatControl volumen;
+	private FloatControl volumen;
 	private static float porcentajeVolumen;
 	
 	
 	public Sonido(Clip sonido)
 	{
 		this.sonido = sonido;
-		Sonido.volumen = (FloatControl)sonido.getControl(FloatControl.Type.MASTER_GAIN);
+		this.volumen = (FloatControl)sonido.getControl(FloatControl.Type.MASTER_GAIN);
 	}
 	
 	
 	public Sonido(String ubicacionSonido)
 	{
 		this.sonido = CargarSonido.cargarSonido(ubicacionSonido);
-		Sonido.volumen = (FloatControl)sonido.getControl(FloatControl.Type.MASTER_GAIN);
+		this.volumen = (FloatControl)sonido.getControl(FloatControl.Type.MASTER_GAIN);
 	}
 	
 	

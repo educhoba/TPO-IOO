@@ -21,7 +21,7 @@ public class Ini
 	public final static int CARGA_EXPLOSION_Y_MIN = 300;
 	public final static int CARGA_EXPLOSION_Y_MAX = 700;
 	public final static int CARGA_VELOCIDAD = 200;
-	public final static int CANT_CARGAS_MIN = 1;
+	public final static int CANT_CARGAS_MIN = 10;
 	public final static int CANT_CARGAS_MAX = 10;
 	
 	
@@ -34,13 +34,13 @@ public class Ini
 	 */
 	
 	
-	public final static int SUBMARINO_LARGO = 80;
-	public final static int SUBMARINO_ALTO = 50;
-	public final static int BUQUE_LARGO = 80;
-	public final static int BUQUE_ALTO = 80;
-	public final static int CARGA_LARGO = 20;
-	public final static int CARGA_ALTO = 30;
-	public final static int EXPLOSION_LARGO = 200 + CARGA_LARGO;
-	public final static int EXPLOSION_ALTO = 200 + CARGA_ALTO;
+	public final static int SUBMARINO_LARGO = (AREA_JUEGO_X_MAX - AREA_JUEGO_X_MIN) * 80 / 600;
+	public final static int SUBMARINO_ALTO = (AREA_JUEGO_Y_MAX - AREA_JUEGO_Y_MIN) * 50 / 800;
+	public final static int BUQUE_LARGO = (AREA_JUEGO_X_MAX - AREA_JUEGO_X_MIN) * 80 / 600;
+	public final static int BUQUE_ALTO = (AREA_JUEGO_Y_MAX - AREA_JUEGO_Y_MIN) * 90 / 800;
+	public final static int CARGA_LARGO = (AREA_JUEGO_X_MAX - AREA_JUEGO_X_MIN) * 10 / 600;
+	public final static int CARGA_ALTO = (AREA_JUEGO_Y_MAX - AREA_JUEGO_Y_MIN) * 15 / 800;
+	public final static int EXPLOSION_LARGO = (AREA_JUEGO_X_MAX - AREA_JUEGO_X_MIN) * (200 + CARGA_LARGO) / 600;
+	public final static int EXPLOSION_ALTO = (AREA_JUEGO_Y_MAX - AREA_JUEGO_Y_MIN) * (200 + CARGA_ALTO) / 800;
 	
 }
