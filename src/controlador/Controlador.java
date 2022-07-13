@@ -85,4 +85,9 @@ public class Controlador {
 		return juego.getAreaJuego();
 	}
 	
+	public int getTiempoRefresco()
+	{
+		return Math.round(Ini.TIEMPO_REFRESCO_MS * 1000);
+	}
+	
 }

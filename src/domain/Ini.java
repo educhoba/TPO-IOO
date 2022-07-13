@@ -3,7 +3,7 @@ package domain;
 public class Ini 
 {
 	// ESTA CLASE CONTIENE TODAS LAS CONSTANTES DE INICIACION DEL JUEGO.
-	public final static float TIEMPO_REFRESCO_MS = 0.024f;
+	public final static float TIEMPO_REFRESCO_MS = 0.042f;
 	public final static int BUQUES_POR_NIVEL = 10;
 	public final static int PORCENTAJE_INCREMENTO_DIFICULTAD = 10;
 	
@@ -21,7 +21,7 @@ public class Ini
 	public final static int CARGA_EXPLOSION_Y_MIN = 300;
 	public final static int CARGA_EXPLOSION_Y_MAX = 700;
 	public final static int CARGA_VELOCIDAD = 200;
-	public final static int CANT_CARGAS_MIN = 10;
+	public final static int CANT_CARGAS_MIN = 1;
 	public final static int CANT_CARGAS_MAX = 10;
 	
 	

@@ -31,16 +31,13 @@ public class CargaProfundidad extends ObjetoJuego
 	}
 	
 	public void moverConBuque(int xCoordBuque) 
-	{ // Recibe xCoordBuque + largoBuque/2 para estar siempre en el punto medio del buque. 
-		if (!this.soltada)
-		{
-			this.coordenada.setX(xCoordBuque);
-		}
+	{ // Recibe xCoordBuque + largoBuque/2 (puntoMedioBuque) para estar siempre en el punto medio del buque. 
+		this.coordenada.setX(xCoordBuque);
 	}
 
 	public void moverY(float deltaTime)
 	{
-		int distancia = (int)(deltaTime * this.velocidad * ObjetoJuego.velocidadMultiplicador);
+		int distancia = Math.round(deltaTime * this.velocidad * ObjetoJuego.velocidadMultiplicador);
 		this.coordenada.moverY(distancia);
 		
 		if (this.coordenada.getVectorCoordenada().getY() >= this.yExplosion) //chequeo si tiene que explotar

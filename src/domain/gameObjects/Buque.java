@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Random;
 
 import domain.gameArea.Coordenada;
-import test.Debugger;
 
 public class Buque extends ObjetoJuego {
 
@@ -25,7 +24,7 @@ public class Buque extends ObjetoJuego {
 	
 	private void setearLado()
 	{
-		int lado = new Random().nextInt(1 + 1);
+		int lado = new Random().nextInt(1 + 1); // 0 en caso de izq a der. 1 en caso de der a izq
 		
 		if (lado == 1) // Si el random es 1, se mueve de derecha a izquierda.
 		{
@@ -49,36 +48,38 @@ public class Buque extends ObjetoJuego {
 		int xMin = this.coordenada.getxMin() + dimension.width;
 		int xMax = this.coordenada.getxMax() - largoCarga;
 		int xSoltar = new Random().nextInt(xMax + 1 - xMin) + xMin;
-		Debugger.PrintXSoltar(xSoltar);
 		return xSoltar;
 	}
 
 	public void moverX(float deltaTiempo) 
 	{
-		int distancia = (int)(deltaTiempo * this.velocidad * ObjetoJuego.velocidadMultiplicador);
+		int distancia = Math.round(deltaTiempo * this.velocidad * ObjetoJuego.velocidadMultiplicador);
 
 		this.coordenada.moverX(distancia);
 		
 		for (int i = cargas.size() - 1; i >= 0; i--)
 		{
 			var c = cargas.get(i);
-			int puntoMedioBuque = this.coordenada.getVectorCoordenada().getX() + (this.dimension.width / 2);
 			
-			c.moverConBuque(puntoMedioBuque);
-			
-			if (isxSoltar(lstSoltar[i], puntoMedioBuque))
+			if (!c.estaSoltada())
 			{
-				if (c.getCoordenada().getVectorCoordenada().getX() > c.getCoordenada().getxMax())
+				int puntoMedioBuque = this.coordenada.getVectorCoordenada().getX() + (this.dimension.width / 2);
+				c.moverConBuque(puntoMedioBuque);
+			
+				if (isxSoltar(lstSoltar[i], puntoMedioBuque))
 				{
-					c.getCoordenada().setX(c.getCoordenada().getxMax());
+					if (c.getCoordenada().getVectorCoordenada().getX() > c.getCoordenada().getxMax())
+					{
+						c.getCoordenada().setX(c.getCoordenada().getxMax());
+					}
+					
+					else if (c.getCoordenada().getVectorCoordenada().getX() < c.getCoordenada().getxMin())
+					{
+						c.getCoordenada().setX(c.getCoordenada().getxMin());
+					}
+					
+					soltarCarga(i);
 				}
-				
-				else if (c.getCoordenada().getVectorCoordenada().getX() < c.getCoordenada().getxMin())
-				{
-					c.getCoordenada().setX(c.getCoordenada().getxMin());
-				}
-				
-				soltarCarga(i);
 			}
 		}
 	}
@@ -86,8 +87,6 @@ public class Buque extends ObjetoJuego {
 	private void soltarCarga(int pos) 
 	{		
 		cargas.get(pos).soltar();
-		cargas.remove(pos);
-		lstSoltar[pos] = 0;
 	}
 
 	private boolean isxSoltar(int xSoltar, int xPMBuque) 

@@ -3,7 +3,6 @@ package domain.gameObjects;
 import java.awt.Dimension;
 
 import domain.gameArea.Coordenada;
-import test.Debugger;
 import utilidades.PuntoObjeto;
 import utilidades.Vector2D;
 
@@ -255,7 +254,6 @@ public class Submarino extends ObjetoJuego {
 
 	private void dañar(int valor) {
 		this.integridadCasco -= valor;
-		Debugger.printIntegridadSubmarino(valor, this.integridadCasco);
 		if (integridadCasco <= 0)
 		{
 			int x = -integridadCasco;
@@ -281,10 +279,8 @@ public class Submarino extends ObjetoJuego {
 
 	private void restarVida() {
 		this.vidas--;
-		Debugger.printPerderVida(this.vidas);
 		if (vidas > 0)
 		{
-			Debugger.printRecargarIntegridad();
 			this.integridadCasco = INTEGRIDAD_CASCO_MAX;
 		}
 	}
@@ -292,7 +288,6 @@ public class Submarino extends ObjetoJuego {
 	public void pasarDeNivelEIncrementarDificultad(float porcentaje) {
 		ObjetoJuego.velocidadMultiplicador = ObjetoJuego.velocidadMultiplicador * (1 + (porcentaje / 100));
 		this.nivel++;
-		Debugger.printPasarNivel(this.nivel);
 		añadirPuntos(200);
 	}
 

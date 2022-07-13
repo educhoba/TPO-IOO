@@ -22,6 +22,10 @@ public class Juego {
 	List<CargaProfundidad> cargas;
 	AreaMovimiento[] areas;
 	
+	public final static int AREA_SUBMARINO = 0;
+	public final static int AREA_BUQUE = 1;
+	public final static int AREA_CARGA = 2;
+	
 	
 	public Juego() 
 	{
@@ -35,20 +39,20 @@ public class Juego {
 	{
 		areas = new AreaMovimiento[3];
 		
-		areas[0] = new AreaMovimiento(Ini.AREA_JUEGO_X_MAX - Ini.SUBMARINO_LARGO, Ini.AREA_JUEGO_X_MIN
+		areas[AREA_SUBMARINO] = new AreaMovimiento(Ini.AREA_JUEGO_X_MAX - Ini.SUBMARINO_LARGO, Ini.AREA_JUEGO_X_MIN
 				, Ini.SUBMARINO_Y_MAX - Ini.SUBMARINO_ALTO, Ini.SUBMARINO_Y_MIN); // AreaMovimiento del Submarino;
 		
-		areas[1] = new AreaMovimiento(Ini.AREA_JUEGO_X_MAX, Ini.AREA_JUEGO_X_MIN - Ini.BUQUE_LARGO
+		areas[AREA_BUQUE] = new AreaMovimiento(Ini.AREA_JUEGO_X_MAX, Ini.AREA_JUEGO_X_MIN - Ini.BUQUE_LARGO
 				, Ini.AREA_JUEGO_Y_MIN, Ini.AREA_JUEGO_Y_MIN - Ini.BUQUE_ALTO); // AreaMovimiento del Buque;
 		
-		areas[2] = new AreaMovimiento(Ini.AREA_JUEGO_X_MAX - Ini.CARGA_LARGO, Ini.AREA_JUEGO_X_MIN
+		areas[AREA_CARGA] = new AreaMovimiento(Ini.AREA_JUEGO_X_MAX - Ini.CARGA_LARGO, Ini.AREA_JUEGO_X_MIN
 				, Ini.CARGA_EXPLOSION_Y_MAX - Ini.CARGA_ALTO, Ini.AREA_JUEGO_Y_MIN - Ini.CARGA_ALTO); // AreaMovimiento de las Cargas;
 	}
 	
 	private void crearSubmarino() 
 	{
-		Coordenada coord = new Coordenada(areas[0].getMax().getX() / 2
-				, areas[0].getMax().getY() / 2, areas[0]);
+		Coordenada coord = new Coordenada(areas[AREA_SUBMARINO].getMax().getX() / 2
+				, areas[AREA_SUBMARINO].getMax().getY() / 2, areas[AREA_SUBMARINO]);
 		
 		this.submarino = new Submarino(Ini.SUBMARINO_VELOCIDAD, Ini.SUBMARINO_ALTO
 				, Ini.SUBMARINO_LARGO, coord);
@@ -59,8 +63,8 @@ public class Juego {
 		if (Buque.getCantidadBuques() == Ini.BUQUES_POR_NIVEL)
 			pasarDeNivel();
 		
-		Coordenada coord = new Coordenada(areas[1].getMin().getX()
-				, areas[1].getMin().getY(), areas[1]);
+		Coordenada coord = new Coordenada(areas[AREA_BUQUE].getMin().getX()
+				, areas[AREA_BUQUE].getMin().getY(), areas[AREA_BUQUE]);
 
 		buque = new Buque(Ini.BUQUE_VELOCIDAD, Ini.BUQUE_ALTO, Ini.BUQUE_LARGO
 				, coord, crearCargasProfundidad());
@@ -74,8 +78,8 @@ public class Juego {
 		
 		for (int i = 0; i < r; i++)
 		{
-			Coordenada coord = new Coordenada(areas[2].getMin().getX()
-					, areas[2].getMin().getY(), areas[2]);
+			Coordenada coord = new Coordenada(areas[AREA_CARGA].getMin().getX()
+					, areas[AREA_CARGA].getMin().getY(), areas[AREA_CARGA]);
 			
 			var carga = new CargaProfundidad(Ini.CARGA_VELOCIDAD, Ini.CARGA_ALTO, Ini.CARGA_LARGO
 					, coord, Ini.CARGA_EXPLOSION_Y_MAX - Ini.CARGA_ALTO, Ini.CARGA_EXPLOSION_Y_MIN);

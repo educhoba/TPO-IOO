@@ -128,7 +128,7 @@ public class VentanaJuego extends JFrame {
     {
     	c = new Controlador();
     	c.actualizarJuego();
-    	timer = new Timer(42, new AccionTimer());
+    	timer = new Timer(c.getTiempoRefresco(), new AccionTimer());
     	bRedibujar = false;
     	
     	musicaFondo = new Sonido(Sonido.musicaFondo);
@@ -201,8 +201,8 @@ public class VentanaJuego extends JFrame {
         setPreferredSize(new Dimension(anchoPantalla, altoPantalla));
         setResizable(false);
         getContentPane().setLayout(null);
-        setLocationRelativeTo(null);
-        setUndecorated(true);
+        setLocationRelativeTo(null); // Centrar ventana a centro pantalla.
+        setUndecorated(true); // Sacar la barra de windows.
         setIconImage(new Imagen().getIconImage("/res/imagenes/icono/icono.png"));
     }
     

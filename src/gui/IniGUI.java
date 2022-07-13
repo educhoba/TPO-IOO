@@ -5,8 +5,8 @@ public class IniGUI
 	
 	public static final int P_INI_X = -2;
 //	public static final int PUNTO_FIN_X = anchoPantalla - 2; // Esta no va, es solo de referencia.
-	public static final int P_INI_MAR = 205;
-	public static final int P_INI_ARENA = 855;
+	public static final int P_INI_MAR = 205; // 1000x1000
+	public static final int P_INI_ARENA = 855; // 1000x1000
 	
 	public static final int RES_X_INI = 1000;
 	public static final int RES_Y_INI = 1000;
