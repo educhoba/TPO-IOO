@@ -3,12 +3,12 @@ package controlador;
 import java.awt.Dimension;
 import java.util.List;
 
-import domain.Ini;
-import domain.Juego;
-import domain.gameObjects.Submarino;
-import domain.gameObjetcsViews.BuqueView;
-import domain.gameObjetcsViews.CargaProfundidadView;
-import domain.gameObjetcsViews.SubmarinoView;
+import negocio.Ini;
+import negocio.Juego;
+import negocio.gameObjects.Submarino;
+import negocio.gameObjetcsViews.BuqueView;
+import negocio.gameObjetcsViews.CargaProfundidadView;
+import negocio.gameObjetcsViews.SubmarinoView;
 import utilidades.Vector2D;
 
 public class Controlador {

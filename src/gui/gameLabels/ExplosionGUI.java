@@ -4,9 +4,9 @@ import java.awt.Dimension;
 
 import javax.swing.JLabel;
 
-import domain.gameObjetcsViews.CargaProfundidadView;
 import gui.gameRes.Imagen;
 import gui.gameRes.Sonido;
+import negocio.gameObjetcsViews.CargaProfundidadView;
 import utilidades.Vector2D;
 
 public class ExplosionGUI 

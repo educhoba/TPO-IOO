@@ -1,6 +1,6 @@
-package domain.gameObjetcsViews;
+package negocio.gameObjetcsViews;
 
-import domain.gameObjects.Submarino;
+import negocio.gameObjects.Submarino;
 
 public class SubmarinoView extends ObjetoJuegoView{
 	

@@ -1,9 +1,9 @@
-package domain.gameObjects;
+package negocio.gameObjects;
 
 import java.util.List;
 import java.util.Random;
 
-import domain.gameArea.Coordenada;
+import negocio.gameArea.Coordenada;
 
 public class Buque extends ObjetoJuego {
 

@@ -1,6 +1,6 @@
-package domain.gameObjetcsViews;
+package negocio.gameObjetcsViews;
 
-import domain.gameObjects.Buque;
+import negocio.gameObjects.Buque;
 
 public class BuqueView extends ObjetoJuegoView{
 

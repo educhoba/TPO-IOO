@@ -1,8 +1,8 @@
-package domain.gameObjetcsViews;
+package negocio.gameObjetcsViews;
 
 import java.awt.Dimension;
 
-import domain.gameObjects.CargaProfundidad;
+import negocio.gameObjects.CargaProfundidad;
 import utilidades.Vector2D;
 
 public class CargaProfundidadView extends ObjetoJuegoView{

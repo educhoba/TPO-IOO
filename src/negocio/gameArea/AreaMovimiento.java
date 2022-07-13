@@ -1,4 +1,4 @@
-package domain.gameArea;
+package negocio.gameArea;
 
 import utilidades.Vector2D;
 

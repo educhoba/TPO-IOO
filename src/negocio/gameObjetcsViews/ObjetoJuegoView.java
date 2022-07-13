@@ -1,8 +1,8 @@
-package domain.gameObjetcsViews;
+package negocio.gameObjetcsViews;
 
 import java.awt.Dimension;
 
-import domain.gameObjects.ObjetoJuego;
+import negocio.gameObjects.ObjetoJuego;
 import utilidades.Vector2D;
 
 abstract class ObjetoJuegoView {

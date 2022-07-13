@@ -1,8 +1,8 @@
-package domain.gameObjects;
+package negocio.gameObjects;
 
 import java.awt.Dimension;
 
-import domain.gameArea.Coordenada;
+import negocio.gameArea.Coordenada;
 
 public abstract class ObjetoJuego {
 

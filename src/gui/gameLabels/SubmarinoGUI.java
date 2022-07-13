@@ -3,8 +3,8 @@ package gui.gameLabels;
 import javax.swing.JLabel;
 
 import controlador.Controlador;
-import domain.gameObjetcsViews.SubmarinoView;
 import gui.gameRes.Imagen;
+import negocio.gameObjetcsViews.SubmarinoView;
 import utilidades.Vector2D;
 
 public class SubmarinoGUI

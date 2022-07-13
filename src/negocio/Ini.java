@@ -1,4 +1,4 @@
-package domain;
+package negocio;
 
 public class Ini 
 {

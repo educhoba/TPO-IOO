@@ -1,18 +1,18 @@
-package domain;
+package negocio;
 
 import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import domain.gameArea.AreaMovimiento;
-import domain.gameArea.Coordenada;
-import domain.gameObjects.Buque;
-import domain.gameObjects.CargaProfundidad;
-import domain.gameObjects.Submarino;
-import domain.gameObjetcsViews.BuqueView;
-import domain.gameObjetcsViews.CargaProfundidadView;
-import domain.gameObjetcsViews.SubmarinoView;
+import negocio.gameArea.AreaMovimiento;
+import negocio.gameArea.Coordenada;
+import negocio.gameObjects.Buque;
+import negocio.gameObjects.CargaProfundidad;
+import negocio.gameObjects.Submarino;
+import negocio.gameObjetcsViews.BuqueView;
+import negocio.gameObjetcsViews.CargaProfundidadView;
+import negocio.gameObjetcsViews.SubmarinoView;
 import utilidades.Vector2D;
 
 public class Juego {

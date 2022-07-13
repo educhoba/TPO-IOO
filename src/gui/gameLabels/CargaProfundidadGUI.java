@@ -7,8 +7,8 @@ import javax.swing.Icon;
 import javax.swing.JLabel;
 
 import controlador.Controlador;
-import domain.gameObjetcsViews.CargaProfundidadView;
 import gui.gameRes.Imagen;
+import negocio.gameObjetcsViews.CargaProfundidadView;
 import utilidades.Vector2D;
 
 public class CargaProfundidadGUI 

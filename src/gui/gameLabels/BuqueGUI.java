@@ -3,8 +3,8 @@ package gui.gameLabels;
 import javax.swing.JLabel;
 
 import controlador.Controlador;
-import domain.gameObjetcsViews.BuqueView;
 import gui.gameRes.Imagen;
+import negocio.gameObjetcsViews.BuqueView;
 import utilidades.Vector2D;
 
 public class BuqueGUI 

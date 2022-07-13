@@ -1,10 +1,10 @@
-package domain.gameObjects;
+package negocio.gameObjects;
 
 import java.awt.Dimension;
 import java.util.Random;
 
-import domain.Ini;
-import domain.gameArea.Coordenada;
+import negocio.Ini;
+import negocio.gameArea.Coordenada;
 import utilidades.PuntoObjeto;
 import utilidades.Vector2D;
 

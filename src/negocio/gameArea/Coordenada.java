@@ -1,4 +1,4 @@
-package domain.gameArea;
+package negocio.gameArea;
 
 import utilidades.Vector2D;
 
@@ -57,11 +57,18 @@ public class Coordenada {
     
     public int getxMin()
     {
+    	/**
+    	 * Devuelve el xMinimo del area de movimiento por la que puede moverse el objeto.
+    	 * @return Devuelve el xMinimo
+    	 */
     	return areaMovimiento.getMin().getX();
     }
     
     public int getxMax()
     {
+    	/**
+    	 * Devuelve el xMaximo del area de movimiento por la que puede moverse el objeto.
+    	 */
     	return areaMovimiento.getMax().getX();
     }
 
